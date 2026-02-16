@@ -1,0 +1,65 @@
+{
+  "event_id": "EVT-2026021001",
+  "event_type": "sensor_alert",
+  "timestamp": "2026-02-10T08:45:10.342Z",
+  "source": {
+    "equipment_id": "EQ-001",
+    "equipment_name": "ПДМ-01",
+    "equipment_type": "Погрузочно-доставочная машина",
+    "mine_id": "MINE-1"
+  },
+  "location": {
+    "horizon": "Горизонт -320м",
+    "block": "BLK-N-101",
+    "coordinates": {"x": 1245.8, "y": 872.3, "z": -320.0}
+  },
+  "alerts": [
+    {
+      "sensor_type": "Температура двигателя",
+      "value": 105.3,
+      "unit": "°C",
+      "threshold": 100.0,
+      "severity": "ALARM",
+      "message": "Температура двигателя превысила критический порог"
+    },
+    {
+      "sensor_type": "Вибрация",
+      "value": 7.2,
+      "unit": "мм/с",
+      "threshold": 7.0,
+      "severity": "ALARM",
+      "message": "Уровень вибрации превысил допустимый предел"
+    },
+    {
+      "sensor_type": "Давление гидравлики",
+      "value": 220.1,
+      "unit": "бар",
+      "threshold": 220.0,
+      "severity": "WARN",
+      "message": "Давление гидравлики приближается к нижнему пределу"
+    }
+  ],
+  "context": {
+    "operator": "Петров И.С.",
+    "shift": 1,
+    "engine_hours_at_event": 12450,
+    "last_maintenance": "2025-12-15",
+    "readings_history": [
+      {"timestamp": "2026-02-10T08:00:12Z", "temp": 82.5, "vibration": 2.1, "pressure": 245.0},
+      {"timestamp": "2026-02-10T08:15:07Z", "temp": 84.1, "vibration": 2.3, "pressure": 242.8},
+      {"timestamp": "2026-02-10T08:30:05Z", "temp": 91.7, "vibration": 4.8, "pressure": 238.5},
+      {"timestamp": "2026-02-10T08:45:10Z", "temp": 105.3, "vibration": 7.2, "pressure": 220.1}
+    ]
+  },
+  "actions": {
+    "auto_shutdown": false,
+    "notification_sent": true,
+    "notification_recipients": ["dispatcher@rudaplus.ru", "toir@rudaplus.ru"],
+    "recommended_action": "Остановить оборудование, провести диагностику двигателя и системы охлаждения"
+  },
+  "metadata": {
+    "schema_version": "1.2",
+    "processing_node": "edge-gateway-mine1",
+    "ingestion_timestamp": "2026-02-10T08:45:10.500Z"
+  }
+}

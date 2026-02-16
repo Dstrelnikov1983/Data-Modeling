@@ -1,0 +1,133 @@
+[
+  {
+    "equipment_id": "EQ-001",
+    "equipment_name": "ПДМ-01",
+    "equipment_type": "Погрузочно-доставочная машина",
+    "manufacturer": "Sandvik",
+    "model": "LH517i",
+    "year_manufactured": 2021,
+    "location": {
+      "mine_id": "MINE-1",
+      "mine_name": "Шахта Северная",
+      "current_horizon": "Горизонт -320м",
+      "gps_coordinates": {
+        "x": 1245.8,
+        "y": 872.3,
+        "z": -320.0
+      }
+    },
+    "status": "В работе",
+    "maintenance": {
+      "last_date": "2025-12-15",
+      "next_date": "2026-03-15",
+      "engine_hours": 12450,
+      "maintenance_history": [
+        {"date": "2025-12-15", "type": "ТО-2", "description": "Замена масла, фильтров, проверка гидравлики", "cost_rub": 185000},
+        {"date": "2025-06-10", "type": "ТО-1", "description": "Замена масла и воздушного фильтра", "cost_rub": 45000},
+        {"date": "2024-12-20", "type": "ТО-3", "description": "Капитальное ТО — ходовая, гидравлика, электрика", "cost_rub": 620000}
+      ]
+    },
+    "specs": {
+      "max_payload_tons": 17.0,
+      "bucket_capacity_m3": 10.0,
+      "engine_power_kw": 275,
+      "operating_weight_tons": 36.2,
+      "max_speed_kmh": 25
+    },
+    "sensors": [
+      {"sensor_id": "SNS-001-T", "type": "Температура двигателя", "unit": "°C", "alarm_threshold": 100, "warn_threshold": 90},
+      {"sensor_id": "SNS-001-P", "type": "Давление гидравлики", "unit": "бар", "alarm_threshold": 200, "warn_threshold": 220},
+      {"sensor_id": "SNS-001-F", "type": "Уровень топлива", "unit": "%", "alarm_threshold": 10, "warn_threshold": 20},
+      {"sensor_id": "SNS-001-V", "type": "Вибрация", "unit": "мм/с", "alarm_threshold": 7.0, "warn_threshold": 4.5},
+      {"sensor_id": "SNS-001-NAV", "type": "Навигация", "unit": "координаты", "alarm_threshold": null, "warn_threshold": null},
+      {"sensor_id": "SNS-001-CAM", "type": "Видеорегистратор", "unit": "поток", "resolution": "1080p", "fps": 25}
+    ],
+    "tags": ["ПДМ", "Sandvik", "Северная", "активный"]
+  },
+  {
+    "equipment_id": "EQ-004",
+    "equipment_name": "СС-01",
+    "equipment_type": "Шахтный самосвал",
+    "manufacturer": "Sandvik",
+    "model": "TH663i",
+    "year_manufactured": 2021,
+    "location": {
+      "mine_id": "MINE-1",
+      "mine_name": "Шахта Северная",
+      "current_horizon": "Горизонт -320м",
+      "gps_coordinates": {
+        "x": 1300.2,
+        "y": 910.5,
+        "z": -320.0
+      }
+    },
+    "status": "В работе",
+    "maintenance": {
+      "last_date": "2025-11-20",
+      "next_date": "2026-02-20",
+      "engine_hours": 14100,
+      "maintenance_history": [
+        {"date": "2025-11-20", "type": "ТО-2", "description": "Замена масла, проверка тормозов и трансмиссии", "cost_rub": 290000},
+        {"date": "2025-05-15", "type": "ТО-1", "description": "Замена фильтров, проверка шин", "cost_rub": 78000}
+      ]
+    },
+    "specs": {
+      "max_payload_tons": 63.0,
+      "body_capacity_m3": 25.0,
+      "engine_power_kw": 525,
+      "operating_weight_tons": 52.8,
+      "max_speed_kmh": 35
+    },
+    "sensors": [
+      {"sensor_id": "SNS-004-T", "type": "Температура двигателя", "unit": "°C", "alarm_threshold": 105, "warn_threshold": 95},
+      {"sensor_id": "SNS-004-P", "type": "Давление гидравлики", "unit": "бар", "alarm_threshold": 280, "warn_threshold": 290},
+      {"sensor_id": "SNS-004-W", "type": "Масса груза", "unit": "т", "alarm_threshold": 65, "warn_threshold": 63},
+      {"sensor_id": "SNS-004-S", "type": "Скорость", "unit": "км/ч", "alarm_threshold": 40, "warn_threshold": 35},
+      {"sensor_id": "SNS-004-NAV", "type": "Навигация", "unit": "координаты", "alarm_threshold": null, "warn_threshold": null},
+      {"sensor_id": "SNS-004-CAM", "type": "Видеорегистратор", "unit": "поток", "resolution": "1080p", "fps": 25}
+    ],
+    "tags": ["самосвал", "Sandvik", "Северная", "активный", "тяжелый"]
+  },
+  {
+    "equipment_id": "EQ-011",
+    "equipment_name": "СП-01",
+    "equipment_type": "Скиповый подъемник",
+    "manufacturer": "НКМЗ",
+    "model": "СП-12",
+    "year_manufactured": 2017,
+    "location": {
+      "mine_id": "MINE-1",
+      "mine_name": "Шахта Северная",
+      "current_horizon": "Ствол шахты",
+      "gps_coordinates": {
+        "x": 1000.0,
+        "y": 1000.0,
+        "z": 0.0
+      }
+    },
+    "status": "В работе",
+    "maintenance": {
+      "last_date": "2026-01-20",
+      "next_date": "2026-07-20",
+      "engine_hours": 42000,
+      "maintenance_history": [
+        {"date": "2026-01-20", "type": "Плановая проверка", "description": "Проверка канатов, тормозов, направляющих", "cost_rub": 450000},
+        {"date": "2025-07-15", "type": "ТО-3", "description": "Замена каната, ревизия привода", "cost_rub": 2800000},
+        {"date": "2025-01-10", "type": "Плановая проверка", "description": "Дефектоскопия каната, проверка тормозов", "cost_rub": 380000}
+      ]
+    },
+    "specs": {
+      "max_payload_tons": 12.0,
+      "shaft_depth_m": 450,
+      "max_speed_ms": 10.0,
+      "rope_diameter_mm": 56,
+      "motor_power_kw": 1200
+    },
+    "sensors": [
+      {"sensor_id": "SNS-011-W", "type": "Масса скипа", "unit": "т", "alarm_threshold": 13, "warn_threshold": 12.5},
+      {"sensor_id": "SNS-011-S", "type": "Скорость подъема", "unit": "м/с", "alarm_threshold": 11, "warn_threshold": 10},
+      {"sensor_id": "SNS-011-R", "type": "Натяжение каната", "unit": "кН", "alarm_threshold": 160, "warn_threshold": 145}
+    ],
+    "tags": ["подъемник", "НКМЗ", "Северная", "критический", "стационарный"]
+  }
+]
