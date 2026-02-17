@@ -1,0 +1,106 @@
+// ================================
+// MES «Руда+» — Star Schema (Кимбалл)
+// Модуль 3: OLAP-моделирование
+// ================================
+
+// --- Измерения (Dimensions) ---
+
+Table dim_time {
+  time_key serial [pk]
+  production_date date [not null, unique]
+  year integer [not null]
+  quarter integer [not null]
+  month integer [not null]
+  month_name varchar(20) [not null]
+  week integer [not null]
+  day_of_month integer [not null]
+  day_of_week integer [not null]
+  day_name varchar(20) [not null]
+  is_weekend boolean [default: false]
+  Note: 'Измерение: Время (Conformed)'
+}
+
+Table dim_mine {
+  mine_key serial [pk]
+  mine_id varchar(10) [not null]
+  mine_name varchar(50) [not null]
+  region varchar(50)
+  max_depth_m integer
+  status varchar(20)
+  opened_date date
+  effective_from date [not null]
+  effective_to date [not null, default: '9999-12-31']
+  is_current boolean [default: true]
+  Note: 'Измерение: Шахта (SCD Type 2, Conformed)'
+}
+
+Table dim_equipment {
+  equipment_key serial [pk]
+  equipment_id varchar(10) [not null]
+  equipment_name varchar(50) [not null]
+  type_name varchar(50)
+  type_code varchar(10)
+  manufacturer varchar(50)
+  model varchar(50)
+  year_manufactured integer
+  max_payload_tons decimal(6,1)
+  mine_name varchar(50)
+  mine_region varchar(50)
+  effective_from date [not null]
+  effective_to date [not null, default: '9999-12-31']
+  is_current boolean [default: true]
+  Note: 'Измерение: Оборудование (денормализовано, SCD Type 2, Conformed)'
+}
+
+Table dim_operator {
+  operator_key serial [pk]
+  operator_id varchar(10) [not null]
+  full_name varchar(100) [not null]
+  last_name varchar(50)
+  first_name varchar(50)
+  position varchar(50)
+  qualification varchar(30)
+  mine_name varchar(50)
+  effective_from date [not null]
+  effective_to date [not null, default: '9999-12-31']
+  is_current boolean [default: true]
+  Note: 'Измерение: Оператор (SCD Type 2)'
+}
+
+Table dim_downtime_category {
+  category_key serial [pk]
+  event_type varchar(30) [not null]
+  event_category varchar(40) [not null]
+  severity varchar(20) [not null]
+  Note: 'Измерение: Категория простоя (Junk Dimension)'
+}
+
+// --- Таблицы фактов (Facts) ---
+
+Table fact_production {
+  production_key serial [pk]
+  time_key integer [not null, ref: > dim_time.time_key]
+  mine_key integer [not null, ref: > dim_mine.mine_key]
+  equipment_key integer [not null, ref: > dim_equipment.equipment_key]
+  operator_key integer [ref: > dim_operator.operator_key]
+  production_id varchar(10) [not null]
+  shift integer [not null]
+  block_id varchar(15)
+  ore_type varchar(20)
+  tonnage_extracted decimal(10,1) [not null, default: 0]
+  fe_content_pct decimal(5,2) [not null, default: 0]
+  moisture_pct decimal(5,2) [not null, default: 0]
+  etl_loaded_at timestamp [default: `now()`]
+  Note: 'Факт: Добыча руды (зерно: смена + оборудование + оператор)'
+}
+
+Table fact_downtime {
+  downtime_key serial [pk]
+  time_key integer [not null, ref: > dim_time.time_key]
+  equipment_key integer [not null, ref: > dim_equipment.equipment_key]
+  category_key integer [not null, ref: > dim_downtime_category.category_key]
+  event_id varchar(10) [not null]
+  duration_minutes integer [not null, default: 0]
+  etl_loaded_at timestamp [default: `now()`]
+  Note: 'Факт: Простои оборудования (зерно: одно событие)'
+}
