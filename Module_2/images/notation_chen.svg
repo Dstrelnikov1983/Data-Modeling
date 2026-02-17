@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 550" font-family="Segoe UI, Tahoma, sans-serif">
+  <defs>
+    <filter id="shadow2" x="-5%" y="-5%" width="115%" height="115%">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+
+  <!-- Title -->
+  <rect x="0" y="0" width="900" height="50" fill="#4472C4" rx="0"/>
+  <text x="450" y="33" text-anchor="middle" fill="white" font-size="20" font-weight="700">Нотация Чена (Chen Notation)</text>
+
+  <!-- Subtitle -->
+  <text x="450" y="78" text-anchor="middle" fill="#6c757d" font-size="14">Классическая академическая нотация. Сущности — прямоугольники, связи — ромбы, атрибуты — овалы</text>
+
+  <!-- ===== Entity: Шахта ===== -->
+  <g filter="url(#shadow2)">
+    <rect x="80" y="210" width="170" height="60" fill="#4472C4" stroke="#3461a8" stroke-width="2" rx="4"/>
+    <text x="165" y="247" text-anchor="middle" fill="white" font-size="18" font-weight="700">Шахта</text>
+  </g>
+
+  <!-- Attributes for Шахта -->
+  <!-- mine_id (PK - underlined) -->
+  <line x1="80" y1="170" x2="40" y2="140" stroke="#4472C4" stroke-width="1.5"/>
+  <ellipse cx="40" cy="125" rx="50" ry="18" fill="#e8f0fe" stroke="#4472C4" stroke-width="1.5"/>
+  <text x="40" y="130" text-anchor="middle" fill="#2c3e50" font-size="12" font-weight="600" text-decoration="underline">mine_id</text>
+
+  <!-- mine_name -->
+  <line x1="120" y1="210" x2="95" y2="155" stroke="#4472C4" stroke-width="1.5"/>
+  <ellipse cx="95" cy="138" rx="55" ry="18" fill="#e8f0fe" stroke="#4472C4" stroke-width="1.5"/>
+  <text x="95" y="143" text-anchor="middle" fill="#2c3e50" font-size="12">mine_name</text>
+
+  <!-- region -->
+  <line x1="200" y1="210" x2="215" y2="155" stroke="#4472C4" stroke-width="1.5"/>
+  <ellipse cx="215" cy="138" rx="45" ry="18" fill="#e8f0fe" stroke="#4472C4" stroke-width="1.5"/>
+  <text x="215" y="143" text-anchor="middle" fill="#2c3e50" font-size="12">region</text>
+
+  <!-- max_depth_m -->
+  <line x1="250" y1="220" x2="290" y2="155" stroke="#4472C4" stroke-width="1.5"/>
+  <ellipse cx="310" cy="140" rx="55" ry="18" fill="#e8f0fe" stroke="#4472C4" stroke-width="1.5"/>
+  <text x="310" y="145" text-anchor="middle" fill="#2c3e50" font-size="11">max_depth_m</text>
+
+  <!-- ===== Relationship: содержит ===== -->
+  <g filter="url(#shadow2)">
+    <polygon points="450,210 530,245 450,280 370,245" fill="#ED7D31" stroke="#d06a20" stroke-width="2"/>
+    <text x="450" y="250" text-anchor="middle" fill="white" font-size="14" font-weight="700">содержит</text>
+  </g>
+
+  <!-- Lines: Entity to Relationship -->
+  <line x1="250" y1="240" x2="370" y2="245" stroke="#2c3e50" stroke-width="2"/>
+  <line x1="530" y1="245" x2="640" y2="245" stroke="#2c3e50" stroke-width="2"/>
+
+  <!-- Cardinality -->
+  <text x="290" y="235" fill="#4472C4" font-size="16" font-weight="700">1</text>
+  <text x="600" y="235" fill="#ED7D31" font-size="16" font-weight="700">N</text>
+
+  <!-- ===== Entity: Оборудование ===== -->
+  <g filter="url(#shadow2)">
+    <rect x="640" y="215" width="200" height="60" fill="#ED7D31" stroke="#d06a20" stroke-width="2" rx="4"/>
+    <text x="740" y="252" text-anchor="middle" fill="white" font-size="18" font-weight="700">Оборудование</text>
+  </g>
+
+  <!-- Attributes for Оборудование -->
+  <!-- equipment_id (PK) -->
+  <line x1="690" y1="215" x2="620" y2="150" stroke="#ED7D31" stroke-width="1.5"/>
+  <ellipse cx="600" cy="135" rx="60" ry="18" fill="#fef3e8" stroke="#ED7D31" stroke-width="1.5"/>
+  <text x="600" y="140" text-anchor="middle" fill="#2c3e50" font-size="11" font-weight="600" text-decoration="underline">equipment_id</text>
+
+  <!-- equipment_name -->
+  <line x1="740" y1="215" x2="720" y2="150" stroke="#ED7D31" stroke-width="1.5"/>
+  <ellipse cx="720" cy="133" rx="65" ry="18" fill="#fef3e8" stroke="#ED7D31" stroke-width="1.5"/>
+  <text x="720" y="138" text-anchor="middle" fill="#2c3e50" font-size="11">equipment_name</text>
+
+  <!-- manufacturer -->
+  <line x1="800" y1="215" x2="835" y2="150" stroke="#ED7D31" stroke-width="1.5"/>
+  <ellipse cx="840" cy="133" rx="55" ry="18" fill="#fef3e8" stroke="#ED7D31" stroke-width="1.5"/>
+  <text x="840" y="138" text-anchor="middle" fill="#2c3e50" font-size="11">manufacturer</text>
+
+  <!-- status -->
+  <line x1="840" y1="240" x2="870" y2="215" stroke="#ED7D31" stroke-width="1.5"/>
+  <ellipse cx="865" cy="195" rx="40" ry="18" fill="#fef3e8" stroke="#ED7D31" stroke-width="1.5"/>
+  <text x="865" y="200" text-anchor="middle" fill="#2c3e50" font-size="11">status</text>
+
+  <!-- Legend -->
+  <rect x="60" y="340" width="780" height="190" fill="#f8f9fa" stroke="#dee2e6" stroke-width="1" rx="8"/>
+  <text x="80" y="370" fill="#2c3e50" font-size="14" font-weight="700">Элементы нотации Чена:</text>
+
+  <!-- Entity -->
+  <rect x="90" y="390" width="90" height="35" fill="white" stroke="#4472C4" stroke-width="2" rx="3"/>
+  <text x="135" y="413" text-anchor="middle" fill="#4472C4" font-size="12" font-weight="600">Сущность</text>
+  <text x="200" y="413" fill="#2c3e50" font-size="12">— Прямоугольник (объект предметной области)</text>
+
+  <!-- Relationship -->
+  <polygon points="130,445 170,462 130,480 90,462" fill="white" stroke="#ED7D31" stroke-width="2"/>
+  <text x="130" y="467" text-anchor="middle" fill="#ED7D31" font-size="10" font-weight="600">Связь</text>
+  <text x="200" y="467" fill="#2c3e50" font-size="12">— Ромб (ассоциация между сущностями)</text>
+
+  <!-- Attribute -->
+  <ellipse cx="130" cy="502" rx="42" ry="15" fill="white" stroke="#70AD47" stroke-width="1.5"/>
+  <text x="130" y="507" text-anchor="middle" fill="#70AD47" font-size="10" font-weight="600">Атрибут</text>
+  <text x="200" y="507" fill="#2c3e50" font-size="12">— Овал (свойство сущности). <tspan font-weight="600" text-decoration="underline">Подчёркнутый</tspan> = PK</text>
+
+  <!-- Weak entity note -->
+  <rect x="560" y="390" width="90" height="35" fill="white" stroke="#dc3545" stroke-width="2" rx="3"/>
+  <rect x="564" y="394" width="82" height="27" fill="white" stroke="#dc3545" stroke-width="1" rx="2"/>
+  <text x="605" y="413" text-anchor="middle" fill="#dc3545" font-size="10" font-weight="600">Слабая</text>
+  <text x="670" y="413" fill="#2c3e50" font-size="12">— Двойной контур (слабая сущность)</text>
+
+  <!-- Multivalued -->
+  <ellipse cx="600" cy="460" rx="42" ry="15" fill="white" stroke="#7c3aed" stroke-width="1.5"/>
+  <ellipse cx="600" cy="460" rx="36" ry="11" fill="white" stroke="#7c3aed" stroke-width="1"/>
+  <text x="600" y="465" text-anchor="middle" fill="#7c3aed" font-size="9" font-weight="600">Множ.</text>
+  <text x="670" y="465" fill="#2c3e50" font-size="12">— Двойной овал (многозначный атрибут)</text>
+
+  <!-- Derived -->
+  <ellipse cx="600" cy="505" rx="42" ry="15" fill="white" stroke="#6c757d" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="600" y="510" text-anchor="middle" fill="#6c757d" font-size="9" font-weight="600">Вычисл.</text>
+  <text x="670" y="510" fill="#2c3e50" font-size="12">— Пунктирный овал (вычисляемый атрибут)</text>
+</svg>

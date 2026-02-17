@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" font-family="Segoe UI, Tahoma, sans-serif">
+  <defs>
+    <filter id="shadow3" x="-5%" y="-5%" width="115%" height="115%">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+
+  <!-- Title -->
+  <rect x="0" y="0" width="900" height="50" fill="#4472C4" rx="0"/>
+  <text x="450" y="33" text-anchor="middle" fill="white" font-size="20" font-weight="700">Нотация UML (Диаграмма классов)</text>
+
+  <!-- Subtitle -->
+  <text x="450" y="78" text-anchor="middle" fill="#6c757d" font-size="14">Объектно-ориентированный подход. Используется в Visual Paradigm, Sparx EA, StarUML</text>
+
+  <!-- ===== Class: Шахта (Mine) ===== -->
+  <g filter="url(#shadow3)">
+    <!-- Class box -->
+    <rect x="70" y="110" width="260" height="260" fill="white" stroke="#4472C4" stroke-width="2" rx="0"/>
+    <!-- Class name compartment -->
+    <rect x="70" y="110" width="260" height="40" fill="#4472C4"/>
+    <text x="200" y="125" text-anchor="middle" fill="white" fill-opacity="0.7" font-size="11" font-style="italic">&#171;entity&#187;</text>
+    <text x="200" y="142" text-anchor="middle" fill="white" font-size="16" font-weight="700">Mine</text>
+    <!-- Attributes compartment -->
+    <line x1="70" y1="150" x2="330" y2="150" stroke="#4472C4" stroke-width="1"/>
+    <text x="85" y="172" fill="#2c3e50" font-size="13">+ mine_id : VARCHAR(10) {PK}</text>
+    <text x="85" y="195" fill="#2c3e50" font-size="13">+ mine_name : VARCHAR(50)</text>
+    <text x="85" y="218" fill="#2c3e50" font-size="13">+ region : VARCHAR(50)</text>
+    <text x="85" y="241" fill="#2c3e50" font-size="13">+ max_depth_m : INTEGER</text>
+    <text x="85" y="264" fill="#2c3e50" font-size="13">+ status : VARCHAR(20)</text>
+    <text x="85" y="287" fill="#2c3e50" font-size="13">+ opened_date : DATE</text>
+    <!-- Operations compartment -->
+    <line x1="70" y1="300" x2="330" y2="300" stroke="#4472C4" stroke-width="1"/>
+    <text x="85" y="322" fill="#6c757d" font-size="12" font-style="italic">// нет операций (data entity)</text>
+    <text x="85" y="345" fill="#6c757d" font-size="12" font-style="italic">// constraints: UNIQUE(mine_name)</text>
+  </g>
+
+  <!-- ===== Class: Оборудование (Equipment) ===== -->
+  <g filter="url(#shadow3)">
+    <rect x="550" y="110" width="280" height="280" fill="white" stroke="#ED7D31" stroke-width="2" rx="0"/>
+    <!-- Class name compartment -->
+    <rect x="550" y="110" width="280" height="40" fill="#ED7D31"/>
+    <text x="690" y="125" text-anchor="middle" fill="white" fill-opacity="0.7" font-size="11" font-style="italic">&#171;entity&#187;</text>
+    <text x="690" y="142" text-anchor="middle" fill="white" font-size="16" font-weight="700">Equipment</text>
+    <!-- Attributes compartment -->
+    <line x1="550" y1="150" x2="830" y2="150" stroke="#ED7D31" stroke-width="1"/>
+    <text x="565" y="172" fill="#2c3e50" font-size="13">+ equipment_id : VARCHAR(10) {PK}</text>
+    <text x="565" y="195" fill="#2c3e50" font-size="13">+ mine_id : VARCHAR(10) {FK}</text>
+    <text x="565" y="218" fill="#2c3e50" font-size="13">+ equipment_name : VARCHAR(50)</text>
+    <text x="565" y="241" fill="#2c3e50" font-size="13">+ type_id : VARCHAR(10) {FK}</text>
+    <text x="565" y="264" fill="#2c3e50" font-size="13">+ manufacturer : VARCHAR(50)</text>
+    <text x="565" y="287" fill="#2c3e50" font-size="13">+ status : VARCHAR(20)</text>
+    <text x="565" y="310" fill="#2c3e50" font-size="13">+ commissioned : DATE</text>
+    <!-- Operations compartment -->
+    <line x1="550" y1="325" x2="830" y2="325" stroke="#ED7D31" stroke-width="1"/>
+    <text x="565" y="347" fill="#6c757d" font-size="12" font-style="italic">// нет операций (data entity)</text>
+    <text x="565" y="367" fill="#6c757d" font-size="12" font-style="italic">// NOT NULL: equipment_name</text>
+  </g>
+
+  <!-- ===== Association line ===== -->
+  <line x1="330" y1="230" x2="550" y2="230" stroke="#2c3e50" stroke-width="2"/>
+
+  <!-- Multiplicity labels -->
+  <text x="340" y="222" fill="#4472C4" font-size="15" font-weight="700">1</text>
+  <text x="520" y="222" fill="#ED7D31" font-size="15" font-weight="700">0..*</text>
+
+  <!-- Role names -->
+  <text x="340" y="250" fill="#6c757d" font-size="11" font-style="italic">location</text>
+  <text x="505" y="250" fill="#6c757d" font-size="11" font-style="italic">units</text>
+
+  <!-- Association name -->
+  <rect x="395" y="205" width="90" height="22" fill="#e8f0fe" rx="11"/>
+  <text x="440" y="221" text-anchor="middle" fill="#4472C4" font-size="12" font-weight="600">содержит &#9654;</text>
+
+  <!-- Legend -->
+  <rect x="60" y="415" width="780" height="90" fill="#f8f9fa" stroke="#dee2e6" stroke-width="1" rx="8"/>
+  <text x="80" y="440" fill="#2c3e50" font-size="14" font-weight="700">Особенности UML-нотации:</text>
+
+  <!-- Legend items -->
+  <rect x="90" y="455" width="50" height="25" fill="white" stroke="#4472C4" stroke-width="2"/>
+  <text x="155" y="473" fill="#2c3e50" font-size="12">Класс: 3 секции (имя | атрибуты | операции)</text>
+
+  <text x="440" y="455" fill="#2c3e50" font-size="12"><tspan font-weight="600">Множественность:</tspan>  1  |  0..1  |  *  |  1..*  |  0..*</text>
+
+  <text x="440" y="478" fill="#2c3e50" font-size="12"><tspan font-weight="600">Видимость:</tspan>  + public  |  - private  |  # protected  |  ~ package</text>
+
+  <text x="90" y="492" fill="#6c757d" font-size="12" font-style="italic">Стереотип &#171;entity&#187; указывает, что класс представляет таблицу БД</text>
+</svg>
