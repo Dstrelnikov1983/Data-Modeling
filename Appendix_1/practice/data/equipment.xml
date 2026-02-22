@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<equipmentList xmlns="http://ruda-plus.ru/mes/equipment"
+               xmlns:sensor="http://ruda-plus.ru/mes/sensors">
+
+    <equipment>
+        <id>PDM-001</id>
+        <type>ПДМ</type>
+        <model>Sandvik LH517i</model>
+        <mine code="SH-01">Шахта Северная</mine>
+        <specifications>
+            <payload unit="tonnes">17.0</payload>
+            <engine_power unit="kW">250</engine_power>
+            <year_manufactured>2021</year_manufactured>
+        </specifications>
+        <sensor:sensors>
+            <sensor:sensor id="S-101" type="temperature">
+                <sensor:location>Двигатель</sensor:location>
+                <sensor:unit>°C</sensor:unit>
+            </sensor:sensor>
+            <sensor:sensor id="S-102" type="vibration">
+                <sensor:location>Ковш</sensor:location>
+                <sensor:unit>mm/s</sensor:unit>
+            </sensor:sensor>
+            <sensor:sensor id="S-103" type="pressure">
+                <sensor:location>Гидросистема</sensor:location>
+                <sensor:unit>bar</sensor:unit>
+            </sensor:sensor>
+            <sensor:sensor id="S-104" type="gps">
+                <sensor:location>Кабина</sensor:location>
+                <sensor:unit>coord</sensor:unit>
+            </sensor:sensor>
+        </sensor:sensors>
+    </equipment>
+
+    <equipment>
+        <id>PDM-002</id>
+        <type>ПДМ</type>
+        <model>Caterpillar R1700</model>
+        <mine code="SH-01">Шахта Северная</mine>
+        <specifications>
+            <payload unit="tonnes">15.0</payload>
+            <engine_power unit="kW">220</engine_power>
+            <year_manufactured>2020</year_manufactured>
+        </specifications>
+        <sensor:sensors>
+            <sensor:sensor id="S-201" type="temperature">
+                <sensor:location>Двигатель</sensor:location>
+                <sensor:unit>°C</sensor:unit>
+            </sensor:sensor>
+            <sensor:sensor id="S-202" type="vibration">
+                <sensor:location>Ковш</sensor:location>
+                <sensor:unit>mm/s</sensor:unit>
+            </sensor:sensor>
+        </sensor:sensors>
+    </equipment>
+
+    <equipment>
+        <id>ST-001</id>
+        <type>Шахтный самосвал</type>
+        <model>Caterpillar AD45</model>
+        <mine code="SH-02">Шахта Восточная</mine>
+        <specifications>
+            <payload unit="tonnes">45.0</payload>
+            <engine_power unit="kW">415</engine_power>
+            <year_manufactured>2022</year_manufactured>
+        </specifications>
+        <sensor:sensors>
+            <sensor:sensor id="S-301" type="temperature">
+                <sensor:location>Двигатель</sensor:location>
+                <sensor:unit>°C</sensor:unit>
+            </sensor:sensor>
+            <sensor:sensor id="S-302" type="gps">
+                <sensor:location>Кабина</sensor:location>
+                <sensor:unit>coord</sensor:unit>
+            </sensor:sensor>
+            <sensor:sensor id="S-303" type="video">
+                <sensor:location>Кабина</sensor:location>
+                <sensor:unit>stream</sensor:unit>
+            </sensor:sensor>
+        </sensor:sensors>
+    </equipment>
+
+    <equipment>
+        <id>VG-001</id>
+        <type>Вагонетка</type>
+        <model>ВГ-3.3</model>
+        <mine code="SH-01">Шахта Северная</mine>
+        <specifications>
+            <payload unit="tonnes">3.3</payload>
+            <engine_power unit="kW">0</engine_power>
+            <year_manufactured>2019</year_manufactured>
+        </specifications>
+    </equipment>
+
+    <equipment>
+        <id>SK-001</id>
+        <type>Скиповый подъёмник</type>
+        <model>СКП-20</model>
+        <mine code="SH-01">Шахта Северная</mine>
+        <specifications>
+            <payload unit="tonnes">20.0</payload>
+            <engine_power unit="kW">500</engine_power>
+            <year_manufactured>2018</year_manufactured>
+        </specifications>
+        <sensor:sensors>
+            <sensor:sensor id="S-501" type="vibration">
+                <sensor:location>Канат</sensor:location>
+                <sensor:unit>mm/s</sensor:unit>
+            </sensor:sensor>
+            <sensor:sensor id="S-502" type="pressure">
+                <sensor:location>Тормозная система</sensor:location>
+                <sensor:unit>bar</sensor:unit>
+            </sensor:sensor>
+        </sensor:sensors>
+    </equipment>
+
+</equipmentList>

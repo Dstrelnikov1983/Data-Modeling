@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://ruda-plus.ru/mes/sensors"
+           xmlns:sensor="http://ruda-plus.ru/mes/sensors"
+           elementFormDefault="qualified">
+
+    <!-- Корневой элемент списка датчиков -->
+    <xs:element name="sensors" type="sensor:SensorsListType"/>
+
+    <!-- Список датчиков -->
+    <xs:complexType name="SensorsListType">
+        <xs:sequence>
+            <xs:element name="sensor" type="sensor:SensorType"
+                        minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Датчик -->
+    <xs:complexType name="SensorType">
+        <xs:sequence>
+            <xs:element name="location" type="xs:string"/>
+            <xs:element name="unit" type="xs:string"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="sensor:SensorIdType" use="required"/>
+        <xs:attribute name="type" type="sensor:SensorCategoryType" use="required"/>
+    </xs:complexType>
+
+    <!-- Идентификатор датчика: S-101, S-999 -->
+    <xs:simpleType name="SensorIdType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="S-\d{3}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Тип датчика -->
+    <xs:simpleType name="SensorCategoryType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="temperature"/>
+            <xs:enumeration value="vibration"/>
+            <xs:enumeration value="pressure"/>
+            <xs:enumeration value="gps"/>
+            <xs:enumeration value="video"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

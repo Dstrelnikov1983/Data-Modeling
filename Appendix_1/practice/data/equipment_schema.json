@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://ruda-plus.ru/schemas/equipment.json",
+  "title": "Паспорт оборудования Руда+",
+  "description": "JSON Schema для валидации паспорта горного оборудования предприятия Руда+",
+  "type": "array",
+  "items": {
+    "$ref": "#/$defs/Equipment"
+  },
+  "$defs": {
+    "Equipment": {
+      "type": "object",
+      "properties": {
+        "equipment_id": {
+          "type": "string",
+          "pattern": "^[A-Z]{2,4}-\\d{3}$",
+          "description": "Уникальный идентификатор оборудования (например, PDM-001, ST-042)"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["ПДМ", "Шахтный самосвал", "Вагонетка", "Скиповый подъёмник"],
+          "description": "Категория оборудования"
+        },
+        "model": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Модель оборудования"
+        },
+        "mine": {
+          "$ref": "#/$defs/Mine"
+        },
+        "specifications": {
+          "$ref": "#/$defs/Specifications"
+        },
+        "is_active": {
+          "type": "boolean",
+          "default": true,
+          "description": "Активно ли оборудование"
+        },
+        "sensors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Sensor"
+          },
+          "uniqueItems": true,
+          "description": "Список установленных датчиков"
+        },
+        "maintenance_history": {
+          "oneOf": [
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/MaintenanceRecord"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "История обслуживания (null если нет данных)"
+        }
+      },
+      "required": ["equipment_id", "type", "model", "mine", "specifications"],
+      "additionalProperties": false
+    },
+    "Mine": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^SH-\\d{2}$",
+          "description": "Код шахты (например, SH-01)"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Название шахты"
+        }
+      },
+      "required": ["code", "name"],
+      "additionalProperties": false
+    },
+    "Specifications": {
+      "type": "object",
+      "properties": {
+        "payload_tonnes": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100.0,
+          "description": "Грузоподъёмность в тоннах"
+        },
+        "engine_power_kw": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2000,
+          "description": "Мощность двигателя в кВт"
+        },
+        "year_manufactured": {
+          "type": "integer",
+          "minimum": 2000,
+          "maximum": 2030,
+          "description": "Год выпуска"
+        }
+      },
+      "required": ["payload_tonnes"],
+      "additionalProperties": false
+    },
+    "Sensor": {
+      "type": "object",
+      "properties": {
+        "sensor_id": {
+          "type": "string",
+          "pattern": "^S-\\d{3}$",
+          "description": "Идентификатор датчика"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["temperature", "vibration", "pressure", "gps", "video"],
+          "description": "Тип датчика"
+        },
+        "location": {
+          "type": "string",
+          "description": "Место установки на оборудовании"
+        },
+        "unit": {
+          "type": "string",
+          "description": "Единица измерения"
+        }
+      },
+      "required": ["sensor_id", "type"],
+      "additionalProperties": false
+    },
+    "MaintenanceRecord": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "format": "date",
+          "description": "Дата обслуживания"
+        },
+        "type": {
+          "type": "string",
+          "description": "Тип обслуживания (ТО-1, ТО-2, Ремонт)"
+        },
+        "description": {
+          "type": "string",
+          "description": "Описание выполненных работ"
+        }
+      },
+      "required": ["date", "type"],
+      "additionalProperties": false
+    }
+  }
+}

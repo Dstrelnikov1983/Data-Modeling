@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://ruda-plus.ru/schemas/sensor_telemetry.json",
+  "title": "Телеметрия датчиков Руда+",
+  "description": "JSON Schema для валидации показаний IoT-датчиков",
+  "type": "array",
+  "items": {
+    "$ref": "#/$defs/SensorReading"
+  },
+  "$defs": {
+    "SensorReading": {
+      "type": "object",
+      "properties": {
+        "reading_id": {
+          "type": "string",
+          "pattern": "^R-\\d{6}$",
+          "description": "Уникальный идентификатор показания"
+        },
+        "sensor_id": {
+          "type": "string",
+          "pattern": "^S-\\d{3}$",
+          "description": "Идентификатор датчика"
+        },
+        "equipment_id": {
+          "type": "string",
+          "pattern": "^[A-Z]{2,4}-\\d{3}$",
+          "description": "Идентификатор оборудования"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Временная метка показания (ISO 8601)"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["temperature", "vibration", "pressure", "gps", "video"],
+          "description": "Тип измерения"
+        },
+        "value": {
+          "oneOf": [
+            {"type": "number"},
+            {"type": "null"}
+          ],
+          "description": "Значение показания (null для нечисловых датчиков)"
+        },
+        "unit": {
+          "type": "string",
+          "description": "Единица измерения"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["normal", "warning", "critical"],
+          "description": "Статус показания"
+        },
+        "location": {
+          "$ref": "#/$defs/Location"
+        },
+        "gps_data": {
+          "$ref": "#/$defs/GpsData"
+        },
+        "alert": {
+          "$ref": "#/$defs/Alert"
+        }
+      },
+      "required": ["reading_id", "sensor_id", "equipment_id", "timestamp", "type", "status"],
+      "additionalProperties": false
+    },
+    "Location": {
+      "type": "object",
+      "properties": {
+        "x": {"type": "number", "description": "Координата X (метры)"},
+        "y": {"type": "number", "description": "Координата Y (метры)"},
+        "z": {"type": "number", "description": "Координата Z / глубина (метры)"},
+        "horizon": {"type": "string", "description": "Название горизонта"}
+      },
+      "required": ["x", "y", "z"],
+      "additionalProperties": false
+    },
+    "GpsData": {
+      "type": "object",
+      "properties": {
+        "latitude": {"type": "number", "minimum": -90, "maximum": 90},
+        "longitude": {"type": "number", "minimum": -180, "maximum": 180},
+        "speed_kmh": {"type": "number", "minimum": 0, "description": "Скорость в км/ч"}
+      },
+      "required": ["latitude", "longitude"],
+      "additionalProperties": false
+    },
+    "Alert": {
+      "type": "object",
+      "properties": {
+        "level": {
+          "type": "string",
+          "enum": ["warning", "critical"],
+          "description": "Уровень тревоги"
+        },
+        "message": {
+          "type": "string",
+          "description": "Текст тревожного сообщения"
+        },
+        "threshold": {
+          "type": "number",
+          "description": "Пороговое значение, которое было превышено"
+        }
+      },
+      "required": ["level", "message"],
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,281 @@
+[
+  {
+    "_id": "INC001",
+    "type": "equipment_failure",
+    "severity": "critical",
+    "equipment_id": "EQ003",
+    "mine_name": "Центральная",
+    "mine_id": "M002",
+    "incident_date": "2025-02-10T06:45:00Z",
+    "shift": 1,
+    "description": "Выход из строя трансмиссии ПДМ LH517i. Машина остановлена на горизонте -400. Обнаружена утечка трансмиссионного масла.",
+    "location": { "horizon": -400, "zone": "Забой-2" },
+    "reported_by": "Козлов И.С.",
+    "response_time_min": 15,
+    "downtime_hours": 72,
+    "root_cause": "Износ шестерён раздаточной коробки",
+    "actions_taken": [
+      "Эвакуация оператора",
+      "Установка ограждения",
+      "Вызов ремонтной бригады",
+      "Замена трансмиссии в сборе"
+    ],
+    "repair_cost": 280000,
+    "status": "resolved",
+    "resolved_date": "2025-02-13T18:00:00Z",
+    "photos": ["photo_inc001_1.jpg", "photo_inc001_2.jpg"]
+  },
+  {
+    "_id": "INC002",
+    "type": "sensor_alert",
+    "severity": "warning",
+    "equipment_id": "EQ001",
+    "mine_name": "Северная",
+    "mine_id": "M001",
+    "incident_date": "2025-01-28T14:22:00Z",
+    "shift": 2,
+    "description": "Датчик температуры двигателя SNS001 зафиксировал превышение порога 95°C. Температура достигла 102°C.",
+    "location": { "horizon": -320, "zone": "Штрек-5" },
+    "reported_by": "Автоматическая система мониторинга",
+    "sensor_data": {
+      "sensor_id": "SNS001",
+      "threshold": 95,
+      "actual_value": 102,
+      "unit": "°C"
+    },
+    "response_time_min": 5,
+    "downtime_hours": 2,
+    "root_cause": "Засорение радиатора пылью",
+    "actions_taken": [
+      "Остановка машины",
+      "Охлаждение двигателя",
+      "Очистка радиатора"
+    ],
+    "repair_cost": 0,
+    "status": "resolved",
+    "resolved_date": "2025-01-28T16:30:00Z"
+  },
+  {
+    "_id": "INC003",
+    "type": "safety_violation",
+    "severity": "warning",
+    "mine_name": "Северная",
+    "mine_id": "M001",
+    "incident_date": "2025-01-25T08:10:00Z",
+    "shift": 1,
+    "description": "Нарушение скоростного режима шахтным самосвалом EQ005 на спуске к горизонту -280. Зафиксировано 45 км/ч при лимите 30 км/ч.",
+    "location": { "horizon": -280, "zone": "Уклон №2" },
+    "reported_by": "Система навигации",
+    "equipment_id": "EQ005",
+    "speed_data": {
+      "speed_limit_kmh": 30,
+      "actual_speed_kmh": 45,
+      "duration_sec": 12
+    },
+    "operator": { "name": "Новиков Д.А.", "tab_number": "T-1042" },
+    "actions_taken": [
+      "Уведомление диспетчера",
+      "Инструктаж оператора",
+      "Запись в журнал нарушений"
+    ],
+    "status": "resolved",
+    "resolved_date": "2025-01-25T09:00:00Z"
+  },
+  {
+    "_id": "INC004",
+    "type": "equipment_failure",
+    "severity": "critical",
+    "equipment_id": "EQ010",
+    "mine_name": "Северная",
+    "mine_id": "M001",
+    "incident_date": "2024-12-15T22:30:00Z",
+    "shift": 3,
+    "description": "Аварийная остановка скипового подъёмника СН-5.0 из-за срабатывания датчика натяжения каната SNS033. Обнаружено критическое снижение натяжения.",
+    "location": { "horizon": 0, "zone": "Ствол №1" },
+    "reported_by": "Автоматическая система мониторинга",
+    "sensor_data": {
+      "sensor_id": "SNS033",
+      "threshold": 45,
+      "actual_value": 28,
+      "unit": "кН"
+    },
+    "response_time_min": 2,
+    "downtime_hours": 18,
+    "root_cause": "Обрыв 3 прядей подъёмного каната",
+    "actions_taken": [
+      "Аварийная остановка подъёма",
+      "Фиксация скипа на предохранительных устройствах",
+      "Осмотр каната ремонтной бригадой",
+      "Решение о замене каната"
+    ],
+    "repair_cost": 450000,
+    "status": "resolved",
+    "resolved_date": "2024-12-16T16:30:00Z",
+    "follow_up": "Запланировано внеочередное ТО всех подъёмных канатов"
+  },
+  {
+    "_id": "INC005",
+    "type": "ore_quality",
+    "severity": "info",
+    "mine_name": "Центральная",
+    "mine_id": "M002",
+    "incident_date": "2025-02-05T10:00:00Z",
+    "shift": 1,
+    "description": "Снижение содержания железа в руде с горизонта -250 до 32.1% (ниже планового 36%).",
+    "location": { "horizon": -250, "zone": "Забой-3" },
+    "reported_by": "Лаборатория качества",
+    "quality_data": {
+      "sample_id": "ORE-2025-0205-01",
+      "planned_fe_pct": 36.8,
+      "actual_fe_pct": 32.1,
+      "deviation_pct": -4.7,
+      "impurities": { "silicon_pct": 12.5, "sulfur_pct": 0.8, "phosphorus_pct": 0.15 }
+    },
+    "actions_taken": [
+      "Уведомление геолога",
+      "Отбор дополнительных проб",
+      "Корректировка плана добычи"
+    ],
+    "status": "monitoring",
+    "notes": "Требуется наблюдение в течение 5 смен"
+  },
+  {
+    "_id": "INC006",
+    "type": "sensor_alert",
+    "severity": "warning",
+    "equipment_id": "EQ005",
+    "mine_name": "Северная",
+    "mine_id": "M001",
+    "incident_date": "2025-02-08T19:15:00Z",
+    "shift": 3,
+    "description": "Повышенная вибрация шасси самосвала TH663i. Датчик SNS016 зафиксировал уровень вибрации 8.5 мм/с при норме до 6.0 мм/с.",
+    "location": { "horizon": -280, "zone": "Транспортный штрек" },
+    "reported_by": "Автоматическая система мониторинга",
+    "sensor_data": {
+      "sensor_id": "SNS016",
+      "threshold": 6.0,
+      "actual_value": 8.5,
+      "unit": "мм/с"
+    },
+    "response_time_min": 10,
+    "downtime_hours": 4,
+    "root_cause": "Разбалансировка колёс после наезда на камень",
+    "actions_taken": [
+      "Остановка самосвала",
+      "Осмотр ходовой части",
+      "Балансировка колёс"
+    ],
+    "repair_cost": 15000,
+    "status": "resolved",
+    "resolved_date": "2025-02-08T23:20:00Z"
+  },
+  {
+    "_id": "INC007",
+    "type": "ventilation",
+    "severity": "critical",
+    "mine_name": "Центральная",
+    "mine_id": "M002",
+    "incident_date": "2025-01-18T03:40:00Z",
+    "shift": 3,
+    "description": "Отказ вентилятора ВОД-50 (FAN-003). Снижение подачи воздуха на горизонт -400 до 60% от нормы.",
+    "location": { "horizon": 0, "zone": "Вентиляционная установка №1" },
+    "reported_by": "Дежурный вентиляции Егоров К.Л.",
+    "ventilation_data": {
+      "fan_id": "FAN-003",
+      "normal_flow_m3s": 190,
+      "actual_flow_m3s": 114,
+      "co2_level_ppm": 850,
+      "co2_threshold_ppm": 500
+    },
+    "response_time_min": 8,
+    "downtime_hours": 6,
+    "root_cause": "Выход из строя подшипника электродвигателя",
+    "actions_taken": [
+      "Переключение на резервный вентилятор FAN-004",
+      "Эвакуация людей с горизонта -400",
+      "Замена подшипника",
+      "Замер газовой обстановки после ремонта"
+    ],
+    "repair_cost": 95000,
+    "status": "resolved",
+    "resolved_date": "2025-01-18T09:45:00Z",
+    "personnel_evacuated": 42
+  },
+  {
+    "_id": "INC008",
+    "type": "equipment_failure",
+    "severity": "warning",
+    "equipment_id": "EQ008",
+    "mine_name": "Северная",
+    "mine_id": "M001",
+    "incident_date": "2025-02-12T11:30:00Z",
+    "shift": 2,
+    "description": "Сход вагонетки ВГ-4.5 с рельсов на горизонте -320 вблизи пункта загрузки.",
+    "location": { "horizon": -320, "zone": "Околоствольный двор" },
+    "reported_by": "Машинист электровоза Белов Н.Ф.",
+    "response_time_min": 20,
+    "downtime_hours": 3,
+    "root_cause": "Деформация стрелочного перевода",
+    "actions_taken": [
+      "Остановка движения на участке",
+      "Подъём вагонетки домкратами",
+      "Ремонт стрелочного перевода"
+    ],
+    "repair_cost": 12000,
+    "status": "resolved",
+    "resolved_date": "2025-02-12T14:30:00Z"
+  },
+  {
+    "_id": "INC009",
+    "type": "sensor_alert",
+    "severity": "info",
+    "equipment_id": "EQ011",
+    "mine_name": "Центральная",
+    "mine_id": "M002",
+    "incident_date": "2025-02-14T07:50:00Z",
+    "shift": 1,
+    "description": "Повышенная температура двигателя подъёмной машины СН-7.5 — 78°C при рекомендуемом максимуме 75°C. Предупредительный порог.",
+    "location": { "horizon": 0, "zone": "Ствол №2" },
+    "reported_by": "Автоматическая система мониторинга",
+    "sensor_data": {
+      "sensor_id": "SNS037",
+      "threshold": 75,
+      "actual_value": 78,
+      "unit": "°C"
+    },
+    "response_time_min": 30,
+    "downtime_hours": 0,
+    "root_cause": "Повышенная нагрузка из-за увеличенного плана подъёма",
+    "actions_taken": [
+      "Увеличение интервалов между подъёмами",
+      "Контроль температуры в ручном режиме"
+    ],
+    "repair_cost": 0,
+    "status": "monitoring"
+  },
+  {
+    "_id": "INC010",
+    "type": "safety_violation",
+    "severity": "warning",
+    "mine_name": "Южная",
+    "mine_id": "M003",
+    "incident_date": "2025-02-16T15:20:00Z",
+    "shift": 2,
+    "description": "Обнаружение персонала без средств индивидуальной защиты (каска, самоспасатель) в зоне работы ПДМ на горизонте -220.",
+    "location": { "horizon": -220, "zone": "Рабочая зона ПДМ" },
+    "reported_by": "Инженер по ТБ Краснова Е.М.",
+    "operator": { "name": "Тимофеев А.С.", "tab_number": "T-2018" },
+    "violation_details": {
+      "missing_ppe": ["каска", "самоспасатель"],
+      "zone_type": "опасная зона",
+      "regulation": "ПБ 03-553-03, п.12.4"
+    },
+    "actions_taken": [
+      "Немедленное удаление из зоны работ",
+      "Составление акта о нарушении",
+      "Внеплановый инструктаж"
+    ],
+    "status": "resolved",
+    "resolved_date": "2025-02-16T16:00:00Z"
+  }
+]

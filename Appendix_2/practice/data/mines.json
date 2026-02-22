@@ -1,0 +1,179 @@
+[
+  {
+    "_id": "M001",
+    "name": "Северная",
+    "code": "SH-01",
+    "location": {
+      "region": "Свердловская область",
+      "city": "Качканар",
+      "coordinates": { "latitude": 56.8431, "longitude": 60.6454 }
+    },
+    "type": "подземная",
+    "depth_m": 500,
+    "commissioned_year": 1985,
+    "status": "active",
+    "horizons": [
+      {
+        "level": -180,
+        "name": "Горизонт -180",
+        "status": "active",
+        "ore_type": "магнетитовая руда",
+        "avg_fe_pct": 38.5,
+        "active_faces": 3,
+        "equipment_count": 4
+      },
+      {
+        "level": -280,
+        "name": "Горизонт -280",
+        "status": "active",
+        "ore_type": "магнетитовая руда",
+        "avg_fe_pct": 41.2,
+        "active_faces": 5,
+        "equipment_count": 6
+      },
+      {
+        "level": -320,
+        "name": "Горизонт -320",
+        "status": "active",
+        "ore_type": "магнетитовая руда",
+        "avg_fe_pct": 43.0,
+        "active_faces": 4,
+        "equipment_count": 5
+      },
+      {
+        "level": -420,
+        "name": "Горизонт -420",
+        "status": "development",
+        "ore_type": "магнетитовая руда",
+        "avg_fe_pct": null,
+        "active_faces": 0,
+        "equipment_count": 2
+      }
+    ],
+    "daily_target_tons": 2500,
+    "shifts_per_day": 3,
+    "personnel_count": 320,
+    "ventilation": {
+      "system": "нагнетательная",
+      "capacity_m3s": 250,
+      "fans": [
+        { "id": "FAN-001", "model": "ВОД-40", "power_kw": 500 },
+        { "id": "FAN-002", "model": "ВОД-40", "power_kw": 500 }
+      ]
+    },
+    "contacts": {
+      "chief_engineer": "Иванов А.П.",
+      "phone": "+7-343-555-01-01",
+      "email": "severnaya@rudaplus.ru"
+    }
+  },
+  {
+    "_id": "M002",
+    "name": "Центральная",
+    "code": "SH-02",
+    "location": {
+      "region": "Свердловская область",
+      "city": "Качканар",
+      "coordinates": { "latitude": 56.8510, "longitude": 60.6520 }
+    },
+    "type": "подземная",
+    "depth_m": 650,
+    "commissioned_year": 1992,
+    "status": "active",
+    "horizons": [
+      {
+        "level": -250,
+        "name": "Горизонт -250",
+        "status": "active",
+        "ore_type": "титаномагнетитовая руда",
+        "avg_fe_pct": 36.8,
+        "active_faces": 4,
+        "equipment_count": 5
+      },
+      {
+        "level": -400,
+        "name": "Горизонт -400",
+        "status": "active",
+        "ore_type": "титаномагнетитовая руда",
+        "avg_fe_pct": 44.1,
+        "active_faces": 6,
+        "equipment_count": 7
+      },
+      {
+        "level": -550,
+        "name": "Горизонт -550",
+        "status": "development",
+        "ore_type": "титаномагнетитовая руда",
+        "avg_fe_pct": null,
+        "active_faces": 1,
+        "equipment_count": 3
+      }
+    ],
+    "daily_target_tons": 3200,
+    "shifts_per_day": 3,
+    "personnel_count": 410,
+    "ventilation": {
+      "system": "комбинированная",
+      "capacity_m3s": 380,
+      "fans": [
+        { "id": "FAN-003", "model": "ВОД-50", "power_kw": 630 },
+        { "id": "FAN-004", "model": "ВОД-50", "power_kw": 630 },
+        { "id": "FAN-005", "model": "ВОД-30", "power_kw": 315 }
+      ]
+    },
+    "contacts": {
+      "chief_engineer": "Петров Б.В.",
+      "phone": "+7-343-555-02-01",
+      "email": "centralnaya@rudaplus.ru"
+    }
+  },
+  {
+    "_id": "M003",
+    "name": "Южная",
+    "code": "SH-03",
+    "location": {
+      "region": "Свердловская область",
+      "city": "Качканар",
+      "coordinates": { "latitude": 56.8380, "longitude": 60.6580 }
+    },
+    "type": "подземная",
+    "depth_m": 400,
+    "commissioned_year": 2005,
+    "status": "active",
+    "horizons": [
+      {
+        "level": -150,
+        "name": "Горизонт -150",
+        "status": "active",
+        "ore_type": "магнетитовая руда",
+        "avg_fe_pct": 35.2,
+        "active_faces": 2,
+        "equipment_count": 3
+      },
+      {
+        "level": -220,
+        "name": "Горизонт -220",
+        "status": "active",
+        "ore_type": "магнетитовая руда",
+        "avg_fe_pct": 39.7,
+        "active_faces": 3,
+        "equipment_count": 4
+      }
+    ],
+    "daily_target_tons": 1800,
+    "shifts_per_day": 2,
+    "personnel_count": 180,
+    "ventilation": {
+      "system": "нагнетательная",
+      "capacity_m3s": 180,
+      "fans": [
+        { "id": "FAN-006", "model": "ВОД-30", "power_kw": 315 }
+      ]
+    },
+    "contacts": {
+      "chief_engineer": "Сидоров В.Г.",
+      "phone": "+7-343-555-03-01",
+      "email": "yuzhnaya@rudaplus.ru"
+    }
+  }
+]

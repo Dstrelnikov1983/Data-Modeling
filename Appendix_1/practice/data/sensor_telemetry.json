@@ -1,0 +1,115 @@
+[
+  {
+    "reading_id": "R-000001",
+    "sensor_id": "S-101",
+    "equipment_id": "PDM-001",
+    "timestamp": "2025-01-15T10:30:00Z",
+    "type": "temperature",
+    "value": 85.3,
+    "unit": "°C",
+    "status": "normal",
+    "location": {"x": 1250.5, "y": 340.2, "z": -180.0, "horizon": "Горизонт -180"}
+  },
+  {
+    "reading_id": "R-000002",
+    "sensor_id": "S-102",
+    "equipment_id": "PDM-001",
+    "timestamp": "2025-01-15T10:30:01Z",
+    "type": "vibration",
+    "value": 4.7,
+    "unit": "mm/s",
+    "status": "normal",
+    "location": {"x": 1250.5, "y": 340.2, "z": -180.0, "horizon": "Горизонт -180"}
+  },
+  {
+    "reading_id": "R-000003",
+    "sensor_id": "S-103",
+    "equipment_id": "PDM-001",
+    "timestamp": "2025-01-15T10:30:02Z",
+    "type": "pressure",
+    "value": 210.5,
+    "unit": "bar",
+    "status": "warning",
+    "location": {"x": 1251.0, "y": 340.5, "z": -180.0, "horizon": "Горизонт -180"}
+  },
+  {
+    "reading_id": "R-000004",
+    "sensor_id": "S-201",
+    "equipment_id": "PDM-002",
+    "timestamp": "2025-01-15T10:30:00Z",
+    "type": "temperature",
+    "value": 72.1,
+    "unit": "°C",
+    "status": "normal",
+    "location": {"x": 800.0, "y": 150.3, "z": -180.0, "horizon": "Горизонт -180"}
+  },
+  {
+    "reading_id": "R-000005",
+    "sensor_id": "S-301",
+    "equipment_id": "ST-001",
+    "timestamp": "2025-01-15T10:30:05Z",
+    "type": "temperature",
+    "value": 95.8,
+    "unit": "°C",
+    "status": "warning",
+    "location": {"x": 2100.0, "y": 520.0, "z": -240.0, "horizon": "Горизонт -240"}
+  },
+  {
+    "reading_id": "R-000006",
+    "sensor_id": "S-302",
+    "equipment_id": "ST-001",
+    "timestamp": "2025-01-15T10:30:05Z",
+    "type": "gps",
+    "value": null,
+    "unit": "coord",
+    "status": "normal",
+    "location": {"x": 2100.0, "y": 520.0, "z": -240.0, "horizon": "Горизонт -240"},
+    "gps_data": {"latitude": 55.7558, "longitude": 37.6173, "speed_kmh": 12.5}
+  },
+  {
+    "reading_id": "R-000007",
+    "sensor_id": "S-101",
+    "equipment_id": "PDM-001",
+    "timestamp": "2025-01-15T10:31:00Z",
+    "type": "temperature",
+    "value": 112.4,
+    "unit": "°C",
+    "status": "critical",
+    "location": {"x": 1255.0, "y": 342.0, "z": -180.0, "horizon": "Горизонт -180"},
+    "alert": {"level": "critical", "message": "Превышена максимальная температура двигателя", "threshold": 100.0}
+  },
+  {
+    "reading_id": "R-000008",
+    "sensor_id": "S-501",
+    "equipment_id": "SK-001",
+    "timestamp": "2025-01-15T10:30:10Z",
+    "type": "vibration",
+    "value": 8.2,
+    "unit": "mm/s",
+    "status": "warning",
+    "location": {"x": 0, "y": 0, "z": -300.0, "horizon": "Ствол шахты"}
+  },
+  {
+    "reading_id": "R-000009",
+    "sensor_id": "S-502",
+    "equipment_id": "SK-001",
+    "timestamp": "2025-01-15T10:30:10Z",
+    "type": "pressure",
+    "value": 145.0,
+    "unit": "bar",
+    "status": "normal",
+    "location": {"x": 0, "y": 0, "z": -300.0, "horizon": "Ствол шахты"}
+  },
+  {
+    "reading_id": "R-000010",
+    "sensor_id": "S-202",
+    "equipment_id": "PDM-002",
+    "timestamp": "2025-01-15T10:31:00Z",
+    "type": "vibration",
+    "value": 15.6,
+    "unit": "mm/s",
+    "status": "critical",
+    "location": {"x": 805.0, "y": 152.0, "z": -180.0, "horizon": "Горизонт -180"},
+    "alert": {"level": "critical", "message": "Критическая вибрация ковша", "threshold": 12.0}
+  }
+]

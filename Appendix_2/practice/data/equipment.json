@@ -1,0 +1,405 @@
+[
+  {
+    "_id": "EQ001",
+    "type": "ПДМ",
+    "model": "ST14",
+    "manufacturer": "Epiroc",
+    "year_manufactured": 2021,
+    "serial_number": "EP-ST14-20210342",
+    "status": "working",
+    "mine": { "_id": "M001", "name": "Северная" },
+    "engine_hours": 12450,
+    "commissioned_date": "2021-06-15",
+    "specifications": {
+      "engine_power_kw": 200,
+      "max_payload_tons": 14,
+      "bucket_volume_m3": 7.0,
+      "tram_speed_kmh": 25,
+      "operating_weight_kg": 28000
+    },
+    "sensors": [
+      { "sensor_id": "SNS001", "type": "temperature", "location": "engine" },
+      { "sensor_id": "SNS002", "type": "vibration", "location": "transmission" },
+      { "sensor_id": "SNS003", "type": "gps", "location": "cabin" },
+      { "sensor_id": "SNS004", "type": "video", "location": "cabin_front" }
+    ],
+    "maintenance": {
+      "last_service": "2025-01-10",
+      "next_service": "2025-04-10",
+      "history": [
+        { "date": "2025-01-10", "type": "ТО-2", "cost": 45000, "description": "Замена фильтров, проверка гидравлики" },
+        { "date": "2024-07-20", "type": "ТО-3", "cost": 120000, "description": "Капитальный ремонт двигателя" }
+      ]
+    },
+    "location": { "latitude": 56.8431, "longitude": 60.6454, "level": -320 }
+  },
+  {
+    "_id": "EQ002",
+    "type": "ПДМ",
+    "model": "ST18",
+    "manufacturer": "Epiroc",
+    "year_manufactured": 2022,
+    "serial_number": "EP-ST18-20220187",
+    "status": "working",
+    "mine": { "_id": "M001", "name": "Северная" },
+    "engine_hours": 8320,
+    "commissioned_date": "2022-03-01",
+    "specifications": {
+      "engine_power_kw": 275,
+      "max_payload_tons": 18,
+      "bucket_volume_m3": 10.0,
+      "tram_speed_kmh": 28,
+      "operating_weight_kg": 36000
+    },
+    "sensors": [
+      { "sensor_id": "SNS005", "type": "temperature", "location": "engine" },
+      { "sensor_id": "SNS006", "type": "vibration", "location": "transmission" },
+      { "sensor_id": "SNS007", "type": "gps", "location": "cabin" }
+    ],
+    "maintenance": {
+      "last_service": "2025-02-01",
+      "next_service": "2025-05-01",
+      "history": [
+        { "date": "2025-02-01", "type": "ТО-1", "cost": 25000, "description": "Плановое ТО" }
+      ]
+    },
+    "location": { "latitude": 56.8428, "longitude": 60.6461, "level": -280 }
+  },
+  {
+    "_id": "EQ003",
+    "type": "ПДМ",
+    "model": "LH517i",
+    "manufacturer": "Sandvik",
+    "year_manufactured": 2020,
+    "serial_number": "SV-LH517-20200055",
+    "status": "maintenance",
+    "mine": { "_id": "M002", "name": "Центральная" },
+    "engine_hours": 15680,
+    "commissioned_date": "2020-09-10",
+    "specifications": {
+      "engine_power_kw": 250,
+      "max_payload_tons": 17,
+      "bucket_volume_m3": 9.2,
+      "tram_speed_kmh": 30,
+      "operating_weight_kg": 34500
+    },
+    "sensors": [
+      { "sensor_id": "SNS008", "type": "temperature", "location": "engine" },
+      { "sensor_id": "SNS009", "type": "vibration", "location": "chassis" },
+      { "sensor_id": "SNS010", "type": "gps", "location": "cabin" },
+      { "sensor_id": "SNS011", "type": "video", "location": "cabin_front" },
+      { "sensor_id": "SNS012", "type": "video", "location": "cabin_rear" }
+    ],
+    "maintenance": {
+      "last_service": "2025-02-10",
+      "next_service": "2025-03-10",
+      "history": [
+        { "date": "2025-02-10", "type": "Аварийный ремонт", "cost": 280000, "description": "Замена трансмиссии" },
+        { "date": "2024-11-05", "type": "ТО-2", "cost": 52000, "description": "Замена фильтров и масла" }
+      ]
+    },
+    "location": { "latitude": 56.8510, "longitude": 60.6520, "level": -400 }
+  },
+  {
+    "_id": "EQ004",
+    "type": "ПДМ",
+    "model": "ST14",
+    "manufacturer": "Epiroc",
+    "year_manufactured": 2023,
+    "serial_number": "EP-ST14-20230091",
+    "status": "working",
+    "mine": { "_id": "M003", "name": "Южная" },
+    "engine_hours": 4200,
+    "commissioned_date": "2023-01-20",
+    "specifications": {
+      "engine_power_kw": 200,
+      "max_payload_tons": 14,
+      "bucket_volume_m3": 7.0,
+      "tram_speed_kmh": 25,
+      "operating_weight_kg": 28000
+    },
+    "sensors": [
+      { "sensor_id": "SNS013", "type": "temperature", "location": "engine" },
+      { "sensor_id": "SNS014", "type": "gps", "location": "cabin" }
+    ],
+    "maintenance": {
+      "last_service": "2024-12-15",
+      "next_service": "2025-03-15",
+      "history": [
+        { "date": "2024-12-15", "type": "ТО-1", "cost": 22000, "description": "Плановое ТО" }
+      ]
+    },
+    "location": { "latitude": 56.8380, "longitude": 60.6580, "level": -180 }
+  },
+  {
+    "_id": "EQ005",
+    "type": "Самосвал",
+    "model": "TH663i",
+    "manufacturer": "Sandvik",
+    "year_manufactured": 2021,
+    "serial_number": "SV-TH663-20210034",
+    "status": "working",
+    "mine": { "_id": "M001", "name": "Северная" },
+    "engine_hours": 11200,
+    "commissioned_date": "2021-04-25",
+    "specifications": {
+      "engine_power_kw": 500,
+      "max_payload_tons": 63,
+      "bed_capacity_m3": 38.0,
+      "max_speed_kmh": 40,
+      "operating_weight_kg": 72000,
+      "turning_radius_m": 9.2
+    },
+    "sensors": [
+      { "sensor_id": "SNS015", "type": "temperature", "location": "engine" },
+      { "sensor_id": "SNS016", "type": "vibration", "location": "chassis" },
+      { "sensor_id": "SNS017", "type": "gps", "location": "cabin" },
+      { "sensor_id": "SNS018", "type": "video", "location": "cabin_front" },
+      { "sensor_id": "SNS019", "type": "payload_scale", "location": "bed" }
+    ],
+    "maintenance": {
+      "last_service": "2025-01-20",
+      "next_service": "2025-04-20",
+      "history": [
+        { "date": "2025-01-20", "type": "ТО-2", "cost": 85000, "description": "Замена тормозных колодок" }
+      ]
+    },
+    "location": { "latitude": 56.8435, "longitude": 60.6448, "level": -280 }
+  },
+  {
+    "_id": "EQ006",
+    "type": "Самосвал",
+    "model": "MT65",
+    "manufacturer": "Epiroc",
+    "year_manufactured": 2022,
+    "serial_number": "EP-MT65-20220012",
+    "status": "working",
+    "mine": { "_id": "M002", "name": "Центральная" },
+    "engine_hours": 7850,
+    "commissioned_date": "2022-08-12",
+    "specifications": {
+      "engine_power_kw": 480,
+      "max_payload_tons": 65,
+      "bed_capacity_m3": 40.0,
+      "max_speed_kmh": 38,
+      "operating_weight_kg": 75000,
+      "turning_radius_m": 10.1
+    },
+    "sensors": [
+      { "sensor_id": "SNS020", "type": "temperature", "location": "engine" },
+      { "sensor_id": "SNS021", "type": "gps", "location": "cabin" },
+      { "sensor_id": "SNS022", "type": "video", "location": "cabin_front" },
+      { "sensor_id": "SNS023", "type": "payload_scale", "location": "bed" }
+    ],
+    "maintenance": {
+      "last_service": "2024-11-30",
+      "next_service": "2025-02-28",
+      "history": [
+        { "date": "2024-11-30", "type": "ТО-1", "cost": 35000, "description": "Плановое ТО, долив масла" }
+      ]
+    },
+    "location": { "latitude": 56.8515, "longitude": 60.6530, "level": -350 }
+  },
+  {
+    "_id": "EQ007",
+    "type": "Самосвал",
+    "model": "TH551i",
+    "manufacturer": "Sandvik",
+    "year_manufactured": 2019,
+    "serial_number": "SV-TH551-20190078",
+    "status": "idle",
+    "mine": { "_id": "M003", "name": "Южная" },
+    "engine_hours": 18900,
+    "commissioned_date": "2019-11-01",
+    "specifications": {
+      "engine_power_kw": 420,
+      "max_payload_tons": 51,
+      "bed_capacity_m3": 32.0,
+      "max_speed_kmh": 35,
+      "operating_weight_kg": 62000,
+      "turning_radius_m": 8.5
+    },
+    "sensors": [
+      { "sensor_id": "SNS024", "type": "temperature", "location": "engine" },
+      { "sensor_id": "SNS025", "type": "vibration", "location": "chassis" },
+      { "sensor_id": "SNS026", "type": "gps", "location": "cabin" }
+    ],
+    "maintenance": {
+      "last_service": "2024-10-15",
+      "next_service": "2025-01-15",
+      "history": [
+        { "date": "2024-10-15", "type": "ТО-3", "cost": 210000, "description": "Капитальный ремонт ходовой" },
+        { "date": "2024-04-20", "type": "ТО-2", "cost": 78000, "description": "Замена фильтров" }
+      ]
+    },
+    "location": { "latitude": 56.8375, "longitude": 60.6590, "level": -220 }
+  },
+  {
+    "_id": "EQ008",
+    "type": "Вагонетка",
+    "model": "ВГ-4.5",
+    "manufacturer": "Уралмашзавод",
+    "year_manufactured": 2020,
+    "serial_number": "UMZ-VG45-20200015",
+    "status": "working",
+    "mine": { "_id": "M001", "name": "Северная" },
+    "engine_hours": 0,
+    "commissioned_date": "2020-05-10",
+    "specifications": {
+      "capacity_m3": 4.5,
+      "max_payload_tons": 12,
+      "track_gauge_mm": 900,
+      "wagon_length_m": 3.8,
+      "tare_weight_kg": 2200
+    },
+    "sensors": [
+      { "sensor_id": "SNS027", "type": "payload_scale", "location": "body" },
+      { "sensor_id": "SNS028", "type": "rfid", "location": "frame" }
+    ],
+    "maintenance": {
+      "last_service": "2024-09-01",
+      "next_service": "2025-09-01",
+      "history": [
+        { "date": "2024-09-01", "type": "Осмотр", "cost": 5000, "description": "Ежегодный осмотр рельсового пути и колёс" }
+      ]
+    },
+    "assigned_route": { "from": "Забой-3", "to": "Скиповая яма", "horizon": -320 }
+  },
+  {
+    "_id": "EQ009",
+    "type": "Вагонетка",
+    "model": "ВГ-6.0",
+    "manufacturer": "Уралмашзавод",
+    "year_manufactured": 2022,
+    "serial_number": "UMZ-VG60-20220008",
+    "status": "working",
+    "mine": { "_id": "M002", "name": "Центральная" },
+    "engine_hours": 0,
+    "commissioned_date": "2022-10-05",
+    "specifications": {
+      "capacity_m3": 6.0,
+      "max_payload_tons": 16,
+      "track_gauge_mm": 900,
+      "wagon_length_m": 4.2,
+      "tare_weight_kg": 2800
+    },
+    "sensors": [
+      { "sensor_id": "SNS029", "type": "payload_scale", "location": "body" },
+      { "sensor_id": "SNS030", "type": "rfid", "location": "frame" }
+    ],
+    "maintenance": {
+      "last_service": "2024-10-01",
+      "next_service": "2025-10-01",
+      "history": [
+        { "date": "2024-10-01", "type": "Осмотр", "cost": 5000, "description": "Ежегодный осмотр" }
+      ]
+    },
+    "assigned_route": { "from": "Забой-1", "to": "Скиповая яма", "horizon": -400 }
+  },
+  {
+    "_id": "EQ010",
+    "type": "Скип",
+    "model": "СН-5.0",
+    "manufacturer": "Уралмашзавод",
+    "year_manufactured": 2018,
+    "serial_number": "UMZ-SN50-20180003",
+    "status": "working",
+    "mine": { "_id": "M001", "name": "Северная" },
+    "engine_hours": 22500,
+    "commissioned_date": "2018-03-20",
+    "specifications": {
+      "lift_height_m": 450,
+      "skip_volume_m3": 5.0,
+      "max_payload_tons": 15,
+      "hoist_speed_ms": 12,
+      "rope_diameter_mm": 42,
+      "motor_power_kw": 800
+    },
+    "sensors": [
+      { "sensor_id": "SNS031", "type": "vibration", "location": "hoist_motor" },
+      { "sensor_id": "SNS032", "type": "temperature", "location": "hoist_motor" },
+      { "sensor_id": "SNS033", "type": "rope_tension", "location": "headframe" },
+      { "sensor_id": "SNS034", "type": "position", "location": "skip" },
+      { "sensor_id": "SNS035", "type": "video", "location": "shaft_top" }
+    ],
+    "maintenance": {
+      "last_service": "2025-01-05",
+      "next_service": "2025-04-05",
+      "history": [
+        { "date": "2025-01-05", "type": "ТО-2", "cost": 150000, "description": "Проверка каната, замена тормозных накладок" },
+        { "date": "2024-06-15", "type": "ТО-3", "cost": 450000, "description": "Замена подъёмного каната" }
+      ]
+    },
+    "shaft": { "name": "Ствол №1", "depth_m": 500 }
+  },
+  {
+    "_id": "EQ011",
+    "type": "Скип",
+    "model": "СН-7.5",
+    "manufacturer": "НКМЗ",
+    "year_manufactured": 2020,
+    "serial_number": "NKMZ-SN75-20200001",
+    "status": "working",
+    "mine": { "_id": "M002", "name": "Центральная" },
+    "engine_hours": 14200,
+    "commissioned_date": "2020-07-01",
+    "specifications": {
+      "lift_height_m": 600,
+      "skip_volume_m3": 7.5,
+      "max_payload_tons": 22,
+      "hoist_speed_ms": 15,
+      "rope_diameter_mm": 48,
+      "motor_power_kw": 1200
+    },
+    "sensors": [
+      { "sensor_id": "SNS036", "type": "vibration", "location": "hoist_motor" },
+      { "sensor_id": "SNS037", "type": "temperature", "location": "hoist_motor" },
+      { "sensor_id": "SNS038", "type": "rope_tension", "location": "headframe" },
+      { "sensor_id": "SNS039", "type": "position", "location": "skip" },
+      { "sensor_id": "SNS040", "type": "video", "location": "shaft_top" },
+      { "sensor_id": "SNS041", "type": "video", "location": "shaft_bottom" }
+    ],
+    "maintenance": {
+      "last_service": "2024-12-20",
+      "next_service": "2025-03-20",
+      "history": [
+        { "date": "2024-12-20", "type": "ТО-2", "cost": 180000, "description": "Проверка каната и тормозной системы" }
+      ]
+    },
+    "shaft": { "name": "Ствол №2", "depth_m": 650 }
+  },
+  {
+    "_id": "EQ012",
+    "type": "Скип",
+    "model": "СН-5.0",
+    "manufacturer": "Уралмашзавод",
+    "year_manufactured": 2023,
+    "serial_number": "UMZ-SN50-20230002",
+    "status": "working",
+    "mine": { "_id": "M003", "name": "Южная" },
+    "engine_hours": 3100,
+    "commissioned_date": "2023-05-15",
+    "specifications": {
+      "lift_height_m": 350,
+      "skip_volume_m3": 5.0,
+      "max_payload_tons": 15,
+      "hoist_speed_ms": 12,
+      "rope_diameter_mm": 42,
+      "motor_power_kw": 800
+    },
+    "sensors": [
+      { "sensor_id": "SNS042", "type": "vibration", "location": "hoist_motor" },
+      { "sensor_id": "SNS043", "type": "temperature", "location": "hoist_motor" },
+      { "sensor_id": "SNS044", "type": "rope_tension", "location": "headframe" },
+      { "sensor_id": "SNS045", "type": "position", "location": "skip" }
+    ],
+    "maintenance": {
+      "last_service": "2025-01-25",
+      "next_service": "2025-04-25",
+      "history": [
+        { "date": "2025-01-25", "type": "ТО-1", "cost": 60000, "description": "Плановое ТО" }
+      ]
+    },
+    "shaft": { "name": "Ствол №3", "depth_m": 400 }
+  }
+]

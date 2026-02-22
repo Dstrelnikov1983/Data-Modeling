@@ -1,0 +1,111 @@
+[
+  {
+    "equipment_id": "PDM-001",
+    "type": "ПДМ",
+    "model": "Sandvik LH517i",
+    "mine": {
+      "code": "SH-01",
+      "name": "Шахта Северная"
+    },
+    "specifications": {
+      "payload_tonnes": 17.0,
+      "engine_power_kw": 250,
+      "year_manufactured": 2021
+    },
+    "is_active": true,
+    "sensors": [
+      {"sensor_id": "S-101", "type": "temperature", "location": "Двигатель", "unit": "°C"},
+      {"sensor_id": "S-102", "type": "vibration", "location": "Ковш", "unit": "mm/s"},
+      {"sensor_id": "S-103", "type": "pressure", "location": "Гидросистема", "unit": "bar"},
+      {"sensor_id": "S-104", "type": "gps", "location": "Кабина", "unit": "coord"}
+    ],
+    "maintenance_history": [
+      {"date": "2025-01-10", "type": "ТО-1", "description": "Плановое ТО, замена масла"},
+      {"date": "2024-11-05", "type": "ТО-2", "description": "Замена фильтров и ремней"}
+    ]
+  },
+  {
+    "equipment_id": "PDM-002",
+    "type": "ПДМ",
+    "model": "Caterpillar R1700",
+    "mine": {
+      "code": "SH-01",
+      "name": "Шахта Северная"
+    },
+    "specifications": {
+      "payload_tonnes": 15.0,
+      "engine_power_kw": 220,
+      "year_manufactured": 2020
+    },
+    "is_active": true,
+    "sensors": [
+      {"sensor_id": "S-201", "type": "temperature", "location": "Двигатель", "unit": "°C"},
+      {"sensor_id": "S-202", "type": "vibration", "location": "Ковш", "unit": "mm/s"}
+    ],
+    "maintenance_history": [
+      {"date": "2025-02-01", "type": "ТО-1", "description": "Плановое ТО"}
+    ]
+  },
+  {
+    "equipment_id": "ST-001",
+    "type": "Шахтный самосвал",
+    "model": "Caterpillar AD45",
+    "mine": {
+      "code": "SH-02",
+      "name": "Шахта Восточная"
+    },
+    "specifications": {
+      "payload_tonnes": 45.0,
+      "engine_power_kw": 415,
+      "year_manufactured": 2022
+    },
+    "is_active": true,
+    "sensors": [
+      {"sensor_id": "S-301", "type": "temperature", "location": "Двигатель", "unit": "°C"},
+      {"sensor_id": "S-302", "type": "gps", "location": "Кабина", "unit": "coord"},
+      {"sensor_id": "S-303", "type": "video", "location": "Кабина", "unit": "stream"}
+    ],
+    "maintenance_history": null
+  },
+  {
+    "equipment_id": "VG-001",
+    "type": "Вагонетка",
+    "model": "ВГ-3.3",
+    "mine": {
+      "code": "SH-01",
+      "name": "Шахта Северная"
+    },
+    "specifications": {
+      "payload_tonnes": 3.3,
+      "engine_power_kw": 0,
+      "year_manufactured": 2019
+    },
+    "is_active": true,
+    "sensors": [],
+    "maintenance_history": []
+  },
+  {
+    "equipment_id": "SK-001",
+    "type": "Скиповый подъёмник",
+    "model": "СКП-20",
+    "mine": {
+      "code": "SH-01",
+      "name": "Шахта Северная"
+    },
+    "specifications": {
+      "payload_tonnes": 20.0,
+      "engine_power_kw": 500,
+      "year_manufactured": 2018
+    },
+    "is_active": false,
+    "sensors": [
+      {"sensor_id": "S-501", "type": "vibration", "location": "Канат", "unit": "mm/s"},
+      {"sensor_id": "S-502", "type": "pressure", "location": "Тормозная система", "unit": "bar"}
+    ],
+    "maintenance_history": [
+      {"date": "2025-01-20", "type": "Ремонт", "description": "Замена каната, плановая ревизия"},
+      {"date": "2024-12-15", "type": "ТО-2", "description": "Диагностика тормозной системы"},
+      {"date": "2024-09-01", "type": "ТО-1", "description": "Плановое ТО"}
+    ]
+  }
+]

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://ruda-plus.ru/mes/equipment"
+           xmlns:eq="http://ruda-plus.ru/mes/equipment"
+           xmlns:sensor="http://ruda-plus.ru/mes/sensors"
+           elementFormDefault="qualified">
+
+    <!-- Импорт пространства имён для датчиков -->
+    <xs:import namespace="http://ruda-plus.ru/mes/sensors"
+               schemaLocation="sensors.xsd"/>
+
+    <!-- ===== Корневой элемент ===== -->
+    <xs:element name="equipmentList" type="eq:EquipmentListType"/>
+
+    <xs:complexType name="EquipmentListType">
+        <xs:sequence>
+            <xs:element name="equipment" type="eq:EquipmentType"
+                        maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- ===== Тип оборудования ===== -->
+    <xs:complexType name="EquipmentType">
+        <xs:sequence>
+            <xs:element name="id" type="eq:EquipmentIdType"/>
+            <xs:element name="type" type="eq:EquipmentCategoryType"/>
+            <xs:element name="model" type="xs:string"/>
+            <xs:element name="mine" type="eq:MineType"/>
+            <xs:element name="specifications" type="eq:SpecificationsType"/>
+            <xs:any namespace="http://ruda-plus.ru/mes/sensors"
+                    minOccurs="0" processContents="lax"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- ===== Пользовательские простые типы ===== -->
+
+    <!-- Идентификатор оборудования: PDM-001, ST-042, VG-003 -->
+    <xs:simpleType name="EquipmentIdType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[A-Z]{2,4}-\d{3}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Категория оборудования -->
+    <xs:simpleType name="EquipmentCategoryType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ПДМ"/>
+            <xs:enumeration value="Шахтный самосвал"/>
+            <xs:enumeration value="Вагонетка"/>
+            <xs:enumeration value="Скиповый подъёмник"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Код шахты: SH-01, SH-02 -->
+    <xs:simpleType name="MineCodeType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="SH-\d{2}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- ===== Сложные типы ===== -->
+
+    <!-- Шахта: текстовое содержимое + атрибут code -->
+    <xs:complexType name="MineType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="code" type="eq:MineCodeType" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <!-- Спецификации оборудования -->
+    <xs:complexType name="SpecificationsType">
+        <xs:sequence>
+            <xs:element name="payload">
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="eq:PayloadValueType">
+                            <xs:attribute name="unit" type="xs:string" use="required"/>
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="engine_power">
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="eq:EnginePowerType">
+                            <xs:attribute name="unit" type="xs:string" use="required"/>
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="year_manufactured" type="eq:YearType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Грузоподъёмность: 0.1 - 100.0 тонн -->
+    <xs:simpleType name="PayloadValueType">
+        <xs:restriction base="xs:decimal">
+            <xs:minInclusive value="0"/>
+            <xs:maxInclusive value="100.0"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Мощность двигателя: 0 - 2000 кВт -->
+    <xs:simpleType name="EnginePowerType">
+        <xs:restriction base="xs:integer">
+            <xs:minInclusive value="0"/>
+            <xs:maxInclusive value="2000"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Год выпуска: 2000 - 2030 -->
+    <xs:simpleType name="YearType">
+        <xs:restriction base="xs:integer">
+            <xs:minInclusive value="2000"/>
+            <xs:maxInclusive value="2030"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>
