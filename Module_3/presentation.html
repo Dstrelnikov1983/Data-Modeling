@@ -1,0 +1,2091 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Модуль 3. Моделирование транзакционных и аналитических систем</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/white.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/plugin/highlight/monokai.css">
+    <style>
+        :root {
+            --accent1: #4472C4;
+            --accent2: #ED7D31;
+            --accent6: #70AD47;
+            --bg-light: #f8f9fa;
+            --text-dark: #2c3e50;
+            --text-muted: #6c757d;
+        }
+
+        .reveal {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 28px;
+            color: var(--text-dark);
+        }
+
+        .reveal h1 {
+            color: var(--accent1);
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 0.3em;
+        }
+
+        .reveal h2 {
+            color: var(--accent1);
+            font-size: 1.4em;
+            font-weight: 600;
+            margin-bottom: 0.3em;
+        }
+
+        .reveal h3 {
+            color: var(--accent2);
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .reveal .slide-number {
+            font-size: 14px;
+            color: var(--accent1);
+        }
+
+        /* Title slide */
+        .title-slide {
+            text-align: center;
+        }
+        .title-slide h1 {
+            font-size: 2em;
+            border-bottom: 4px solid var(--accent2);
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+        .title-slide .subtitle {
+            color: var(--text-muted);
+            font-size: 0.9em;
+            margin-top: 20px;
+        }
+        .title-slide .module-info {
+            background: linear-gradient(135deg, var(--accent1), #5a8fd4);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-top: 20px;
+            font-size: 0.8em;
+        }
+
+        /* Section divider */
+        .section-divider {
+            background: linear-gradient(135deg, var(--accent1), #2c5aa0) !important;
+            color: white !important;
+        }
+        .section-divider h1, .section-divider h2 {
+            color: white !important;
+        }
+        .section-divider .divider-line {
+            width: 100px;
+            height: 4px;
+            background: var(--accent2);
+            margin: 20px auto;
+        }
+
+        /* Content cards */
+        .card-container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            flex: 1;
+            min-width: 200px;
+            max-width: 300px;
+            text-align: left;
+            font-size: 0.7em;
+            border-top: 3px solid var(--accent1);
+        }
+        .card.accent2 {
+            border-top-color: var(--accent2);
+        }
+        .card.accent6 {
+            border-top-color: var(--accent6);
+        }
+        .card h4 {
+            color: var(--accent1);
+            margin: 0 0 8px 0;
+            font-size: 1.1em;
+        }
+        .card.accent2 h4 { color: var(--accent2); }
+        .card.accent6 h4 { color: var(--accent6); }
+
+        /* Lists */
+        .reveal ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .reveal ul li {
+            padding: 4px 0 4px 25px;
+            position: relative;
+            font-size: 0.85em;
+        }
+        .reveal ul li::before {
+            content: '▸';
+            color: var(--accent2);
+            position: absolute;
+            left: 5px;
+            font-weight: bold;
+        }
+
+        .reveal ol {
+            padding-left: 30px;
+        }
+        .reveal ol li {
+            padding: 4px 0;
+            font-size: 0.85em;
+        }
+
+        /* Highlight box */
+        .highlight-box {
+            background: linear-gradient(135deg, #e8f0fe, #d4e4fc);
+            border-left: 4px solid var(--accent1);
+            padding: 15px 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 15px 0;
+            font-size: 0.8em;
+            text-align: left;
+        }
+        .highlight-box.warning {
+            background: linear-gradient(135deg, #fef3e8, #fde4c8);
+            border-left-color: var(--accent2);
+        }
+        .highlight-box.success {
+            background: linear-gradient(135deg, #e8feef, #c8fdd8);
+            border-left-color: var(--accent6);
+        }
+
+        /* Quiz styles */
+        .quiz-container {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            border: 2px solid var(--accent1);
+        }
+        .quiz-container h3 {
+            color: var(--accent1);
+            margin-top: 0;
+        }
+        .quiz-option {
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin: 8px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.75em;
+            text-align: left;
+        }
+        .quiz-option:hover {
+            border-color: var(--accent1);
+            background: #e8f0fe;
+        }
+        .quiz-option.correct {
+            border-color: var(--accent6);
+            background: #e8feef;
+        }
+        .quiz-option.incorrect {
+            border-color: #dc3545;
+            background: #fee8e8;
+        }
+        .quiz-feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.75em;
+            display: none;
+        }
+
+        /* Discussion slide */
+        .discussion {
+            background: linear-gradient(135deg, #fff8e1, #fff3cd) !important;
+        }
+        .discussion-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        .discussion h2 {
+            color: var(--accent2) !important;
+        }
+        .discussion-question {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 10px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            font-size: 0.85em;
+            border-left: 4px solid var(--accent2);
+            text-align: left;
+        }
+
+        /* Practice slide */
+        .practice-slide {
+            background: linear-gradient(135deg, #e8feef, #d4fce4) !important;
+        }
+        .practice-slide h2 {
+            color: var(--accent6) !important;
+        }
+
+        /* Table styles */
+        .reveal table {
+            border-collapse: collapse;
+            margin: 15px auto;
+            font-size: 0.65em;
+            width: 90%;
+        }
+        .reveal table th {
+            background: var(--accent1);
+            color: white;
+            padding: 10px 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        .reveal table td {
+            padding: 8px 15px;
+            border-bottom: 1px solid #dee2e6;
+            text-align: left;
+        }
+        .reveal table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        .reveal table tr:hover {
+            background: #e8f0fe;
+        }
+
+        /* Diagram / Flow styles */
+        .flow-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+        .flow-step {
+            background: linear-gradient(135deg, var(--accent1), #5a8fd4);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.6em;
+            font-weight: 600;
+            min-width: 100px;
+            text-align: center;
+        }
+        .flow-arrow {
+            color: var(--accent2);
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        /* Group work */
+        .group-work {
+            background: linear-gradient(135deg, #f0e8fe, #e4d4fc) !important;
+        }
+        .group-work h2 {
+            color: #7c3aed !important;
+        }
+        .group-task {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            font-size: 0.7em;
+            text-align: left;
+        }
+        .group-task .group-num {
+            display: inline-block;
+            background: #7c3aed;
+            color: white;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            line-height: 28px;
+            text-align: center;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        /* Case study */
+        .case-study {
+            background: linear-gradient(135deg, #fce8e8, #fcd4d4) !important;
+        }
+        .case-study h2 {
+            color: #dc3545 !important;
+        }
+        .case-box {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            font-size: 0.75em;
+            text-align: left;
+        }
+
+        /* Code block */
+        .reveal pre {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            border-radius: 8px;
+            font-size: 0.5em;
+        }
+        .reveal pre code {
+            padding: 15px 20px;
+            max-height: 500px;
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.6em;
+            font-weight: 600;
+            color: white;
+            margin: 2px;
+        }
+        .badge-blue { background: var(--accent1); }
+        .badge-orange { background: var(--accent2); }
+        .badge-green { background: var(--accent6); }
+        .badge-purple { background: #7c3aed; }
+        .badge-red { background: #dc3545; }
+
+        /* Comparison columns */
+        .comparison {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .comparison .col {
+            flex: 1;
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            font-size: 0.7em;
+            text-align: left;
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            height: 4px;
+            background: #dee2e6;
+            border-radius: 2px;
+            margin: 20px 0 5px 0;
+        }
+        .progress-bar .fill {
+            height: 100%;
+            border-radius: 2px;
+            background: linear-gradient(90deg, var(--accent1), var(--accent2));
+        }
+
+        /* Footer */
+        .slide-footer {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.45em;
+            color: var(--text-muted);
+        }
+
+        /* Icon circle */
+        .icon-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            margin: 5px;
+        }
+        .icon-circle.blue { background: #e8f0fe; color: var(--accent1); }
+        .icon-circle.orange { background: #fef3e8; color: var(--accent2); }
+        .icon-circle.green { background: #e8feef; color: var(--accent6); }
+
+        /* Responsive adjustments */
+        .reveal .slides section {
+            padding: 20px 40px;
+        }
+
+        /* Small text helper */
+        .small { font-size: 0.7em; }
+        .smaller { font-size: 0.6em; }
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .mt-10 { margin-top: 10px; }
+        .mt-20 { margin-top: 20px; }
+        .mb-10 { margin-bottom: 10px; }
+
+        /* ER-diagram styles */
+        .er-entity {
+            background: white;
+            border: 2px solid var(--accent1);
+            border-radius: 8px;
+            padding: 10px 15px;
+            display: inline-block;
+            font-size: 0.65em;
+            text-align: left;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            min-width: 180px;
+        }
+        .er-entity .entity-title {
+            background: var(--accent1);
+            color: white;
+            padding: 5px 10px;
+            margin: -10px -15px 10px -15px;
+            border-radius: 6px 6px 0 0;
+            font-weight: 700;
+            text-align: center;
+        }
+        .er-entity .pk { color: var(--accent2); font-weight: 600; }
+        .er-entity .fk { color: #7c3aed; font-weight: 600; }
+        .er-entity .attr { color: var(--text-dark); }
+
+        .er-relationship {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+        .er-line {
+            font-size: 1.5em;
+            color: var(--accent2);
+            font-weight: bold;
+        }
+
+        /* Level indicator */
+        .level-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            margin: 15px 0;
+        }
+        .level-step {
+            padding: 10px 20px;
+            font-size: 0.65em;
+            font-weight: 600;
+            text-align: center;
+            min-width: 140px;
+            color: white;
+        }
+        .level-step:first-child { border-radius: 8px 0 0 8px; }
+        .level-step:last-child { border-radius: 0 8px 8px 0; }
+        .level-step.active { transform: scale(1.05); box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 1; }
+
+        /* Architecture layers */
+        .arch-layer {
+            border: 2px solid var(--accent1);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 8px 0;
+            font-size: 0.7em;
+            text-align: left;
+            position: relative;
+        }
+        .arch-layer .layer-label {
+            position: absolute;
+            top: -10px;
+            left: 15px;
+            background: white;
+            padding: 0 8px;
+            font-weight: 700;
+            font-size: 0.9em;
+            color: var(--accent1);
+        }
+
+        /* Vault component styles */
+        .vault-hub {
+            background: linear-gradient(135deg, var(--accent1), #5a8fd4);
+            color: white;
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.6em;
+            text-align: center;
+        }
+        .vault-link {
+            background: linear-gradient(135deg, var(--accent2), #d56a1f);
+            color: white;
+            border-radius: 8px;
+            padding: 10px 15px;
+            display: inline-block;
+            font-weight: 600;
+            font-size: 0.6em;
+        }
+        .vault-sat {
+            background: linear-gradient(135deg, var(--accent6), #5a9a37);
+            color: white;
+            border-radius: 0 0 8px 8px;
+            padding: 8px 12px;
+            display: inline-block;
+            font-size: 0.55em;
+            min-width: 100px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- ===== ТИТУЛЬНЫЙ СЛАЙД ===== -->
+            <section class="title-slide">
+                <h1>Модуль 3</h1>
+                <h2 style="color: var(--text-dark); font-size: 1.2em;">Моделирование транзакционных<br>и аналитических систем</h2>
+                <p class="subtitle">Практикум по анализу и моделированию данных</p>
+                <div class="module-info">
+                    Модуль 3 из 8 &nbsp;|&nbsp; 16 академических часов &nbsp;|&nbsp; 6 тем
+                </div>
+                <div class="progress-bar">
+                    <div class="fill" style="width: 37.5%;"></div>
+                </div>
+                <p class="smaller" style="color: var(--text-muted);">Прогресс курса: 37.5%</p>
+            </section>
+
+            <!-- Содержание модуля -->
+            <section>
+                <h2>Содержание модуля</h2>
+                <table>
+                    <thead>
+                        <tr><th>Тема</th><th>Содержание</th><th>Приоритет</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>3.1</td><td>Моделирование транзакционных систем (OLTP). Нормализация</td><td><span class="badge badge-blue">Основы</span></td></tr>
+                        <tr><td>3.2</td><td>Моделирование аналитических систем (OLAP). Звезда и снежинка</td><td><span class="badge badge-blue">Основы</span></td></tr>
+                        <tr><td>3.3</td><td>Подход Ральфа Кимбалла (Dimensional Modeling)</td><td><span class="badge badge-orange">Продвинутый</span></td></tr>
+                        <tr><td>3.4</td><td>Подход Билла Инмона (Corporate Information Factory)</td><td><span class="badge badge-orange">Продвинутый</span></td></tr>
+                        <tr><td>3.5</td><td>Data Vault 2.0</td><td><span class="badge badge-purple">Продвинутый</span></td></tr>
+                        <tr><td>3.6</td><td>Сравнение подходов и выбор архитектуры</td><td><span class="badge badge-green">Синтез</span></td></tr>
+                    </tbody>
+                </table>
+                <div class="highlight-box mt-10">
+                    <strong>Сквозной пример:</strong> MES-система «Руда+» — трансформация OLTP-модели из модуля 2 в аналитические модели.
+                </div>
+            </section>
+
+            <!-- ============================================== -->
+            <!-- ===== ТЕМА 3.1: OLTP ======================== -->
+            <!-- ============================================== -->
+
+            <section class="section-divider">
+                <h1>Тема 3.1</h1>
+                <div class="divider-line"></div>
+                <h2>Моделирование транзакционных систем (OLTP)</h2>
+                <p style="font-size:0.7em; opacity:0.8;">Нормализация: 1НФ, 2НФ, 3НФ, BCNF</p>
+            </section>
+
+            <!-- OLTP характеристики -->
+            <section>
+                <h2>Что такое OLTP?</h2>
+                <div class="highlight-box">
+                    <strong>OLTP (Online Transaction Processing)</strong> — системы оперативной обработки транзакций.
+                    Предназначены для быстрой записи и чтения отдельных записей.
+                </div>
+                <div class="card-container mt-10">
+                    <div class="card">
+                        <h4>Характеристики</h4>
+                        <ul>
+                            <li>Короткие транзакции (INSERT, UPDATE)</li>
+                            <li>Работа с отдельными записями</li>
+                            <li>Высокая частота операций</li>
+                            <li>Актуальные (текущие) данные</li>
+                        </ul>
+                    </div>
+                    <div class="card accent2">
+                        <h4>Примеры OLTP «Руда+»</h4>
+                        <ul>
+                            <li>Запись показания датчика</li>
+                            <li>Регистрация смены добычи</li>
+                            <li>Фиксация начала простоя</li>
+                            <li>Обновление наработки (моточасы)</li>
+                        </ul>
+                    </div>
+                    <div class="card accent6">
+                        <h4>Требования</h4>
+                        <ul>
+                            <li>ACID-транзакции</li>
+                            <li>Минимальная задержка (&lt;100 мс)</li>
+                            <li>Целостность данных</li>
+                            <li>Параллельный доступ</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Нормализация — зачем? -->
+            <section>
+                <h2>Нормализация: зачем?</h2>
+                <div class="highlight-box warning">
+                    <strong>Нормализация</strong> — процесс организации данных в БД для устранения
+                    избыточности и аномалий при вставке, обновлении и удалении.
+                </div>
+                <div class="comparison mt-10">
+                    <div class="col" style="border-top: 3px solid #dc3545;">
+                        <h4 style="color:#dc3545;">Проблемы без нормализации</h4>
+                        <ul>
+                            <li><strong>Аномалия вставки:</strong> нельзя добавить шахту без оборудования</li>
+                            <li><strong>Аномалия обновления:</strong> переименование шахты — менять в 50+ записях</li>
+                            <li><strong>Аномалия удаления:</strong> удаление последнего оборудования удаляет и шахту</li>
+                            <li><strong>Избыточность:</strong> mine_name дублируется в каждой строке</li>
+                        </ul>
+                    </div>
+                    <div class="col" style="border-top: 3px solid var(--accent6);">
+                        <h4 style="color:var(--accent6);">Результат нормализации</h4>
+                        <ul>
+                            <li>Каждый факт хранится один раз</li>
+                            <li>Обновление — в одном месте</li>
+                            <li>Нет противоречивых данных</li>
+                            <li>Чёткие ссылки через FK</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Пример: Модуль 1 vs Модуль 2 -->
+            <section>
+                <h2>Пример: эволюция модели «Руда+»</h2>
+                <div class="comparison">
+                    <div class="col" style="border-top: 3px solid #dc3545;">
+                        <h4 style="color:#dc3545;">Модуль 1: Ненормализовано</h4>
+                        <pre style="font-size:0.85em;"><code class="language-sql">-- equipment: mine_name дублируется
+EQ-001, ПДМ-1, Северная
+EQ-002, ПДМ-2, Северная
+EQ-003, СС-1,  Северная
+...
+-- ore_production: operator_name текстом
+PR-001, Иванов А.А., Северная
+PR-002, Петров Б.Б., Северная</code></pre>
+                        <p class="smaller" style="color:#dc3545;">mine_name повторяется 12 раз в equipment!</p>
+                    </div>
+                    <div class="col" style="border-top: 3px solid var(--accent6);">
+                        <h4 style="color:var(--accent6);">Модуль 2: Нормализовано</h4>
+                        <pre style="font-size:0.85em;"><code class="language-sql">-- mines: один раз
+MINE-01, Северная
+-- equipment: ссылка по FK
+EQ-001, ПДМ-1, mine_id=MINE-01
+EQ-002, ПДМ-2, mine_id=MINE-01
+-- operators: отдельная таблица
+OP-001, Иванов, Алексей</code></pre>
+                        <p class="smaller" style="color:var(--accent6);">Каждое имя хранится 1 раз!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 1НФ -->
+            <section>
+                <h2>Первая нормальная форма (1НФ)</h2>
+                <div class="highlight-box">
+                    <strong>1НФ:</strong> Все атрибуты содержат только атомарные (неделимые) значения.
+                    Нет повторяющихся групп и массивов.
+                </div>
+                <div class="comparison mt-10">
+                    <div class="col" style="border-top: 3px solid #dc3545;">
+                        <h4 style="color:#dc3545;">Нарушение 1НФ</h4>
+                        <pre style="font-size:0.85em;"><code class="language-sql">-- Несколько датчиков в одном поле!
+| equipment_id | sensors              |
+| EQ-001       | темп, давл, вибрация |
+| EQ-002       | темп, масса          |</code></pre>
+                    </div>
+                    <div class="col" style="border-top: 3px solid var(--accent6);">
+                        <h4 style="color:var(--accent6);">Соответствует 1НФ</h4>
+                        <pre style="font-size:0.85em;"><code class="language-sql">-- Каждый датчик — отдельная запись
+| equipment_id | sensor_type |
+| EQ-001       | температура |
+| EQ-001       | давление    |
+| EQ-001       | вибрация    |
+| EQ-002       | температура |
+| EQ-002       | масса       |</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2НФ -->
+            <section>
+                <h2>Вторая нормальная форма (2НФ)</h2>
+                <div class="highlight-box">
+                    <strong>2НФ:</strong> Таблица в 1НФ + каждый неключевой атрибут полностью зависит
+                    от всего первичного ключа (не от его части).
+                </div>
+                <div class="comparison mt-10">
+                    <div class="col" style="border-top: 3px solid #dc3545;">
+                        <h4 style="color:#dc3545;">Нарушение 2НФ</h4>
+                        <pre style="font-size:0.85em;"><code class="language-sql">-- PK = (production_id, equipment_id)
+| prod_id | equip_id | equip_name | tonnage |
+|---------|----------|------------|---------|
+| PR-001  | EQ-001   | ПДМ-1      | 245     |
+| PR-002  | EQ-001   | ПДМ-1      | 280     |
+-- equip_name зависит только от equip_id!</code></pre>
+                    </div>
+                    <div class="col" style="border-top: 3px solid var(--accent6);">
+                        <h4 style="color:var(--accent6);">Соответствует 2НФ</h4>
+                        <pre style="font-size:0.85em;"><code class="language-sql">-- Разделяем на 2 таблицы:
+-- equipment:
+| equip_id | equip_name |
+| EQ-001   | ПДМ-1      |
+
+-- ore_production:
+| prod_id | equip_id | tonnage |
+| PR-001  | EQ-001   | 245     |
+| PR-002  | EQ-001   | 280     |</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3НФ -->
+            <section>
+                <h2>Третья нормальная форма (3НФ)</h2>
+                <div class="highlight-box">
+                    <strong>3НФ:</strong> Таблица в 2НФ + нет транзитивных зависимостей.
+                    Неключевые атрибуты зависят только от PK, а не друг от друга.
+                </div>
+                <div class="comparison mt-10">
+                    <div class="col" style="border-top: 3px solid #dc3545;">
+                        <h4 style="color:#dc3545;">Нарушение 3НФ</h4>
+                        <pre style="font-size:0.85em;"><code class="language-sql">-- equipment:
+| equip_id | type_name | type_code |
+| EQ-001   | ПДМ       | ET-01     |
+| EQ-002   | ПДМ       | ET-01     |
+-- type_code зависит от type_name,
+-- а не от equip_id (транзитивно)</code></pre>
+                    </div>
+                    <div class="col" style="border-top: 3px solid var(--accent6);">
+                        <h4 style="color:var(--accent6);">Соответствует 3НФ</h4>
+                        <pre style="font-size:0.85em;"><code class="language-sql">-- equipment_types:
+| type_id | type_name | type_code |
+| ET-01   | ПДМ       | ПДМ       |
+
+-- equipment:
+| equip_id | type_id |
+| EQ-001   | ET-01   |
+| EQ-002   | ET-01   |</code></pre>
+                    </div>
+                </div>
+                <div class="highlight-box success mt-10">
+                    <strong>Именно это мы сделали в Модуле 2!</strong> Выделили equipment_types, mines и operators в отдельные справочники.
+                </div>
+            </section>
+
+            <!-- BCNF -->
+            <section>
+                <h2>Нормальная форма Бойса-Кодда (BCNF)</h2>
+                <div class="highlight-box">
+                    <strong>BCNF:</strong> Для каждой функциональной зависимости X → Y,
+                    X является суперключом. Строже, чем 3НФ.
+                </div>
+                <div class="card-container mt-10">
+                    <div class="card">
+                        <h4>Когда 3НФ ≠ BCNF?</h4>
+                        <ul>
+                            <li>Таблица с несколькими составными ключами-кандидатами</li>
+                            <li>Часть одного ключа определяет часть другого</li>
+                            <li>На практике встречается редко</li>
+                        </ul>
+                    </div>
+                    <div class="card accent2">
+                        <h4>Пример «Руда+»</h4>
+                        <p class="smaller">Оператор может быть назначен на несколько горизонтов одной шахты.<br><br>
+                        Если PK = (operator_id, horizon_id), а mine_id зависит от horizon_id (но horizon_id не суперключ) — нарушение BCNF.</p>
+                    </div>
+                    <div class="card accent6">
+                        <h4>Рекомендация</h4>
+                        <p class="smaller">Для большинства OLTP-систем достаточно <strong>3НФ</strong>. BCNF нужна только при сложных составных ключах.</p>
+                        <div class="badge badge-green">Правило 3НФ</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Физическая модель OLTP -->
+            <section>
+                <h2>Физическая модель OLTP: «Руда+»</h2>
+                <pre><code class="language-sql">-- Нормализованная OLTP-модель «Руда+» (3НФ)
+-- Справочники:
+--   mines (mine_id PK)
+--   equipment_types (type_id PK)
+--   operators (operator_id PK, mine_id FK → mines)
+--   horizons (horizon_id PK, mine_id FK → mines)
+--
+-- Транзакционные таблицы:
+--   equipment (equipment_id PK, type_id FK, mine_id FK)
+--   sensor_readings (reading_id PK, equipment_id FK)
+--   ore_production (production_id PK, mine_id FK, equipment_id FK,
+--                   operator_id FK, horizon_id FK)
+--   downtime_events (event_id PK, equipment_id FK, reported_by_id FK)
+
+-- Итого: 8 таблиц, 12+ FK-связей
+-- Каждый факт хранится ровно один раз!</code></pre>
+                <div class="highlight-box success mt-10">
+                    <strong>Эта модель в 3НФ</strong> идеально подходит для оперативной работы MES-системы.
+                    Но для аналитики она не оптимальна — слишком много JOIN.
+                </div>
+            </section>
+
+            <!-- Квиз 3.1 -->
+            <section>
+                <h2>Квиз: Нормализация</h2>
+                <div class="quiz-container">
+                    <h3>Вопрос 1</h3>
+                    <p class="small">В Модуле 1 поле mine_name хранилось текстом в таблице equipment (12 строк). В Модуле 2 мы вынесли шахты в справочник mines и заменили на FK. Какую нормальную форму мы применили?</p>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        A) 1НФ — устранили неатомарные значения
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        B) 2НФ — устранили частичную зависимость от PK
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true)">
+                        C) 3НФ — устранили транзитивную зависимость
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        D) BCNF — устранили зависимость от несуперключа
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Квиз: Нормализация</h2>
+                <div class="quiz-container">
+                    <h3>Вопрос 2</h3>
+                    <p class="small">Какая характеристика НЕ относится к OLTP-системам?</p>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        A) Короткие транзакции INSERT/UPDATE
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true)">
+                        B) Агрегация миллионов строк для отчётов
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        C) Высокая частота параллельных операций
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        D) Гарантии ACID
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+            </section>
+
+            <!-- Обсуждение 3.1 -->
+            <section class="discussion">
+                <div class="discussion-icon">💬</div>
+                <h2>Вопрос для обсуждения</h2>
+                <div class="discussion-question">
+                    <strong>Вопрос:</strong> Модель «Руда+» в 3НФ имеет 8 таблиц. Чтобы получить отчёт
+                    «Добыча по шахтам с именами операторов и типами оборудования», нужно написать запрос с 4-мя JOIN.
+                    Как вы думаете, это проблема? Для каких задач — да, а для каких — нет?
+                </div>
+                <div class="discussion-question">
+                    <strong>Вопрос:</strong> На предприятии «Руда+» телеметрия поступает со скоростью
+                    1000 показаний/сек. Как нормализация влияет на производительность записи?
+                    Нужно ли денормализовать таблицу sensor_readings?
+                </div>
+                <div class="smaller mt-20" style="color: var(--text-muted);">
+                    Время на обсуждение: 5–7 минут
+                </div>
+            </section>
+
+            <!-- ============================================== -->
+            <!-- ===== ТЕМА 3.2: OLAP ======================== -->
+            <!-- ============================================== -->
+
+            <section class="section-divider">
+                <h1>Тема 3.2</h1>
+                <div class="divider-line"></div>
+                <h2>Моделирование аналитических систем (OLAP)</h2>
+                <p style="font-size:0.7em; opacity:0.8;">Факты, измерения, звезда и снежинка</p>
+            </section>
+
+            <!-- OLTP vs OLAP -->
+            <section>
+                <h2>OLTP vs OLAP</h2>
+                <table>
+                    <thead>
+                        <tr><th>Характеристика</th><th>OLTP</th><th>OLAP</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Назначение</td><td>Оперативная обработка</td><td>Анализ и отчётность</td></tr>
+                        <tr><td>Операции</td><td>INSERT, UPDATE, DELETE</td><td>SELECT (агрегации)</td></tr>
+                        <tr><td>Объём запроса</td><td>Одна запись</td><td>Миллионы строк</td></tr>
+                        <tr><td>Модель данных</td><td>3НФ (нормализация)</td><td>Звезда / Снежинка</td></tr>
+                        <tr><td>Избыточность</td><td>Минимальная</td><td>Допустима (денормализация)</td></tr>
+                        <tr><td>Пользователи</td><td>Операторы, приложения</td><td>Аналитики, менеджеры</td></tr>
+                        <tr><td>Пример «Руда+»</td><td>Запись показания датчика</td><td>Отчёт: добыча за квартал по шахтам</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Dimensional Modeling -->
+            <section>
+                <h2>Dimensional Modeling: факты и измерения</h2>
+                <div class="comparison">
+                    <div class="col" style="border-top: 3px solid var(--accent2);">
+                        <h4 style="color:var(--accent2);">Таблица фактов (Fact)</h4>
+                        <ul>
+                            <li>Содержит <strong>метрики</strong> (числа для анализа)</li>
+                            <li>Каждая строка — событие / транзакция</li>
+                            <li>FK-ссылки на измерения</li>
+                            <li>Самая большая таблица в схеме</li>
+                        </ul>
+                        <p class="smaller mt-10"><strong>«Руда+»:</strong> тоннаж, содержание Fe%, длительность простоя</p>
+                    </div>
+                    <div class="col" style="border-top: 3px solid var(--accent1);">
+                        <h4 style="color:var(--accent1);">Таблицы измерений (Dimension)</h4>
+                        <ul>
+                            <li>Описательные атрибуты (контекст)</li>
+                            <li>Отвечают на вопросы: кто? где? когда? что?</li>
+                            <li>Обычно небольшие (справочники)</li>
+                            <li>Денормализованные (широкие)</li>
+                        </ul>
+                        <p class="smaller mt-10"><strong>«Руда+»:</strong> шахта, оборудование, оператор, время</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Грануляция фактов -->
+            <section>
+                <h2>Гранулярность таблицы фактов</h2>
+                <div class="highlight-box warning">
+                    <strong>Grain (зерно)</strong> — уровень детализации одной строки таблицы фактов.
+                    Определяет, что именно измеряет каждая запись.
+                </div>
+                <table class="mt-10">
+                    <thead>
+                        <tr><th>Уровень зерна</th><th>Пример «Руда+»</th><th>Строк/год</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Показание датчика</td><td>1 значение с 1 датчика в 1 момент</td><td>~31 млрд</td></tr>
+                        <tr><td>Смена добычи</td><td>1 оператор, 1 оборудование, 1 смена</td><td>~3 000</td></tr>
+                        <tr><td>Суточная добыча</td><td>Сумма за сутки по шахте</td><td>~1 100</td></tr>
+                        <tr><td>Месячная добыча</td><td>Сумма за месяц по шахте</td><td>~36</td></tr>
+                    </tbody>
+                </table>
+                <div class="highlight-box success mt-10">
+                    <strong>Правило:</strong> Выбирайте максимально детальное зерно, которое поддерживает все бизнес-вопросы.
+                    Агрегировать можно всегда, дезагрегировать — никогда!
+                </div>
+            </section>
+
+            <!-- Star Schema -->
+            <section>
+                <h2>Схема «Звезда» (Star Schema)</h2>
+                <div class="text-center">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap;">
+                        <div class="er-entity" style="min-width:140px;">
+                            <div class="entity-title">dim_time</div>
+                            <div class="pk">PK time_key</div>
+                            <div class="attr">&nbsp;&nbsp;production_date</div>
+                            <div class="attr">&nbsp;&nbsp;year, quarter</div>
+                            <div class="attr">&nbsp;&nbsp;month, day</div>
+                            <div class="attr">&nbsp;&nbsp;shift</div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                            <div class="er-entity" style="min-width:140px;">
+                                <div class="entity-title" style="background:var(--accent6);">dim_mine</div>
+                                <div class="pk">PK mine_key</div>
+                                <div class="attr">&nbsp;&nbsp;mine_name</div>
+                                <div class="attr">&nbsp;&nbsp;region</div>
+                                <div class="attr">&nbsp;&nbsp;max_depth_m</div>
+                            </div>
+                            <div class="er-entity" style="min-width:180px; border-color:var(--accent2);">
+                                <div class="entity-title" style="background:var(--accent2);">fact_production</div>
+                                <div class="fk">FK time_key</div>
+                                <div class="fk">FK mine_key</div>
+                                <div class="fk">FK equipment_key</div>
+                                <div class="fk">FK operator_key</div>
+                                <div class="attr" style="color:var(--accent2); font-weight:600;">&nbsp;&nbsp;tonnage_extracted</div>
+                                <div class="attr" style="color:var(--accent2); font-weight:600;">&nbsp;&nbsp;fe_content_pct</div>
+                                <div class="attr" style="color:var(--accent2); font-weight:600;">&nbsp;&nbsp;moisture_pct</div>
+                            </div>
+                            <div class="er-entity" style="min-width:140px;">
+                                <div class="entity-title" style="background:#7c3aed;">dim_operator</div>
+                                <div class="pk">PK operator_key</div>
+                                <div class="attr">&nbsp;&nbsp;full_name</div>
+                                <div class="attr">&nbsp;&nbsp;position</div>
+                                <div class="attr">&nbsp;&nbsp;qualification</div>
+                            </div>
+                        </div>
+                        <div class="er-entity" style="min-width:150px;">
+                            <div class="entity-title" style="background:#dc3545;">dim_equipment</div>
+                            <div class="pk">PK equipment_key</div>
+                            <div class="attr">&nbsp;&nbsp;equipment_name</div>
+                            <div class="attr">&nbsp;&nbsp;type_name</div>
+                            <div class="attr">&nbsp;&nbsp;manufacturer</div>
+                            <div class="attr">&nbsp;&nbsp;mine_name</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="highlight-box mt-10">
+                    <strong>Звезда:</strong> Таблица фактов в центре, измерения вокруг. Каждое измерение
+                    соединяется с фактом одним JOIN. Максимум JOIN = количество измерений.
+                </div>
+            </section>
+
+            <!-- Snowflake Schema -->
+            <section>
+                <h2>Схема «Снежинка» (Snowflake Schema)</h2>
+                <div class="comparison">
+                    <div class="col" style="border-top: 3px solid var(--accent1);">
+                        <h4 style="color:var(--accent1);">Звезда</h4>
+                        <ul>
+                            <li>Измерения <strong>денормализованы</strong></li>
+                            <li>dim_equipment содержит type_name, mine_name</li>
+                            <li>Меньше JOIN → быстрее запросы</li>
+                            <li>Больше избыточности</li>
+                        </ul>
+                        <div class="badge badge-blue">Проще</div>
+                    </div>
+                    <div class="col" style="border-top: 3px solid var(--accent2);">
+                        <h4 style="color:var(--accent2);">Снежинка</h4>
+                        <ul>
+                            <li>Измерения <strong>нормализованы</strong></li>
+                            <li>dim_equipment ссылается на dim_equipment_type и dim_mine</li>
+                            <li>Больше JOIN → медленнее запросы</li>
+                            <li>Меньше избыточности</li>
+                        </ul>
+                        <div class="badge badge-orange">Нормализовано</div>
+                    </div>
+                </div>
+                <div class="highlight-box success mt-10">
+                    <strong>На практике:</strong> Схема «Звезда» предпочтительнее для аналитики.
+                    Снежинка оправдана только при очень больших измерениях (>1 млн строк) или при жёстких требованиях к хранению.
+                </div>
+            </section>
+
+            <!-- SCD -->
+            <section>
+                <h2>Медленно меняющиеся измерения (SCD)</h2>
+                <div class="highlight-box warning">
+                    <strong>SCD (Slowly Changing Dimensions)</strong> — подходы к обработке изменений в измерениях.
+                    Например: шахта «Северная» переименована в «Северная-2». Что делать?
+                </div>
+                <table class="mt-10">
+                    <thead>
+                        <tr><th>Тип</th><th>Стратегия</th><th>Пример «Руда+»</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><span class="badge badge-blue">Type 0</span></td><td>Не меняем (только вставка)</td><td>Дата открытия шахты — никогда не меняется</td></tr>
+                        <tr><td><span class="badge badge-orange">Type 1</span></td><td>Перезаписываем значение</td><td>Обновили телефон оператора</td></tr>
+                        <tr><td><span class="badge badge-green">Type 2</span></td><td>Новая строка + даты действия</td><td>Оператор сменил квалификацию (5→6 разряд)</td></tr>
+                        <tr><td><span class="badge badge-purple">Type 3</span></td><td>Доп. столбец для предыдущего значения</td><td>prev_mine_name при переименовании шахты</td></tr>
+                        <tr><td><span class="badge badge-red">Type 6</span></td><td>Комбинация 1+2+3</td><td>Полная история + текущее значение</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- SCD Type 2 пример -->
+            <section>
+                <h2>SCD Type 2: пример для «Руда+»</h2>
+                <pre><code class="language-sql">-- dim_operator с поддержкой SCD Type 2
+CREATE TABLE dim_operator (
+    operator_key    SERIAL PRIMARY KEY,    -- суррогатный ключ
+    operator_id     VARCHAR(10) NOT NULL,  -- бизнес-ключ
+    full_name       VARCHAR(100),
+    position        VARCHAR(50),
+    qualification   VARCHAR(30),
+    mine_name       VARCHAR(50),
+    -- SCD Type 2 поля:
+    effective_from  DATE NOT NULL,
+    effective_to    DATE DEFAULT '9999-12-31',
+    is_current      BOOLEAN DEFAULT TRUE
+);
+
+-- Иванов А.А. повысил квалификацию:
+-- Строка 1: qualification='5 разряд', effective_to='2025-06-30', is_current=FALSE
+-- Строка 2: qualification='6 разряд', effective_from='2025-07-01', is_current=TRUE</code></pre>
+                <div class="highlight-box mt-10">
+                    <strong>Суррогатный ключ</strong> (operator_key) вместо бизнес-ключа (operator_id),
+                    потому что один оператор теперь может иметь несколько строк.
+                </div>
+            </section>
+
+            <!-- Денормализация -->
+            <section>
+                <h2>Денормализация для аналитики</h2>
+                <div class="highlight-box">
+                    <strong>Денормализация</strong> — осознанное внесение избыточности для ускорения аналитических запросов.
+                    Это не «плохая нормализация», а инженерное решение.
+                </div>
+                <div class="card-container mt-10">
+                    <div class="card">
+                        <h4>Приёмы денормализации</h4>
+                        <ul>
+                            <li>Вложение атрибутов из справочников в измерение</li>
+                            <li>Предварительные агрегаты в фактах</li>
+                            <li>Вычисляемые столбцы</li>
+                            <li>Широкие таблицы (flat tables)</li>
+                        </ul>
+                    </div>
+                    <div class="card accent2">
+                        <h4>Пример: dim_equipment</h4>
+                        <pre style="font-size:0.85em;"><code class="language-sql">-- Звезда (денормализовано):
+dim_equipment:
+  equipment_key
+  equipment_name
+  type_name      ← из equipment_types
+  type_code      ← из equipment_types
+  mine_name      ← из mines
+  region         ← из mines</code></pre>
+                    </div>
+                    <div class="card accent6">
+                        <h4>Когда денормализовать?</h4>
+                        <ul>
+                            <li>Запросы с 5+ JOIN</li>
+                            <li>Аналитика на миллиардах строк</li>
+                            <li>BI-инструменты ожидают «звезду»</li>
+                            <li>Данные обновляются редко (ETL)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Квиз 3.2 -->
+            <section>
+                <h2>Квиз: OLAP и измерения</h2>
+                <div class="quiz-container">
+                    <h3>Вопрос 3</h3>
+                    <p class="small">В таблице fact_production хранятся метрики tonnage_extracted и fe_content_pct. Что из перечисленного является измерением (dimension)?</p>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        A) tonnage_extracted
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        B) fe_content_pct
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true)">
+                        C) dim_mine (шахта)
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        D) moisture_pct
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Квиз: OLAP и измерения</h2>
+                <div class="quiz-container">
+                    <h3>Вопрос 4</h3>
+                    <p class="small">Оператор Иванов А.А. повысил разряд с 5 до 6. Какой тип SCD сохранит историю изменений?</p>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        A) SCD Type 0 — оставить старое значение
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        B) SCD Type 1 — перезаписать на новое
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true)">
+                        C) SCD Type 2 — добавить новую строку с датами
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        D) SCD Type 3 — добавить столбец prev_qualification
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+            </section>
+
+            <!-- Работа в группах 3.2 -->
+            <section class="group-work">
+                <h2>Работа в группах: Проектируем звезду</h2>
+                <p class="small">Разделитесь на 3 группы. Время: 15 минут</p>
+                <div class="card-container">
+                    <div class="group-task">
+                        <p><span class="group-num">1</span> <strong>Факт: Простои оборудования</strong></p>
+                        <p>Спроектируйте fact_downtime и измерения для анализа простоев.
+                        Какие метрики? Какие измерения? Какое зерно?</p>
+                    </div>
+                    <div class="group-task">
+                        <p><span class="group-num">2</span> <strong>Факт: Телеметрия</strong></p>
+                        <p>Спроектируйте fact_sensor_reading для анализа показаний датчиков.
+                        Как обработать 31 млрд строк/год? Нужна ли агрегация?</p>
+                    </div>
+                    <div class="group-task">
+                        <p><span class="group-num">3</span> <strong>SCD для оборудования</strong></p>
+                        <p>Оборудование переводят между шахтами, меняется статус. Спроектируйте
+                        dim_equipment с SCD Type 2. Какие поля отслеживать?</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================== -->
+            <!-- ===== ТЕМА 3.3: КИМБАЛЛ ===================== -->
+            <!-- ============================================== -->
+
+            <section class="section-divider">
+                <h1>Тема 3.3</h1>
+                <div class="divider-line"></div>
+                <h2>Подход Ральфа Кимбалла</h2>
+                <p style="font-size:0.7em; opacity:0.8;">Dimensional Modeling, Bus Architecture, Conformed Dimensions</p>
+            </section>
+
+            <!-- Кимбалл: философия -->
+            <section>
+                <h2>Кимбалл: «снизу вверх» (Bottom-Up)</h2>
+                <div class="highlight-box">
+                    <strong>Ральф Кимбалл</strong> (1944–2023) — автор подхода Dimensional Modeling.
+                    Книга «The Data Warehouse Toolkit» — настольная книга DWH-инженеров.
+                </div>
+                <div class="card-container mt-10">
+                    <div class="card">
+                        <h4>Ключевые принципы</h4>
+                        <ul>
+                            <li>Начинаем с бизнес-процессов</li>
+                            <li>Строим Data Marts по процессам</li>
+                            <li>Объединяем через Conformed Dimensions</li>
+                            <li>Пользователь получает данные быстро</li>
+                        </ul>
+                    </div>
+                    <div class="card accent2">
+                        <h4>Архитектура</h4>
+                        <div class="flow-container" style="flex-direction: column; gap:8px;">
+                            <div class="flow-step" style="min-width:200px;">Источники данных</div>
+                            <div class="flow-arrow">↓</div>
+                            <div class="flow-step" style="min-width:200px; background:linear-gradient(135deg, var(--accent2), #d56a1f);">ETL (Staging Area)</div>
+                            <div class="flow-arrow">↓</div>
+                            <div class="flow-step" style="min-width:200px; background:linear-gradient(135deg, var(--accent6), #5a9a37);">Data Marts (звёзды)</div>
+                            <div class="flow-arrow">↓</div>
+                            <div class="flow-step" style="min-width:200px; background:linear-gradient(135deg, #7c3aed, #6a2fc7);">BI / Отчёты</div>
+                        </div>
+                    </div>
+                    <div class="card accent6">
+                        <h4>Преимущества</h4>
+                        <ul>
+                            <li>Быстрый результат (weeks, not months)</li>
+                            <li>Понятно бизнес-пользователям</li>
+                            <li>Оптимизировано для запросов</li>
+                            <li>Итеративный подход</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Conformed Dimensions -->
+            <section>
+                <h2>Conformed Dimensions (Согласованные измерения)</h2>
+                <div class="highlight-box">
+                    <strong>Conformed Dimension</strong> — измерение, которое используется одинаково
+                    в нескольких Data Marts. Обеспечивает «единую версию правды».
+                </div>
+                <div class="text-center mt-10">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                        <div class="er-entity" style="min-width:160px; border-color:var(--accent2);">
+                            <div class="entity-title" style="background:var(--accent2);">fact_production</div>
+                            <div class="attr">tonnage, fe_pct</div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 5px;">
+                            <div class="er-entity" style="min-width:140px; border-color:var(--accent6);">
+                                <div class="entity-title" style="background:var(--accent6);">dim_equipment</div>
+                                <div class="attr">Общее измерение</div>
+                            </div>
+                            <div class="er-entity" style="min-width:140px; border-color:var(--accent6);">
+                                <div class="entity-title" style="background:var(--accent6);">dim_time</div>
+                                <div class="attr">Общее измерение</div>
+                            </div>
+                        </div>
+                        <div class="er-entity" style="min-width:160px; border-color:#dc3545;">
+                            <div class="entity-title" style="background:#dc3545;">fact_downtime</div>
+                            <div class="attr">duration, severity</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="highlight-box success mt-10">
+                    <strong>Пример «Руда+»:</strong> dim_equipment используется и в mart «Добыча», и в mart «Простои»,
+                    и в mart «Телеметрия». Один и тот же equipment_key — одинаковый смысл везде.
+                </div>
+            </section>
+
+            <!-- Business Process Matrix -->
+            <section>
+                <h2>Матрица бизнес-процессов (Bus Matrix)</h2>
+                <div class="highlight-box">
+                    Матрица показывает, какие измерения используются в каждом бизнес-процессе.
+                    Помогает планировать порядок разработки Data Marts.
+                </div>
+                <table class="mt-10">
+                    <thead>
+                        <tr>
+                            <th>Бизнес-процесс \ Измерение</th>
+                            <th>Время</th><th>Шахта</th><th>Оборуд.</th><th>Оператор</th><th>Тип обор.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Добыча руды</strong></td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+                        <tr><td><strong>Простои</strong></td><td>✓</td><td>✓</td><td>✓</td><td></td><td>✓</td></tr>
+                        <tr><td><strong>Телеметрия</strong></td><td>✓</td><td>✓</td><td>✓</td><td></td><td>✓</td></tr>
+                        <tr><td><strong>ТО оборудования</strong></td><td>✓</td><td>✓</td><td>✓</td><td></td><td>✓</td></tr>
+                    </tbody>
+                </table>
+                <div class="highlight-box success mt-10">
+                    <strong>dim_time, dim_mine, dim_equipment</strong> — Conformed Dimensions, используемые во всех процессах.
+                    Их нужно разработать первыми!
+                </div>
+            </section>
+
+            <!-- 4 шага Кимбалла -->
+            <section>
+                <h2>4 шага проектирования по Кимбаллу</h2>
+                <div class="flow-container">
+                    <div class="flow-step" style="background: linear-gradient(135deg, #dc3545, #c82333);">
+                        1. Выбрать<br>бизнес-процесс
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="background: linear-gradient(135deg, var(--accent2), #d56a1f);">
+                        2. Определить<br>гранулярность
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">
+                        3. Определить<br>измерения
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="background: linear-gradient(135deg, var(--accent6), #5a9a37);">
+                        4. Определить<br>факты (метрики)
+                    </div>
+                </div>
+                <div class="comparison mt-20">
+                    <div class="col">
+                        <h4 style="color:var(--accent1);">Пример: процесс «Добыча»</h4>
+                        <ol>
+                            <li><strong>Процесс:</strong> Добыча руды</li>
+                            <li><strong>Зерно:</strong> Одна смена, один оператор, одно оборудование</li>
+                            <li><strong>Измерения:</strong> Время, Шахта, Оборудование, Оператор</li>
+                            <li><strong>Факты:</strong> tonnage, fe_content_pct, moisture_pct</li>
+                        </ol>
+                    </div>
+                    <div class="col">
+                        <h4 style="color:var(--accent2);">Пример: процесс «Простои»</h4>
+                        <ol>
+                            <li><strong>Процесс:</strong> Регистрация простоев</li>
+                            <li><strong>Зерно:</strong> Одно событие простоя</li>
+                            <li><strong>Измерения:</strong> Время, Оборудование, Категория</li>
+                            <li><strong>Факты:</strong> duration_minutes</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Квиз 3.3 -->
+            <section>
+                <h2>Квиз: подход Кимбалла</h2>
+                <div class="quiz-container">
+                    <h3>Вопрос 5</h3>
+                    <p class="small">Что такое Conformed Dimension в подходе Кимбалла?</p>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        A) Таблица фактов, общая для всех Data Marts
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true)">
+                        B) Измерение, используемое одинаково в нескольких Data Marts
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        C) Нормализованная таблица-справочник
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        D) Таблица для хранения SCD-истории
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Квиз: подход Кимбалла</h2>
+                <div class="quiz-container">
+                    <h3>Вопрос 6</h3>
+                    <p class="small">Какой первый шаг при проектировании по методологии Кимбалла?</p>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        A) Выбрать СУБД
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        B) Создать таблицу фактов
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true)">
+                        C) Выбрать бизнес-процесс
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        D) Определить измерения
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+            </section>
+
+            <!-- ============================================== -->
+            <!-- ===== ТЕМА 3.4: ИНМОН ======================= -->
+            <!-- ============================================== -->
+
+            <section class="section-divider">
+                <h1>Тема 3.4</h1>
+                <div class="divider-line"></div>
+                <h2>Подход Билла Инмона</h2>
+                <p style="font-size:0.7em; opacity:0.8;">Corporate Information Factory</p>
+            </section>
+
+            <!-- Инмон: философия -->
+            <section>
+                <h2>Инмон: «сверху вниз» (Top-Down)</h2>
+                <div class="highlight-box">
+                    <strong>Билл Инмон</strong> — «отец хранилищ данных» (Data Warehousing).
+                    Книга «Building the Data Warehouse» (1992) — основа дисциплины DWH.
+                </div>
+                <div class="card-container mt-10">
+                    <div class="card">
+                        <h4>Ключевые принципы</h4>
+                        <ul>
+                            <li>Сначала строим <strong>единое хранилище</strong></li>
+                            <li>Хранилище в <strong>3НФ</strong></li>
+                            <li>Data Marts — производные представления</li>
+                            <li>Единый источник истины (SSOT)</li>
+                        </ul>
+                    </div>
+                    <div class="card accent2">
+                        <h4>Архитектура CIF</h4>
+                        <div class="flow-container" style="flex-direction: column; gap:8px;">
+                            <div class="flow-step" style="min-width:200px;">Источники данных</div>
+                            <div class="flow-arrow">↓</div>
+                            <div class="flow-step" style="min-width:200px; background:linear-gradient(135deg, var(--accent2), #d56a1f);">ODS (промежуточное)</div>
+                            <div class="flow-arrow">↓</div>
+                            <div class="flow-step" style="min-width:200px; background:linear-gradient(135deg, #dc3545, #c82333);">EDW (3НФ, единое хранилище)</div>
+                            <div class="flow-arrow">↓</div>
+                            <div class="flow-step" style="min-width:200px; background:linear-gradient(135deg, var(--accent6), #5a9a37);">Data Marts (звёзды)</div>
+                        </div>
+                    </div>
+                    <div class="card accent6">
+                        <h4>Преимущества</h4>
+                        <ul>
+                            <li>Полная интеграция данных</li>
+                            <li>Единая модель предприятия</li>
+                            <li>Нет дублирования между Data Marts</li>
+                            <li>Гибкость для новых запросов</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Слои CIF -->
+            <section>
+                <h2>Слои архитектуры Инмона: «Руда+»</h2>
+                <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 10px;">
+                    <div class="arch-layer" style="border-color: var(--accent1);">
+                        <span class="layer-label" style="color: var(--accent1);">ODS (Operational Data Store)</span>
+                        <p class="smaller mt-10">Копия оперативных данных «как есть». Данные из SCADA, ERP, датчиков.
+                        Хранятся без трансформации, обновляются часто (near-real-time).</p>
+                    </div>
+                    <div class="arch-layer" style="border-color: #dc3545;">
+                        <span class="layer-label" style="color: #dc3545;">EDW (Enterprise Data Warehouse) — 3НФ</span>
+                        <p class="smaller mt-10">Единое интегрированное хранилище. Все сущности «Руда+» в нормализованном виде:
+                        шахты, оборудование, операторы, добыча, простои, телеметрия. Историчность, аудит.</p>
+                    </div>
+                    <div class="arch-layer" style="border-color: var(--accent6);">
+                        <span class="layer-label" style="color: var(--accent6);">Data Marts (витрины данных)</span>
+                        <p class="smaller mt-10">Предметные витрины в схеме «Звезда» для конкретных отделов:
+                        Витрина добычи (начальник шахты), Витрина ТО (главный механик), Витрина телеметрии (диспетчер).</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3НФ в хранилище -->
+            <section>
+                <h2>EDW в 3НФ: модель «Руда+»</h2>
+                <pre><code class="language-sql">-- EDW «Руда+» в 3НФ (по Инмону)
+-- Все сущности нормализованы, полная история
+
+-- Справочники (с версионностью):
+--   edw.mines        (mine_id, mine_name, region, ..., valid_from, valid_to)
+--   edw.equipment    (equipment_id, type_id, mine_id, ..., valid_from, valid_to)
+--   edw.operators    (operator_id, name, qualification, ..., valid_from, valid_to)
+
+-- Транзакции:
+--   edw.ore_production   (production_id, mine_id, equipment_id, operator_id, ...)
+--   edw.downtime_events  (event_id, equipment_id, category_id, ...)
+--   edw.sensor_readings  (reading_id, equipment_id, sensor_type_id, ...)
+
+-- Классификаторы:
+--   edw.equipment_types    (type_id, type_name)
+--   edw.downtime_categories(category_id, category_name)
+--   edw.sensor_types       (sensor_type_id, sensor_type_name, unit)
+
+-- Из EDW формируются Data Marts (star schemas) для BI</code></pre>
+            </section>
+
+            <!-- Обсуждение 3.3-3.4 -->
+            <section class="discussion">
+                <div class="discussion-icon">💬</div>
+                <h2>Вопрос для обсуждения</h2>
+                <div class="discussion-question">
+                    <strong>Кимбалл vs Инмон:</strong> Предприятие «Руда+» планирует внедрение DWH.
+                    У компании 3 шахты, 450 сотрудников, 4 ключевых бизнес-процесса.
+                    Какой подход вы бы рекомендовали и почему?
+                </div>
+                <div class="discussion-question">
+                    <strong>Практический вопрос:</strong> У Кимбалла данные сразу доступны для аналитики
+                    (за недели), у Инмона — нужно сначала построить EDW (месяцы). Но Инмон даёт
+                    гибкость для новых вопросов. Как бы вы нашли баланс для «Руда+»?
+                </div>
+                <div class="smaller mt-20" style="color: var(--text-muted);">
+                    Время на обсуждение: 7–10 минут
+                </div>
+            </section>
+
+            <!-- ============================================== -->
+            <!-- ===== ТЕМА 3.5: DATA VAULT =================== -->
+            <!-- ============================================== -->
+
+            <section class="section-divider">
+                <h1>Тема 3.5</h1>
+                <div class="divider-line"></div>
+                <h2>Data Vault 2.0</h2>
+                <p style="font-size:0.7em; opacity:0.8;">Хабы, линки, сателлиты</p>
+            </section>
+
+            <!-- Data Vault: введение -->
+            <section>
+                <h2>Data Vault: гибридный подход</h2>
+                <div class="highlight-box">
+                    <strong>Data Vault</strong> — методология моделирования DWH, разработанная Дэном Линстедтом (Dan Linstedt).
+                    Сочетает сильные стороны 3НФ (интеграция) и звезды (гибкость).
+                </div>
+                <div class="card-container mt-10">
+                    <div class="card">
+                        <h4>Hub (Хаб)</h4>
+                        <p class="smaller">Бизнес-сущности. Содержит только бизнес-ключ и метаданные загрузки.</p>
+                        <div class="vault-hub" style="width:80px; height:80px;">Hub<br>Equipment</div>
+                    </div>
+                    <div class="card accent2">
+                        <h4>Link (Линк)</h4>
+                        <p class="smaller">Связи между хабами. Содержит FK на хабы и метаданные загрузки.</p>
+                        <div class="vault-link">Link: Production</div>
+                    </div>
+                    <div class="card accent6">
+                        <h4>Satellite (Сателлит)</h4>
+                        <p class="smaller">Описательные атрибуты и их история. Привязан к хабу или линку.</p>
+                        <div class="vault-sat">Sat: Equipment Details</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Data Vault: компоненты -->
+            <section>
+                <h2>Компоненты Data Vault: «Руда+»</h2>
+                <div class="text-center">
+                    <div style="display: flex; align-items: flex-start; justify-content: center; gap: 30px; flex-wrap: wrap;">
+                        <div style="text-align: center;">
+                            <div class="vault-hub">Hub<br>Mine</div>
+                            <br>
+                            <div class="vault-sat">Sat Mine<br>Details</div>
+                        </div>
+                        <div style="text-align: center; margin-top: 30px;">
+                            <div class="vault-link">Link<br>Equipment_Mine</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div class="vault-hub">Hub<br>Equipment</div>
+                            <br>
+                            <div class="vault-sat">Sat Equipment<br>Details</div>
+                            <br>
+                            <div class="vault-sat" style="background: linear-gradient(135deg, #7c3aed, #6a2fc7);">Sat Equipment<br>Status</div>
+                        </div>
+                        <div style="text-align: center; margin-top: 30px;">
+                            <div class="vault-link">Link<br>Production</div>
+                            <br>
+                            <div class="vault-sat">Sat Production<br>Metrics</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div class="vault-hub">Hub<br>Operator</div>
+                            <br>
+                            <div class="vault-sat">Sat Operator<br>Details</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Data Vault: SQL -->
+            <section>
+                <h2>Data Vault: SQL-реализация</h2>
+                <pre><code class="language-sql">-- Hub: бизнес-ключ + метаданные загрузки
+CREATE TABLE hub_equipment (
+    hub_equipment_hk  CHAR(32) PRIMARY KEY,  -- hash key (MD5)
+    equipment_id      VARCHAR(10) NOT NULL,   -- бизнес-ключ
+    load_dts          TIMESTAMP NOT NULL,     -- дата загрузки
+    record_source     VARCHAR(50) NOT NULL    -- источник
+);
+
+-- Satellite: описательные атрибуты + история
+CREATE TABLE sat_equipment_details (
+    hub_equipment_hk  CHAR(32) NOT NULL REFERENCES hub_equipment,
+    load_dts          TIMESTAMP NOT NULL,
+    load_end_dts      TIMESTAMP DEFAULT '9999-12-31',
+    equipment_name    VARCHAR(50),
+    manufacturer      VARCHAR(50),
+    model             VARCHAR(50),
+    year_manufactured INTEGER,
+    engine_hours      NUMERIC(10,1),
+    record_source     VARCHAR(50),
+    hash_diff         CHAR(32),  -- hash атрибутов для сравнения
+    PRIMARY KEY (hub_equipment_hk, load_dts)
+);</code></pre>
+            </section>
+
+            <!-- Data Vault: Link -->
+            <section>
+                <h2>Data Vault: Link (связь)</h2>
+                <pre><code class="language-sql">-- Link: связь между Equipment и Mine
+CREATE TABLE link_equipment_mine (
+    link_equip_mine_hk  CHAR(32) PRIMARY KEY,   -- hash key
+    hub_equipment_hk    CHAR(32) NOT NULL REFERENCES hub_equipment,
+    hub_mine_hk         CHAR(32) NOT NULL REFERENCES hub_mine,
+    load_dts            TIMESTAMP NOT NULL,
+    record_source       VARCHAR(50) NOT NULL
+);
+
+-- Link: транзакция добычи (связывает Mine, Equipment, Operator)
+CREATE TABLE link_production (
+    link_production_hk  CHAR(32) PRIMARY KEY,
+    hub_mine_hk         CHAR(32) NOT NULL REFERENCES hub_mine,
+    hub_equipment_hk    CHAR(32) NOT NULL REFERENCES hub_equipment,
+    hub_operator_hk     CHAR(32) NOT NULL REFERENCES hub_operator,
+    production_id       VARCHAR(10) NOT NULL,    -- degenerate dim
+    load_dts            TIMESTAMP NOT NULL,
+    record_source       VARCHAR(50) NOT NULL
+);</code></pre>
+            </section>
+
+            <!-- Data Vault: преимущества -->
+            <section>
+                <h2>Преимущества Data Vault</h2>
+                <div class="card-container">
+                    <div class="card">
+                        <h4>Гибкость</h4>
+                        <ul>
+                            <li>Добавление нового источника — новый сателлит</li>
+                            <li>Новая связь — новый линк</li>
+                            <li>Не нужно менять существующие таблицы</li>
+                        </ul>
+                    </div>
+                    <div class="card accent2">
+                        <h4>Аудит и история</h4>
+                        <ul>
+                            <li>Полная трассировка: откуда данные</li>
+                            <li>Автоматическая историчность</li>
+                            <li>load_dts + record_source в каждой таблице</li>
+                        </ul>
+                    </div>
+                    <div class="card accent6">
+                        <h4>Параллельная загрузка</h4>
+                        <ul>
+                            <li>Хабы, линки, сателлиты загружаются независимо</li>
+                            <li>Идеально для ELT-паттерна</li>
+                            <li>Масштабируется горизонтально</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="highlight-box warning mt-10">
+                    <strong>Недостаток:</strong> Для аналитических запросов Data Vault требует создания Business Vault
+                    и Information Marts (витрин). Напрямую к Data Vault BI-инструменты обычно не подключают.
+                </div>
+            </section>
+
+            <!-- PIT и Bridge -->
+            <section>
+                <h2>Дополнительные компоненты Data Vault</h2>
+                <div class="comparison">
+                    <div class="col" style="border-top: 3px solid var(--accent1);">
+                        <h4 style="color:var(--accent1);">PIT (Point-in-Time)</h4>
+                        <p class="smaller">Ускоряет запросы к сателлитам. Содержит моментальный снимок:
+                        для каждого хаба — ссылки на актуальные строки всех его сателлитов на определённую дату.</p>
+                        <pre style="font-size:0.85em;"><code class="language-sql">-- PIT для Hub_Equipment
+pit_equipment:
+  hub_equipment_hk
+  snapshot_dts
+  sat_details_load_dts
+  sat_status_load_dts</code></pre>
+                    </div>
+                    <div class="col" style="border-top: 3px solid var(--accent2);">
+                        <h4 style="color:var(--accent2);">Bridge</h4>
+                        <p class="smaller">Предсоединяет хабы через цепочку линков. Ускоряет многошаговые
+                        JOIN между далёкими сущностями (Mine → Equipment → Production → Operator).</p>
+                        <pre style="font-size:0.85em;"><code class="language-sql">-- Bridge: Mine-to-Operator
+bridge_mine_operator:
+  hub_mine_hk
+  hub_equipment_hk
+  hub_operator_hk
+  effective_from / to</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Квиз 3.5 -->
+            <section>
+                <h2>Квиз: Data Vault</h2>
+                <div class="quiz-container">
+                    <h3>Вопрос 7</h3>
+                    <p class="small">В Data Vault описательные атрибуты сущности (например, name, manufacturer для Equipment) хранятся в:</p>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        A) Hub — вместе с бизнес-ключом
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        B) Link — вместе со связями
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true)">
+                        C) Satellite — отдельно от ключа
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        D) PIT — в моментальном снимке
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Квиз: Data Vault</h2>
+                <div class="quiz-container">
+                    <h3>Вопрос 8</h3>
+                    <p class="small">Какое главное преимущество Data Vault при добавлении нового источника данных?</p>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        A) Не нужен ETL-процесс
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true)">
+                        B) Добавляется новый сателлит без изменения существующих таблиц
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        C) Данные автоматически появляются в BI-отчётах
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        D) Не нужны хеш-ключи
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+            </section>
+
+            <!-- ============================================== -->
+            <!-- ===== ТЕМА 3.6: СРАВНЕНИЕ ==================== -->
+            <!-- ============================================== -->
+
+            <section class="section-divider">
+                <h1>Тема 3.6</h1>
+                <div class="divider-line"></div>
+                <h2>Сравнение подходов и выбор архитектуры</h2>
+            </section>
+
+            <!-- Сравнительная таблица -->
+            <section>
+                <h2>Кимбалл vs Инмон vs Data Vault</h2>
+                <table>
+                    <thead>
+                        <tr><th>Критерий</th><th>Кимбалл</th><th>Инмон</th><th>Data Vault</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Подход</td><td>Снизу вверх</td><td>Сверху вниз</td><td>Гибридный</td></tr>
+                        <tr><td>Модель хранилища</td><td>Звезда / Снежинка</td><td>3НФ</td><td>Hub/Link/Sat</td></tr>
+                        <tr><td>Скорость внедрения</td><td><span class="badge badge-green">Быстро</span></td><td><span class="badge badge-red">Медленно</span></td><td><span class="badge badge-orange">Средне</span></td></tr>
+                        <tr><td>Гибкость к изменениям</td><td><span class="badge badge-orange">Средняя</span></td><td><span class="badge badge-orange">Средняя</span></td><td><span class="badge badge-green">Высокая</span></td></tr>
+                        <tr><td>Аудит и трассировка</td><td><span class="badge badge-red">Низкий</span></td><td><span class="badge badge-orange">Средний</span></td><td><span class="badge badge-green">Высокий</span></td></tr>
+                        <tr><td>Сложность для команды</td><td><span class="badge badge-green">Низкая</span></td><td><span class="badge badge-orange">Средняя</span></td><td><span class="badge badge-red">Высокая</span></td></tr>
+                        <tr><td>BI-интеграция</td><td><span class="badge badge-green">Прямая</span></td><td>Через витрины</td><td>Через витрины</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Критерии выбора -->
+            <section>
+                <h2>Как выбрать архитектуру?</h2>
+                <div class="card-container">
+                    <div class="card">
+                        <h4>Кимбалл — когда?</h4>
+                        <ul>
+                            <li>Малый/средний бизнес</li>
+                            <li>Нужен быстрый результат</li>
+                            <li>Понятные бизнес-процессы</li>
+                            <li>BI — основной потребитель</li>
+                            <li>Небольшая команда</li>
+                        </ul>
+                        <div class="badge badge-blue">«Руда+» сейчас</div>
+                    </div>
+                    <div class="card accent2">
+                        <h4>Инмон — когда?</h4>
+                        <ul>
+                            <li>Крупное предприятие</li>
+                            <li>Много источников данных</li>
+                            <li>Нужна единая модель</li>
+                            <li>Долгосрочная стратегия</li>
+                            <li>Сильная команда архитекторов</li>
+                        </ul>
+                        <div class="badge badge-orange">Холдинг шахт</div>
+                    </div>
+                    <div class="card accent6">
+                        <h4>Data Vault — когда?</h4>
+                        <ul>
+                            <li>Источники часто меняются</li>
+                            <li>Жёсткие требования к аудиту</li>
+                            <li>Agile-разработка DWH</li>
+                            <li>Большие объёмы (Big Data)</li>
+                            <li>Опытная команда</li>
+                        </ul>
+                        <div class="badge badge-green">IoT + телеметрия</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Гибридные подходы -->
+            <section>
+                <h2>Гибридные подходы и современные тренды</h2>
+                <div class="comparison">
+                    <div class="col" style="border-top: 3px solid var(--accent1);">
+                        <h4 style="color:var(--accent1);">Гибрид: Data Vault + Кимбалл</h4>
+                        <ul>
+                            <li>Data Vault — слой интеграции (Raw Vault)</li>
+                            <li>Кимбалл (звёзды) — слой представления</li>
+                            <li>Business Vault — промежуточные расчёты</li>
+                            <li>Популярный подход в 2020-х</li>
+                        </ul>
+                    </div>
+                    <div class="col" style="border-top: 3px solid var(--accent2);">
+                        <h4 style="color:var(--accent2);">Современные архитектуры</h4>
+                        <ul>
+                            <li><strong>Lambda:</strong> batch + stream параллельно</li>
+                            <li><strong>Kappa:</strong> только stream (всё как поток)</li>
+                            <li><strong>Lakehouse:</strong> Data Lake + Warehouse</li>
+                            <li><strong>Data Mesh:</strong> децентрализация по доменам</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="highlight-box mt-10">
+                    <strong>Для «Руда+»:</strong> Телеметрия (1000 показаний/сек) → stream-обработка (Kappa/Lambda).
+                    Добыча и простои → batch ETL в Кимбалл-витрины. Гибридная архитектура!
+                </div>
+            </section>
+
+            <!-- Кейс-стади -->
+            <section class="case-study">
+                <h2>Кейс: выбор архитектуры DWH для «Руда+»</h2>
+                <div class="case-box">
+                    <h3 style="color: #dc3545;">Сценарий</h3>
+                    <p>Руководство «Руда+» утвердило бюджет на внедрение DWH. Требования:</p>
+                    <ul>
+                        <li>Оперативные отчёты по добыче — за 3 месяца</li>
+                        <li>Полный аудит данных телеметрии (регулятор)</li>
+                        <li>В перспективе: подключение ERP, бухгалтерии, кадров</li>
+                        <li>Команда: 2 DWH-инженера, 1 аналитик</li>
+                    </ul>
+                    <p class="mt-10"><strong>Задание:</strong> Какую архитектуру вы порекомендуете? Обоснуйте решение.
+                    Можно ли применить гибридный подход? Какие слои будут?</p>
+                    <p class="smaller mt-10" style="color: var(--text-muted);">Работа в группах: 10 минут на обсуждение, 5 минут на презентацию решения</p>
+                </div>
+            </section>
+
+            <!-- Квиз 3.6 -->
+            <section>
+                <h2>Квиз: Сравнение подходов</h2>
+                <div class="quiz-container">
+                    <h3>Вопрос 9</h3>
+                    <p class="small">Для предприятия «Руда+» (3 шахты, 450 сотрудников, малая команда разработки) наиболее подходящий подход для первой фазы DWH:</p>
+                    <div class="quiz-option" onclick="checkAnswer(this, true)">
+                        A) Кимбалл — быстрый результат, понятные витрины
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        B) Инмон — сначала полное корпоративное хранилище
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        C) Data Vault — максимальная гибкость
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        D) Data Mesh — децентрализация по шахтам
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Квиз: Сравнение подходов</h2>
+                <div class="quiz-container">
+                    <h3>Вопрос 10</h3>
+                    <p class="small">Какая архитектура лучше подходит для потоковой обработки телеметрии (1000 показаний/сек)?</p>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        A) Классическая звезда Кимбалла с ETL
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        B) Инмон 3НФ с пакетной загрузкой
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true)">
+                        C) Lambda / Kappa архитектура с stream-обработкой
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        D) Плоская таблица без нормализации
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+            </section>
+
+            <!-- Работа в группах: итоговая -->
+            <section class="group-work">
+                <h2>Работа в группах: Архитектура для разных компаний</h2>
+                <p class="small">Разделитесь на 4 группы. Время: 15 минут</p>
+                <div class="card-container">
+                    <div class="group-task">
+                        <p><span class="group-num">1</span> <strong>Стартап (50 чел.)</strong></p>
+                        <p>E-commerce, 3 источника данных, нужна аналитика за 1 месяц. Бюджет ограничен.</p>
+                    </div>
+                    <div class="group-task">
+                        <p><span class="group-num">2</span> <strong>Банк (5000 чел.)</strong></p>
+                        <p>50+ систем-источников, жёсткий регуляторный контроль, полная трассировка данных.</p>
+                    </div>
+                    <div class="group-task">
+                        <p><span class="group-num">3</span> <strong>IoT-платформа</strong></p>
+                        <p>100 000 датчиков, 10 млн событий/сек, источники часто добавляются.</p>
+                    </div>
+                    <div class="group-task">
+                        <p><span class="group-num">4</span> <strong>«Руда+» через 5 лет</strong></p>
+                        <p>10 шахт, 2000 сотрудников, ERP+MES+SCADA+HR. Какая эволюция архитектуры?</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Практическая работа -->
+            <section class="practice-slide">
+                <h2>Практическая работа модуля 3</h2>
+                <div class="case-box" style="background: white;">
+                    <h3 style="color: var(--accent6);">Моделирование OLTP/OLAP/Data Vault для «Руда+»</h3>
+                    <ol>
+                        <li><strong>Часть 1</strong> (30 мин): Нормализация OLTP — проверка модели на соответствие 3НФ</li>
+                        <li><strong>Часть 2</strong> (40 мин): Звезда — создание Star Schema (fact_production, dim_*)</li>
+                        <li><strong>Часть 3</strong> (30 мин): Data Vault — создание Hub/Link/Satellite</li>
+                        <li><strong>Часть 4</strong> (20 мин): Аналитические запросы по всем трём моделям</li>
+                    </ol>
+                    <div class="highlight-box success mt-10">
+                        <strong>Результат:</strong> 3 модели данных для одного предприятия — OLTP (3НФ),
+                        Star Schema (Кимбалл), Data Vault. Понимание trade-offs каждого подхода.
+                    </div>
+                    <p class="smaller mt-10">Подробные инструкции — в файле <strong>practice/README.md</strong></p>
+                </div>
+            </section>
+
+            <!-- Резюме модуля -->
+            <section>
+                <h2>Резюме модуля 3</h2>
+                <div class="card-container">
+                    <div class="card">
+                        <h4>OLTP (3.1)</h4>
+                        <ul>
+                            <li>Нормализация: 1НФ → 2НФ → 3НФ → BCNF</li>
+                            <li>Устранение аномалий</li>
+                            <li>Оптимально для транзакций</li>
+                        </ul>
+                    </div>
+                    <div class="card accent2">
+                        <h4>OLAP (3.2)</h4>
+                        <ul>
+                            <li>Факты + Измерения</li>
+                            <li>Звезда vs Снежинка</li>
+                            <li>SCD Types (0–6)</li>
+                            <li>Денормализация</li>
+                        </ul>
+                    </div>
+                    <div class="card accent6">
+                        <h4>Подходы (3.3–3.6)</h4>
+                        <ul>
+                            <li>Кимбалл: bottom-up, быстро</li>
+                            <li>Инмон: top-down, полно</li>
+                            <li>Data Vault: гибко, аудит</li>
+                            <li>Выбор зависит от контекста</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Что дальше -->
+            <section>
+                <h2>Что дальше?</h2>
+                <div class="highlight-box">
+                    <strong>Модуль 4:</strong> Моделирование потоковых и пакетных данных
+                </div>
+                <div class="card-container mt-10">
+                    <div class="card">
+                        <h4>Будем изучать</h4>
+                        <ul>
+                            <li>ETL vs ELT</li>
+                            <li>Stream Processing</li>
+                            <li>Apache Kafka, Flink</li>
+                            <li>Модели для потоков</li>
+                        </ul>
+                    </div>
+                    <div class="card accent2">
+                        <h4>Подготовка</h4>
+                        <ul>
+                            <li>Выполните практическую работу модуля 3</li>
+                            <li>Проверьте: 3 схемы (oltp, star, vault) созданы</li>
+                            <li>Повторите OLTP vs OLAP различия</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="text-center mt-20">
+                    <div class="badge badge-blue" style="font-size:0.8em; padding: 8px 20px;">Спасибо за внимание!</div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/plugin/highlight/highlight.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            showSlideNumber: 'all',
+            transition: 'slide',
+            transitionSpeed: 'default',
+            width: 1200,
+            height: 700,
+            margin: 0.04,
+            plugins: [RevealHighlight]
+        });
+
+        function checkAnswer(element, isCorrect) {
+            const container = element.closest('.quiz-container');
+            const options = container.querySelectorAll('.quiz-option');
+            const feedback = container.querySelector('.quiz-feedback');
+
+            options.forEach(opt => {
+                opt.classList.remove('correct', 'incorrect');
+                opt.style.pointerEvents = 'none';
+            });
+
+            if (isCorrect) {
+                element.classList.add('correct');
+                feedback.textContent = 'Правильно!';
+                feedback.style.background = '#e8feef';
+                feedback.style.color = '#155724';
+            } else {
+                element.classList.add('incorrect');
+                options.forEach(opt => {
+                    if (opt.getAttribute('onclick').includes('true')) {
+                        opt.classList.add('correct');
+                    }
+                });
+                feedback.textContent = 'Неправильно. Правильный ответ выделен зелёным.';
+                feedback.style.background = '#fee8e8';
+                feedback.style.color = '#721c24';
+            }
+            feedback.style.display = 'block';
+
+            setTimeout(() => {
+                options.forEach(opt => {
+                    opt.style.pointerEvents = 'auto';
+                });
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

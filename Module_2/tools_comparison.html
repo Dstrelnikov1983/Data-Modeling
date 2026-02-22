@@ -1,0 +1,1892 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Модуль 2. Инструменты моделирования данных — сравнительный обзор</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/white.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/plugin/highlight/monokai.css">
+    <style>
+        :root {
+            --accent1: #4472C4;
+            --accent2: #ED7D31;
+            --accent6: #70AD47;
+            --bg-light: #f8f9fa;
+            --text-dark: #2c3e50;
+            --text-muted: #6c757d;
+        }
+
+        .reveal {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 28px;
+            color: var(--text-dark);
+        }
+
+        .reveal h1 {
+            color: var(--accent1);
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 0.3em;
+        }
+
+        .reveal h2 {
+            color: var(--accent1);
+            font-size: 1.4em;
+            font-weight: 600;
+            margin-bottom: 0.3em;
+        }
+
+        .reveal h3 {
+            color: var(--accent2);
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .reveal .slide-number {
+            font-size: 14px;
+            color: var(--accent1);
+        }
+
+        /* Title slide */
+        .title-slide {
+            text-align: center;
+        }
+        .title-slide h1 {
+            font-size: 2em;
+            border-bottom: 4px solid var(--accent2);
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+        .title-slide .subtitle {
+            color: var(--text-muted);
+            font-size: 0.9em;
+            margin-top: 20px;
+        }
+        .title-slide .module-info {
+            background: linear-gradient(135deg, var(--accent1), #5a8fd4);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-top: 20px;
+            font-size: 0.8em;
+        }
+
+        /* Section divider */
+        .section-divider {
+            background: linear-gradient(135deg, var(--accent1), #2c5aa0) !important;
+            color: white !important;
+        }
+        .section-divider h1, .section-divider h2 {
+            color: white !important;
+        }
+        .section-divider .divider-line {
+            width: 100px;
+            height: 4px;
+            background: var(--accent2);
+            margin: 20px auto;
+        }
+
+        /* Content cards */
+        .card-container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            flex: 1;
+            min-width: 200px;
+            max-width: 300px;
+            text-align: left;
+            font-size: 0.7em;
+            border-top: 3px solid var(--accent1);
+        }
+        .card.accent2 {
+            border-top-color: var(--accent2);
+        }
+        .card.accent6 {
+            border-top-color: var(--accent6);
+        }
+        .card h4 {
+            color: var(--accent1);
+            margin: 0 0 8px 0;
+            font-size: 1.1em;
+        }
+        .card.accent2 h4 { color: var(--accent2); }
+        .card.accent6 h4 { color: var(--accent6); }
+
+        /* Lists */
+        .reveal ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .reveal ul li {
+            padding: 4px 0 4px 25px;
+            position: relative;
+            font-size: 0.85em;
+        }
+        .reveal ul li::before {
+            content: '\25B8';
+            color: var(--accent2);
+            position: absolute;
+            left: 5px;
+            font-weight: bold;
+        }
+
+        .reveal ol {
+            padding-left: 30px;
+        }
+        .reveal ol li {
+            padding: 4px 0;
+            font-size: 0.85em;
+        }
+
+        /* Highlight box */
+        .highlight-box {
+            background: linear-gradient(135deg, #e8f0fe, #d4e4fc);
+            border-left: 4px solid var(--accent1);
+            padding: 15px 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 15px 0;
+            font-size: 0.8em;
+            text-align: left;
+        }
+        .highlight-box.warning {
+            background: linear-gradient(135deg, #fef3e8, #fde4c8);
+            border-left-color: var(--accent2);
+        }
+        .highlight-box.success {
+            background: linear-gradient(135deg, #e8feef, #c8fdd8);
+            border-left-color: var(--accent6);
+        }
+
+        /* Quiz styles */
+        .quiz-container {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            border: 2px solid var(--accent1);
+        }
+        .quiz-container h3 {
+            color: var(--accent1);
+            margin-top: 0;
+        }
+        .quiz-option {
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin: 8px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.75em;
+            text-align: left;
+        }
+        .quiz-option:hover {
+            border-color: var(--accent1);
+            background: #e8f0fe;
+        }
+        .quiz-option.correct {
+            border-color: var(--accent6);
+            background: #e8feef;
+        }
+        .quiz-option.incorrect {
+            border-color: #dc3545;
+            background: #fee8e8;
+        }
+        .quiz-feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.75em;
+            display: none;
+        }
+
+        /* Discussion slide */
+        .discussion {
+            background: linear-gradient(135deg, #fff8e1, #fff3cd) !important;
+        }
+        .discussion-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        .discussion h2 {
+            color: var(--accent2) !important;
+        }
+        .discussion-question {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 10px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            font-size: 0.85em;
+            border-left: 4px solid var(--accent2);
+            text-align: left;
+        }
+
+        /* Practice slide */
+        .practice-slide {
+            background: linear-gradient(135deg, #e8feef, #d4fce4) !important;
+        }
+        .practice-slide h2 {
+            color: var(--accent6) !important;
+        }
+
+        /* Table styles */
+        .reveal table {
+            border-collapse: collapse;
+            margin: 15px auto;
+            font-size: 0.65em;
+            width: 90%;
+        }
+        .reveal table th {
+            background: var(--accent1);
+            color: white;
+            padding: 10px 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        .reveal table td {
+            padding: 8px 15px;
+            border-bottom: 1px solid #dee2e6;
+            text-align: left;
+        }
+        .reveal table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        .reveal table tr:hover {
+            background: #e8f0fe;
+        }
+
+        /* Flow styles */
+        .flow-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+        .flow-step {
+            background: linear-gradient(135deg, var(--accent1), #5a8fd4);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.6em;
+            font-weight: 600;
+            min-width: 100px;
+            text-align: center;
+        }
+        .flow-arrow {
+            color: var(--accent2);
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        /* Group work */
+        .group-work {
+            background: linear-gradient(135deg, #f0e8fe, #e4d4fc) !important;
+        }
+        .group-work h2 {
+            color: #7c3aed !important;
+        }
+        .group-task {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            font-size: 0.7em;
+            text-align: left;
+        }
+        .group-task .group-num {
+            display: inline-block;
+            background: #7c3aed;
+            color: white;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            line-height: 28px;
+            text-align: center;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        /* Case study */
+        .case-study {
+            background: linear-gradient(135deg, #fce8e8, #fcd4d4) !important;
+        }
+        .case-study h2 {
+            color: #dc3545 !important;
+        }
+        .case-box {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            font-size: 0.75em;
+            text-align: left;
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.6em;
+            font-weight: 600;
+            color: white;
+            margin: 2px;
+        }
+        .badge-blue { background: var(--accent1); }
+        .badge-orange { background: var(--accent2); }
+        .badge-green { background: var(--accent6); }
+        .badge-purple { background: #7c3aed; }
+        .badge-red { background: #dc3545; }
+
+        /* Comparison columns */
+        .comparison {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .comparison .col {
+            flex: 1;
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            font-size: 0.7em;
+            text-align: left;
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            height: 4px;
+            background: #dee2e6;
+            border-radius: 2px;
+            margin: 20px 0 5px 0;
+        }
+        .progress-bar .fill {
+            height: 100%;
+            border-radius: 2px;
+            background: linear-gradient(90deg, var(--accent1), var(--accent2));
+        }
+
+        /* Small text helper */
+        .small { font-size: 0.7em; }
+        .smaller { font-size: 0.6em; }
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .mt-10 { margin-top: 10px; }
+        .mt-20 { margin-top: 20px; }
+        .mb-10 { margin-bottom: 10px; }
+
+        /* Tool logo placeholder */
+        .tool-logo {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4em;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        /* Positioning map */
+        .position-map {
+            position: relative;
+            width: 90%;
+            height: 400px;
+            margin: 10px auto;
+            border-left: 3px solid var(--text-dark);
+            border-bottom: 3px solid var(--text-dark);
+        }
+        .position-map .axis-label-y {
+            position: absolute;
+            left: -15px;
+            top: 50%;
+            transform: rotate(-90deg) translateX(50%);
+            font-size: 0.55em;
+            font-weight: 600;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+        .position-map .axis-label-x {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.55em;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+        .position-map .tool-dot {
+            position: absolute;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.5em;
+            font-weight: 600;
+            color: white;
+            white-space: nowrap;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        /* Checkmark / cross in tables */
+        .yes { color: var(--accent6); font-weight: 700; }
+        .no { color: #dc3545; font-weight: 700; }
+        .partial { color: var(--accent2); font-weight: 700; }
+
+        /* Responsive adjustments */
+        .reveal .slides section {
+            padding: 20px 40px;
+        }
+
+        /* Verdict card */
+        .verdict-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            font-size: 0.7em;
+            text-align: left;
+            border-left: 4px solid var(--accent1);
+            margin: 8px 0;
+        }
+        .verdict-card.best {
+            border-left-color: var(--accent6);
+            background: #f6fff8;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- ===== ТИТУЛЬНЫЙ СЛАЙД ===== -->
+            <section class="title-slide">
+                <h1>Инструменты моделирования данных</h1>
+                <p>Сравнительный обзор</p>
+                <div class="subtitle">
+                    <strong>Модуль 2.</strong> Основы моделирования данных
+                </div>
+                <div class="module-info">
+                    Дополнительная презентация &bull; 8 инструментов &bull; Критерии выбора
+                </div>
+                <div class="progress-bar">
+                    <div class="fill" style="width: 25%"></div>
+                </div>
+            </section>
+
+            <!-- ===== РАЗДЕЛ 1: КРИТЕРИИ СРАВНЕНИЯ ===== -->
+            <section class="section-divider">
+                <h2>Часть 1</h2>
+                <div class="divider-line"></div>
+                <h1>Критерии сравнения инструментов</h1>
+                <p>На что обращать внимание при выборе</p>
+            </section>
+
+            <!-- Зачем сравнивать -->
+            <section>
+                <h2>Зачем нужна система критериев?</h2>
+                <div class="highlight-box">
+                    На рынке <strong>более 30 инструментов</strong> для моделирования данных.
+                    Без чётких критериев выбор превращается в лотерею.
+                </div>
+                <div class="card-container mt-10">
+                    <div class="card">
+                        <h4>Стартап</h4>
+                        <ul>
+                            <li>Нужно быстро и бесплатно</li>
+                            <li>Важна простота</li>
+                            <li>Достаточно физической модели</li>
+                        </ul>
+                    </div>
+                    <div class="card accent2">
+                        <h4>Enterprise</h4>
+                        <ul>
+                            <li>Нужна сертификация</li>
+                            <li>Все три уровня модели</li>
+                            <li>Интеграция с процессами</li>
+                        </ul>
+                    </div>
+                    <div class="card accent6">
+                        <h4>Госсектор (РФ)</h4>
+                        <ul>
+                            <li>Реестр отечественного ПО</li>
+                            <li>Импортозамещение</li>
+                            <li>Сертификация ФСТЭК</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Критерий 1: Уровни моделирования -->
+            <section>
+                <h2>Критерий 1. Уровни моделирования</h2>
+                <div class="flow-container">
+                    <div class="flow-step" style="background: linear-gradient(135deg, #7c3aed, #9b59b6);">Концептуальный<br><span style="font-size:0.8em;">Сущности и связи</span></div>
+                    <div class="flow-arrow">&rarr;</div>
+                    <div class="flow-step" style="background: linear-gradient(135deg, var(--accent2), #f5a623);">Логический<br><span style="font-size:0.8em;">Атрибуты, типы, ключи</span></div>
+                    <div class="flow-arrow">&rarr;</div>
+                    <div class="flow-step">Физический<br><span style="font-size:0.8em;">DDL, индексы, СУБД</span></div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Уровень</th>
+                            <th>Что моделируем</th>
+                            <th>Кому нужен</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Концептуальный</strong></td>
+                            <td>Сущности и связи без деталей</td>
+                            <td>Бизнес-аналитики, заказчики</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Логический</strong></td>
+                            <td>Атрибуты, типы, ключи, нормализация</td>
+                            <td>Архитекторы данных</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Физический</strong></td>
+                            <td>DDL, индексы, партиции, специфика СУБД</td>
+                            <td>DBA, разработчики</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="highlight-box warning mt-10">
+                    <strong>Важно:</strong> Некоторые инструменты (dbdiagram.io, pgModeler) работают только на физическом уровне,
+                    а enterprise-решения (ERwin, Visual Paradigm) поддерживают все три с трассировкой между ними.
+                </div>
+            </section>
+
+            <!-- Критерий 2: Нотации -->
+            <section>
+                <h2>Критерий 2. Поддерживаемые нотации</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Нотация</th>
+                            <th>Применение</th>
+                            <th>Где используется</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Crow's Foot</strong></td>
+                            <td>Самая распространённая в индустрии</td>
+                            <td>ERwin, DBeaver, DbSchema, pgModeler</td>
+                        </tr>
+                        <tr>
+                            <td><strong>IDEF1X</strong></td>
+                            <td>Стандарт FIPS, формальный подход</td>
+                            <td>ERwin, Visual Paradigm</td>
+                        </tr>
+                        <tr>
+                            <td><strong>UML</strong></td>
+                            <td>Диаграммы классов, объектная модель</td>
+                            <td>Visual Paradigm, Sparx EA</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Chen</strong></td>
+                            <td>Академическая, учебные курсы</td>
+                            <td>Visual Paradigm, draw.io</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Barker</strong></td>
+                            <td>Oracle-экосистема</td>
+                            <td>Oracle SQL Developer Data Modeler</td>
+                        </tr>
+                        <tr>
+                            <td><strong>DBML (DSL)</strong></td>
+                            <td>Текстовое описание, Git-friendly</td>
+                            <td>dbdiagram.io</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Критерий 3: Forward / Reverse Engineering -->
+            <section>
+                <h2>Критерий 3. Forward / Reverse Engineering</h2>
+                <div class="card-container">
+                    <div class="card">
+                        <h4>Forward Engineering</h4>
+                        <p>Модель &rarr; DDL-скрипт &rarr; БД</p>
+                        <ul>
+                            <li>Генерация CREATE TABLE</li>
+                            <li>Генерация ALTER (миграции)</li>
+                            <li>Учёт диалекта СУБД</li>
+                        </ul>
+                        <div class="badge badge-blue">Проектирование</div>
+                    </div>
+                    <div class="card accent2">
+                        <h4>Reverse Engineering</h4>
+                        <p>БД &rarr; визуальная модель</p>
+                        <ul>
+                            <li>Подключение к live-БД</li>
+                            <li>Импорт DDL-файла</li>
+                            <li>Автоматические связи по FK</li>
+                        </ul>
+                        <div class="badge badge-orange">Документирование</div>
+                    </div>
+                    <div class="card accent6">
+                        <h4>Round-trip</h4>
+                        <p>Модель &harr; БД (в обе стороны)</p>
+                        <ul>
+                            <li>Синхронизация изменений</li>
+                            <li>Schema diff + миграции</li>
+                            <li>Модель всегда актуальна</li>
+                        </ul>
+                        <div class="badge badge-green">Полный цикл</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Критерии 4-7 -->
+            <section>
+                <h2>Ещё ключевые критерии</h2>
+                <div class="card-container">
+                    <div class="card">
+                        <h4>4. Поддержка СУБД</h4>
+                        <ul>
+                            <li>Количество СУБД</li>
+                            <li>Генерация DDL с учётом диалекта</li>
+                            <li>Live-подключение к БД</li>
+                            <li>NoSQL (MongoDB, Cassandra)</li>
+                        </ul>
+                    </div>
+                    <div class="card accent2">
+                        <h4>5. Совместная работа</h4>
+                        <ul>
+                            <li>Real-time редактирование</li>
+                            <li>Комментарии и рецензии</li>
+                            <li>Управление доступом</li>
+                            <li>Шаринг по ссылке</li>
+                        </ul>
+                    </div>
+                    <div class="card accent6">
+                        <h4>6. Версионирование</h4>
+                        <ul>
+                            <li>История версий модели</li>
+                            <li>Model diff (сравнение)</li>
+                            <li>Интеграция с Git</li>
+                            <li>Генерация миграций (ALTER)</li>
+                        </ul>
+                    </div>
+                    <div class="card" style="border-top-color: #7c3aed;">
+                        <h4 style="color: #7c3aed;">7. Формат описания</h4>
+                        <ul>
+                            <li>Визуальный (drag & drop)</li>
+                            <li>Текстовый DSL (DBML, PlantUML)</li>
+                            <li>Комбинированный</li>
+                            <li>Git-friendly для code review</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Критерии 8-11 -->
+            <section>
+                <h2>Критерии выбора (продолжение)</h2>
+                <div class="card-container">
+                    <div class="card">
+                        <h4>8. Импорт / Экспорт</h4>
+                        <ul>
+                            <li>SQL (DDL), PDF, PNG/SVG</li>
+                            <li>JSON, XML, DBML</li>
+                            <li>Импорт из других инструментов</li>
+                            <li>Data Dictionary (HTML/PDF)</li>
+                        </ul>
+                    </div>
+                    <div class="card accent2">
+                        <h4>9. Документирование</h4>
+                        <ul>
+                            <li>Словарь данных (Data Dictionary)</li>
+                            <li>Описания таблиц и колонок</li>
+                            <li>Бизнес-глоссарий</li>
+                            <li>HTML/PDF-отчёты</li>
+                        </ul>
+                    </div>
+                    <div class="card accent6">
+                        <h4>10. Стоимость</h4>
+                        <ul>
+                            <li>Бесплатно / Open Source</li>
+                            <li>Freemium (базовый бесплатно)</li>
+                            <li>Подписка (per user / month)</li>
+                            <li>Enterprise (тысячи $)</li>
+                        </ul>
+                    </div>
+                    <div class="card" style="border-top-color: #7c3aed;">
+                        <h4 style="color: #7c3aed;">11. Порог входа</h4>
+                        <ul>
+                            <li>Время до первой диаграммы</li>
+                            <li>Документация и обучение</li>
+                            <li>Интуитивность интерфейса</li>
+                            <li>Сообщество и поддержка</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Критерии 12-14 -->
+            <section>
+                <h2>Критерии для enterprise</h2>
+                <div class="card-container">
+                    <div class="card">
+                        <h4>12. Интеграции</h4>
+                        <ul>
+                            <li>CI/CD (генерация DDL)</li>
+                            <li>Confluence / Wiki</li>
+                            <li>Jira / трекеры задач</li>
+                            <li>IDE (DataGrip, VS Code)</li>
+                        </ul>
+                    </div>
+                    <div class="card accent2">
+                        <h4>13. Масштабируемость</h4>
+                        <ul>
+                            <li>Макс. кол-во таблиц</li>
+                            <li>Производительность (100+ таблиц)</li>
+                            <li>Subject Areas (подмодели)</li>
+                            <li>Несколько схем</li>
+                        </ul>
+                    </div>
+                    <div class="card accent6">
+                        <h4>14. Генерация тестовых данных</h4>
+                        <ul>
+                            <li>Random data по паттернам</li>
+                            <li>Reverse regex</li>
+                            <li>Ссылочная целостность</li>
+                            <li>Экспорт в SQL INSERT</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== РАЗДЕЛ 2: ОБЗОР ИНСТРУМЕНТОВ ===== -->
+            <section class="section-divider">
+                <h2>Часть 2</h2>
+                <div class="divider-line"></div>
+                <h1>Обзор инструментов</h1>
+                <p>8 инструментов: от бесплатных до enterprise</p>
+            </section>
+
+            <!-- dbdiagram.io -->
+            <section>
+                <h2>dbdiagram.io</h2>
+                <div class="comparison">
+                    <div class="col" style="flex: 2;">
+                        <h3>Характеристики</h3>
+                        <table style="width: 100%; font-size: 0.9em;">
+                            <tr><td><strong>Тип</strong></td><td>Онлайн (SaaS)</td></tr>
+                            <tr><td><strong>Уровни</strong></td><td>Физический</td></tr>
+                            <tr><td><strong>Нотация</strong></td><td>DBML (текстовый DSL)</td></tr>
+                            <tr><td><strong>Forward Eng.</strong></td><td><span class="yes">SQL-экспорт (PostgreSQL, MySQL, MSSQL)</span></td></tr>
+                            <tr><td><strong>Reverse Eng.</strong></td><td><span class="no">Нет</span></td></tr>
+                            <tr><td><strong>Совместная работа</strong></td><td><span class="yes">Да (шаринг, real-time)</span></td></tr>
+                            <tr><td><strong>Стоимость</strong></td><td>Freemium (бесплатно до 10 диаграмм)</td></tr>
+                            <tr><td><strong>Порог входа</strong></td><td><span class="yes">Низкий</span></td></tr>
+                        </table>
+                    </div>
+                    <div class="col">
+                        <h3>Для кого</h3>
+                        <ul>
+                            <li>Быстрое прототипирование</li>
+                            <li>Документирование API</li>
+                            <li>Учебные проекты</li>
+                        </ul>
+                        <div class="badge badge-green mt-10">Git-friendly (DBML = текст)</div>
+                        <h3 class="mt-10">Ограничения</h3>
+                        <ul>
+                            <li>Нет reverse engineering</li>
+                            <li>Только физический уровень</li>
+                            <li>Лимит диаграмм на free</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- draw.io -->
+            <section>
+                <h2>draw.io / diagrams.net</h2>
+                <div class="comparison">
+                    <div class="col" style="flex: 2;">
+                        <h3>Характеристики</h3>
+                        <table style="width: 100%; font-size: 0.9em;">
+                            <tr><td><strong>Тип</strong></td><td>Онлайн / Desktop</td></tr>
+                            <tr><td><strong>Уровни</strong></td><td>Все (вручную, через шаблоны)</td></tr>
+                            <tr><td><strong>Нотация</strong></td><td>Любая (Crow's Foot, UML, Chen — шаблоны)</td></tr>
+                            <tr><td><strong>Forward Eng.</strong></td><td><span class="no">Нет (только рисунок)</span></td></tr>
+                            <tr><td><strong>Reverse Eng.</strong></td><td><span class="no">Нет</span></td></tr>
+                            <tr><td><strong>Совместная работа</strong></td><td><span class="yes">Да (Google Drive, Confluence)</span></td></tr>
+                            <tr><td><strong>Стоимость</strong></td><td><span class="yes">Полностью бесплатно</span></td></tr>
+                            <tr><td><strong>Порог входа</strong></td><td><span class="yes">Низкий</span></td></tr>
+                        </table>
+                    </div>
+                    <div class="col">
+                        <h3>Для кого</h3>
+                        <ul>
+                            <li>Концептуальные модели</li>
+                            <li>Презентации, документация</li>
+                            <li>Универсальные диаграммы</li>
+                        </ul>
+                        <div class="badge badge-green mt-10">Бесплатно навсегда</div>
+                        <h3 class="mt-10">Ограничения</h3>
+                        <ul>
+                            <li>Нет генерации SQL</li>
+                            <li>Нет связи с реальной БД</li>
+                            <li>Ручная отрисовка всего</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- pgModeler -->
+            <section>
+                <h2>pgModeler</h2>
+                <div class="comparison">
+                    <div class="col" style="flex: 2;">
+                        <h3>Характеристики</h3>
+                        <table style="width: 100%; font-size: 0.9em;">
+                            <tr><td><strong>Тип</strong></td><td>Desktop (Windows, macOS, Linux)</td></tr>
+                            <tr><td><strong>Уровни</strong></td><td>Физический</td></tr>
+                            <tr><td><strong>Нотация</strong></td><td>Crow's Foot</td></tr>
+                            <tr><td><strong>Forward Eng.</strong></td><td><span class="yes">DDL (только PostgreSQL)</span></td></tr>
+                            <tr><td><strong>Reverse Eng.</strong></td><td><span class="yes">Из PostgreSQL</span></td></tr>
+                            <tr><td><strong>Round-trip</strong></td><td><span class="yes">Да (schema diff)</span></td></tr>
+                            <tr><td><strong>Совместная работа</strong></td><td><span class="no">Нет (через Git вручную)</span></td></tr>
+                            <tr><td><strong>Стоимость</strong></td><td>от $20 (бессрочная)</td></tr>
+                            <tr><td><strong>Порог входа</strong></td><td><span class="partial">Средний</span></td></tr>
+                        </table>
+                    </div>
+                    <div class="col">
+                        <h3>Для кого</h3>
+                        <ul>
+                            <li>Команды на PostgreSQL</li>
+                            <li>DBA и разработчики</li>
+                            <li>Миграции схем</li>
+                        </ul>
+                        <div class="badge badge-blue mt-10">PostgreSQL-специалист</div>
+                        <h3 class="mt-10">Ограничения</h3>
+                        <ul>
+                            <li>Только PostgreSQL</li>
+                            <li>Нет концептуального уровня</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DBeaver CE -->
+            <section>
+                <h2>DBeaver Community Edition</h2>
+                <div class="comparison">
+                    <div class="col" style="flex: 2;">
+                        <h3>Характеристики</h3>
+                        <table style="width: 100%; font-size: 0.9em;">
+                            <tr><td><strong>Тип</strong></td><td>Desktop (Windows, macOS, Linux)</td></tr>
+                            <tr><td><strong>Уровни</strong></td><td>Физический</td></tr>
+                            <tr><td><strong>Нотация</strong></td><td>Crow's Foot (автоматическая)</td></tr>
+                            <tr><td><strong>Forward Eng.</strong></td><td><span class="no">Нет</span></td></tr>
+                            <tr><td><strong>Reverse Eng.</strong></td><td><span class="yes">Да — любая СУБД через JDBC</span></td></tr>
+                            <tr><td><strong>Поддержка СУБД</strong></td><td><span class="yes">80+ (все через JDBC)</span></td></tr>
+                            <tr><td><strong>Совместная работа</strong></td><td><span class="no">Нет</span></td></tr>
+                            <tr><td><strong>Стоимость</strong></td><td><span class="yes">Бесплатно (Open Source)</span></td></tr>
+                            <tr><td><strong>Порог входа</strong></td><td><span class="yes">Низкий</span></td></tr>
+                        </table>
+                    </div>
+                    <div class="col">
+                        <h3>Для кого</h3>
+                        <ul>
+                            <li>Документирование существующих БД</li>
+                            <li>Быстрая визуализация схемы</li>
+                            <li>Повседневная работа с БД</li>
+                        </ul>
+                        <div class="badge badge-green mt-10">Бесплатно + Open Source</div>
+                        <h3 class="mt-10">Ограничения</h3>
+                        <ul>
+                            <li>Нельзя проектировать «с нуля»</li>
+                            <li>Нет forward engineering</li>
+                            <li>Нет совместной работы</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DataGrip -->
+            <section>
+                <h2>DataGrip (JetBrains)</h2>
+                <div class="comparison">
+                    <div class="col" style="flex: 2;">
+                        <h3>Характеристики</h3>
+                        <table style="width: 100%; font-size: 0.9em;">
+                            <tr><td><strong>Тип</strong></td><td>Desktop IDE</td></tr>
+                            <tr><td><strong>Уровни</strong></td><td>Физический</td></tr>
+                            <tr><td><strong>Нотация</strong></td><td>Собственная визуализация</td></tr>
+                            <tr><td><strong>Forward Eng.</strong></td><td><span class="no">Нет (SQL-редактор)</span></td></tr>
+                            <tr><td><strong>Reverse Eng.</strong></td><td><span class="yes">Да — любая СУБД</span></td></tr>
+                            <tr><td><strong>Поддержка СУБД</strong></td><td><span class="yes">Все основные (JDBC)</span></td></tr>
+                            <tr><td><strong>Совместная работа</strong></td><td><span class="no">Нет</span></td></tr>
+                            <tr><td><strong>Стоимость</strong></td><td>Подписка ~$25/мес ($100/год для бизнеса)</td></tr>
+                            <tr><td><strong>Порог входа</strong></td><td><span class="partial">Средний</span></td></tr>
+                        </table>
+                    </div>
+                    <div class="col">
+                        <h3>Для кого</h3>
+                        <ul>
+                            <li>Разработчики (IDE для БД)</li>
+                            <li>Умный SQL-редактор</li>
+                            <li>Рефакторинг схемы</li>
+                        </ul>
+                        <div class="badge badge-purple mt-10">Лучший SQL-редактор</div>
+                        <h3 class="mt-10">Ограничения</h3>
+                        <ul>
+                            <li>Диаграммы — только для просмотра</li>
+                            <li>Нельзя проектировать визуально</li>
+                            <li>Платный</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ERwin -->
+            <section>
+                <h2>ERwin Data Modeler</h2>
+                <div class="comparison">
+                    <div class="col" style="flex: 2;">
+                        <h3>Характеристики</h3>
+                        <table style="width: 100%; font-size: 0.9em;">
+                            <tr><td><strong>Тип</strong></td><td>Desktop (Windows)</td></tr>
+                            <tr><td><strong>Уровни</strong></td><td><span class="yes">Концептуальный + Логический + Физический</span></td></tr>
+                            <tr><td><strong>Нотация</strong></td><td>Crow's Foot, IDEF1X</td></tr>
+                            <tr><td><strong>Forward Eng.</strong></td><td><span class="yes">DDL + миграции (ALTER)</span></td></tr>
+                            <tr><td><strong>Reverse Eng.</strong></td><td><span class="yes">Множество СУБД</span></td></tr>
+                            <tr><td><strong>Round-trip</strong></td><td><span class="yes">Полный цикл</span></td></tr>
+                            <tr><td><strong>Совместная работа</strong></td><td><span class="yes">ERwin Mart (репозиторий)</span></td></tr>
+                            <tr><td><strong>Стоимость</strong></td><td><span class="no">Enterprise (тысячи $ в год)</span></td></tr>
+                            <tr><td><strong>Порог входа</strong></td><td><span class="no">Высокий</span></td></tr>
+                        </table>
+                    </div>
+                    <div class="col">
+                        <h3>Для кого</h3>
+                        <ul>
+                            <li>Крупные корпорации</li>
+                            <li>Data Governance</li>
+                            <li>Стандартизация моделей</li>
+                        </ul>
+                        <div class="badge badge-red mt-10">Enterprise-стандарт</div>
+                        <h3 class="mt-10">Ограничения</h3>
+                        <ul>
+                            <li>Очень дорогой</li>
+                            <li>Только Windows</li>
+                            <li>Сложный интерфейс</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DbSchema -->
+            <section>
+                <h2>DbSchema</h2>
+                <div class="comparison">
+                    <div class="col" style="flex: 2;">
+                        <h3>Характеристики</h3>
+                        <table style="width: 100%; font-size: 0.9em;">
+                            <tr><td><strong>Тип</strong></td><td>Desktop (Windows, macOS, Linux)</td></tr>
+                            <tr><td><strong>Уровни</strong></td><td>Физический</td></tr>
+                            <tr><td><strong>Нотация</strong></td><td>Crow's Foot</td></tr>
+                            <tr><td><strong>Forward Eng.</strong></td><td><span class="yes">DDL + миграции (ALTER)</span></td></tr>
+                            <tr><td><strong>Reverse Eng.</strong></td><td><span class="yes">70+ СУБД (включая NoSQL)</span></td></tr>
+                            <tr><td><strong>Round-trip</strong></td><td><span class="yes">Schema Sync (model diff)</span></td></tr>
+                            <tr><td><strong>Поддержка СУБД</strong></td><td><span class="yes">70+ (PostgreSQL, MySQL, MongoDB, Cassandra, Redshift, Snowflake...)</span></td></tr>
+                            <tr><td><strong>Совместная работа</strong></td><td><span class="yes">Через Git (файл проекта)</span></td></tr>
+                            <tr><td><strong>Стоимость</strong></td><td>Free CE / Pro от $98 (бессрочная) или $9.80/мес</td></tr>
+                            <tr><td><strong>Порог входа</strong></td><td><span class="yes">Низкий&ndash;Средний</span></td></tr>
+                        </table>
+                    </div>
+                    <div class="col">
+                        <h3>Уникальные возможности</h3>
+                        <ul>
+                            <li>Генерация тестовых данных (random + regex)</li>
+                            <li>HTML-документация с интерактивной SVG</li>
+                            <li>Virtual Foreign Keys (для БД без FK)</li>
+                            <li>Поддержка NoSQL (MongoDB, Cassandra)</li>
+                        </ul>
+                        <div class="badge badge-orange mt-10">Золотая середина</div>
+                        <h3 class="mt-10">Ограничения</h3>
+                        <ul>
+                            <li>Только физический уровень</li>
+                            <li>Нет текстового DSL</li>
+                            <li>Нет UML / BPMN</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Visual Paradigm -->
+            <section>
+                <h2>Visual Paradigm</h2>
+                <div class="comparison">
+                    <div class="col" style="flex: 2;">
+                        <h3>Характеристики</h3>
+                        <table style="width: 100%; font-size: 0.9em;">
+                            <tr><td><strong>Тип</strong></td><td>Desktop + Online (VP Online)</td></tr>
+                            <tr><td><strong>Уровни</strong></td><td><span class="yes">Концептуальный + Логический + Физический (с трассировкой)</span></td></tr>
+                            <tr><td><strong>Нотация</strong></td><td><span class="yes">Crow's Foot, UML, Chen, IDEF1X</span></td></tr>
+                            <tr><td><strong>Forward Eng.</strong></td><td><span class="yes">DDL (MySQL, PostgreSQL, Oracle, MSSQL...)</span></td></tr>
+                            <tr><td><strong>Reverse Eng.</strong></td><td><span class="yes">Live DB + DDL-файлы</span></td></tr>
+                            <tr><td><strong>Поддержка СУБД</strong></td><td><span class="yes">10+ основных СУБД</span></td></tr>
+                            <tr><td><strong>Совместная работа</strong></td><td><span class="yes">VP Online + Teamwork Server</span></td></tr>
+                            <tr><td><strong>Стоимость</strong></td><td>Community (бесп.) / Modeler $99 / Standard $349 / Professional $699</td></tr>
+                            <tr><td><strong>Порог входа</strong></td><td><span class="partial">Средний</span></td></tr>
+                        </table>
+                    </div>
+                    <div class="col">
+                        <h3>Уникальные возможности</h3>
+                        <ul>
+                            <li>Полный стек нотаций (UML, BPMN, ArchiMate, DFD, Mind Map)</li>
+                            <li>Трассировка: ERD &harr; UML &harr; BPMN</li>
+                            <li>Генерация ORM-маппинга (Hibernate)</li>
+                            <li>Agile / Scrum инструменты</li>
+                        </ul>
+                        <div class="badge badge-purple mt-10">Универсальная платформа</div>
+                        <h3 class="mt-10">Ограничения</h3>
+                        <ul>
+                            <li>Тяжеловесный интерфейс</li>
+                            <li>ERD не основная специализация</li>
+                            <li>Reverse из live DB &mdash; платная версия</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== РАЗДЕЛ 3: СВОДНАЯ ТАБЛИЦА ===== -->
+            <section class="section-divider">
+                <h2>Часть 3</h2>
+                <div class="divider-line"></div>
+                <h1>Сводное сравнение</h1>
+                <p>Все инструменты в одной таблице</p>
+            </section>
+
+            <!-- Сводная таблица: Engineering -->
+            <section>
+                <h2>Сравнение: возможности проектирования</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Инструмент</th>
+                            <th>Уровни модели</th>
+                            <th>Forward Eng.</th>
+                            <th>Reverse Eng.</th>
+                            <th>Round-trip</th>
+                            <th>Кол-во СУБД</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>dbdiagram.io</strong></td>
+                            <td>Физ.</td>
+                            <td><span class="yes">SQL-экспорт</span></td>
+                            <td><span class="no">&mdash;</span></td>
+                            <td><span class="no">&mdash;</span></td>
+                            <td>3 (экспорт)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>draw.io</strong></td>
+                            <td>Все (вручную)</td>
+                            <td><span class="no">&mdash;</span></td>
+                            <td><span class="no">&mdash;</span></td>
+                            <td><span class="no">&mdash;</span></td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td><strong>pgModeler</strong></td>
+                            <td>Физ.</td>
+                            <td><span class="yes">DDL</span></td>
+                            <td><span class="yes">PostgreSQL</span></td>
+                            <td><span class="yes">Да</span></td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td><strong>DBeaver CE</strong></td>
+                            <td>Физ.</td>
+                            <td><span class="no">&mdash;</span></td>
+                            <td><span class="yes">Любая (JDBC)</span></td>
+                            <td><span class="no">&mdash;</span></td>
+                            <td>80+</td>
+                        </tr>
+                        <tr>
+                            <td><strong>DataGrip</strong></td>
+                            <td>Физ.</td>
+                            <td><span class="no">&mdash;</span></td>
+                            <td><span class="yes">Любая (JDBC)</span></td>
+                            <td><span class="no">&mdash;</span></td>
+                            <td>Все (JDBC)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ERwin</strong></td>
+                            <td><span class="yes">Конц. + Лог. + Физ.</span></td>
+                            <td><span class="yes">DDL + ALTER</span></td>
+                            <td><span class="yes">Множество</span></td>
+                            <td><span class="yes">Да</span></td>
+                            <td>10+</td>
+                        </tr>
+                        <tr style="background: #f0f8ff;">
+                            <td><strong>DbSchema</strong></td>
+                            <td>Физ.</td>
+                            <td><span class="yes">DDL + ALTER</span></td>
+                            <td><span class="yes">70+ (вкл. NoSQL)</span></td>
+                            <td><span class="yes">Schema Sync</span></td>
+                            <td><span class="yes">70+</span></td>
+                        </tr>
+                        <tr style="background: #f5f0ff;">
+                            <td><strong>Visual Paradigm</strong></td>
+                            <td><span class="yes">Конц. + Лог. + Физ.</span></td>
+                            <td><span class="yes">DDL</span></td>
+                            <td><span class="yes">Live DB + DDL</span></td>
+                            <td><span class="partial">Частично</span></td>
+                            <td>10+</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Сводная таблица: Collaboration & Cost -->
+            <section>
+                <h2>Сравнение: совместная работа и стоимость</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Инструмент</th>
+                            <th>Совместная работа</th>
+                            <th>Версионирование</th>
+                            <th>Документация</th>
+                            <th>Стоимость</th>
+                            <th>Порог входа</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>dbdiagram.io</strong></td>
+                            <td><span class="yes">SaaS, шаринг</span></td>
+                            <td>Встроенное</td>
+                            <td><span class="no">&mdash;</span></td>
+                            <td>Freemium</td>
+                            <td><span class="yes">Низкий</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>draw.io</strong></td>
+                            <td><span class="yes">Google Drive</span></td>
+                            <td>Git (XML)</td>
+                            <td><span class="no">&mdash;</span></td>
+                            <td><span class="yes">Бесплатно</span></td>
+                            <td><span class="yes">Низкий</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>pgModeler</strong></td>
+                            <td><span class="no">&mdash;</span></td>
+                            <td>Git (XML)</td>
+                            <td><span class="no">&mdash;</span></td>
+                            <td>от $20</td>
+                            <td><span class="partial">Средний</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>DBeaver CE</strong></td>
+                            <td><span class="no">&mdash;</span></td>
+                            <td><span class="no">&mdash;</span></td>
+                            <td><span class="no">&mdash;</span></td>
+                            <td><span class="yes">Бесплатно</span></td>
+                            <td><span class="yes">Низкий</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>DataGrip</strong></td>
+                            <td><span class="no">&mdash;</span></td>
+                            <td><span class="no">&mdash;</span></td>
+                            <td><span class="no">&mdash;</span></td>
+                            <td>~$25/мес</td>
+                            <td><span class="partial">Средний</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>ERwin</strong></td>
+                            <td><span class="yes">ERwin Mart</span></td>
+                            <td><span class="yes">Встроенное</span></td>
+                            <td><span class="yes">Data Dictionary</span></td>
+                            <td><span class="no">Enterprise ($$$)</span></td>
+                            <td><span class="no">Высокий</span></td>
+                        </tr>
+                        <tr style="background: #f0f8ff;">
+                            <td><strong>DbSchema</strong></td>
+                            <td><span class="yes">Git (файл)</span></td>
+                            <td><span class="yes">Git + model diff</span></td>
+                            <td><span class="yes">HTML + SVG</span></td>
+                            <td>Free CE / $98+</td>
+                            <td><span class="yes">Низкий&ndash;Сред.</span></td>
+                        </tr>
+                        <tr style="background: #f5f0ff;">
+                            <td><strong>Visual Paradigm</strong></td>
+                            <td><span class="yes">VP Online + Teamwork</span></td>
+                            <td><span class="yes">Встроенное + Git</span></td>
+                            <td><span class="yes">HTML / PDF</span></td>
+                            <td>Free / от $99</td>
+                            <td><span class="partial">Средний</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Карта позиционирования -->
+            <section>
+                <h2>Карта позиционирования</h2>
+                <div class="position-map">
+                    <span class="axis-label-y">Специализация на БД</span>
+                    <span class="axis-label-x">Универсальность (только БД &rarr; UML + BPMN + ERD + ...)</span>
+                    <!-- ERwin -->
+                    <div class="tool-dot" style="background: #dc3545; left: 20%; bottom: 85%;">ERwin</div>
+                    <!-- pgModeler -->
+                    <div class="tool-dot" style="background: var(--accent1); left: 8%; bottom: 68%;">pgModeler</div>
+                    <!-- DbSchema -->
+                    <div class="tool-dot" style="background: var(--accent2); left: 25%; bottom: 60%;">DbSchema</div>
+                    <!-- DataGrip -->
+                    <div class="tool-dot" style="background: #7c3aed; left: 18%; bottom: 45%;">DataGrip</div>
+                    <!-- DBeaver -->
+                    <div class="tool-dot" style="background: var(--accent6); left: 12%; bottom: 38%;">DBeaver CE</div>
+                    <!-- dbdiagram.io -->
+                    <div class="tool-dot" style="background: var(--accent1); left: 8%; bottom: 25%;">dbdiagram.io</div>
+                    <!-- Visual Paradigm -->
+                    <div class="tool-dot" style="background: #7c3aed; left: 65%; bottom: 55%;">Visual Paradigm</div>
+                    <!-- SILA Union -->
+                    <div class="tool-dot" style="background: #dc3545; left: 72%; bottom: 40%;">SILA Union</div>
+                    <!-- draw.io -->
+                    <div class="tool-dot" style="background: var(--accent6); left: 55%; bottom: 15%;">draw.io</div>
+                </div>
+            </section>
+
+            <!-- ===== РАЗДЕЛ 4: РОССИЙСКИЕ ПРОДУКТЫ ===== -->
+            <section class="section-divider">
+                <h2>Часть 4</h2>
+                <div class="divider-line"></div>
+                <h1>Российские продукты</h1>
+                <p>Импортозамещение в моделировании данных</p>
+            </section>
+
+            <!-- Контекст импортозамещения -->
+            <section>
+                <h2>Контекст: импортозамещение</h2>
+                <div class="highlight-box warning">
+                    <strong>С 2022 года</strong> госсектор и объекты КИИ обязаны переходить на отечественное ПО,
+                    включённое в Реестр российского ПО Минцифры.
+                </div>
+                <div class="card-container mt-10">
+                    <div class="card">
+                        <h4>Что уже есть в РФ</h4>
+                        <ul>
+                            <li><strong>СУБД:</strong> Postgres Pro, Arenadata DB, YDB, Tarantool</li>
+                            <li><strong>BI:</strong> Visiology, DataLens, Polymatica</li>
+                            <li><strong>ETL/MDM:</strong> DATAREON Platform</li>
+                        </ul>
+                    </div>
+                    <div class="card accent2">
+                        <h4>Проблемная ниша</h4>
+                        <ul>
+                            <li>Нет прямого аналога ERwin или pgModeler в реестре</li>
+                            <li>SILA Union &mdash; ближайший, но это аналог ARIS, а не ERwin</li>
+                            <li>На практике используют Open Source</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Российские продукты: таблица -->
+            <section>
+                <h2>Российские инструменты моделирования</h2>
+                <h3>Специализированные продукты (в реестре РФ)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Продукт</th>
+                            <th>Назначение</th>
+                            <th>Реестр РФ</th>
+                            <th>Особенности</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>SILA Union</strong></td>
+                            <td>Бизнес-архитектура, моделирование</td>
+                            <td><span class="yes">Да</span></td>
+                            <td>200+ типов моделей (BPMN, UML, ArchiMate, TOGAF). Аналог ARIS</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ИНТАЛЕВ: Корпоративный навигатор</strong></td>
+                            <td>Моделирование управления</td>
+                            <td><span class="yes">Да</span></td>
+                            <td>Бизнес-процессы, орг. структуры, KPI</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Автограф</strong></td>
+                            <td>Редактор технических схем</td>
+                            <td><span class="yes">Да</span></td>
+                            <td>Аналог draw.io / Visio. ER-диаграммы вручную</td>
+                        </tr>
+                        <tr>
+                            <td><strong>DATAREON Platform</strong></td>
+                            <td>MDM, интеграция данных</td>
+                            <td><span class="yes">Да</span></td>
+                            <td>Low-code, моделирование бизнес-данных</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Open Source решения для РФ -->
+            <section>
+                <h2>Open Source: решение для импортозамещения</h2>
+                <div class="highlight-box success">
+                    <strong>Open Source</strong> не имеет санкционных рисков и может использоваться
+                    без ограничений в любой юрисдикции.
+                </div>
+                <table class="mt-10">
+                    <thead>
+                        <tr>
+                            <th>Продукт</th>
+                            <th>Назначение</th>
+                            <th>Преимущество</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>DBeaver CE</strong></td>
+                            <td>ER-диаграммы из существующей БД</td>
+                            <td>Reverse engineering, 80+ СУБД, бесплатный</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PlantUML</strong></td>
+                            <td>Текстовые ER-диаграммы (as code)</td>
+                            <td>Git-friendly, CI/CD интеграция</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mermaid</strong></td>
+                            <td>Диаграммы в Markdown</td>
+                            <td>GitHub / GitLab рендеринг, документация</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Open ModelSphere</strong></td>
+                            <td>CASE-средство полного цикла</td>
+                            <td>Концептуальный + логический + физический уровни</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Рекомендации для госсектора -->
+            <section>
+                <h2>Рекомендации по выбору для РФ</h2>
+                <div class="card-container">
+                    <div class="card">
+                        <h4>Госсектор / КИИ</h4>
+                        <ul>
+                            <li><strong>Архитектура:</strong> SILA Union</li>
+                            <li><strong>ER-модели:</strong> DBeaver CE + PlantUML</li>
+                            <li><strong>СУБД:</strong> Postgres Pro</li>
+                            <li><strong>BI:</strong> Visiology / DataLens</li>
+                        </ul>
+                        <div class="badge badge-red">Реестр обязателен</div>
+                    </div>
+                    <div class="card accent2">
+                        <h4>Коммерческий сектор</h4>
+                        <ul>
+                            <li><strong>Проектирование:</strong> DbSchema / VP</li>
+                            <li><strong>Прототипы:</strong> dbdiagram.io</li>
+                            <li><strong>Работа с БД:</strong> DBeaver / DataGrip</li>
+                            <li><strong>Документация:</strong> DbSchema HTML-docs</li>
+                        </ul>
+                        <div class="badge badge-orange">Больше свободы</div>
+                    </div>
+                    <div class="card accent6">
+                        <h4>Учебные проекты</h4>
+                        <ul>
+                            <li><strong>Прототипы:</strong> dbdiagram.io</li>
+                            <li><strong>Визуализация:</strong> DBeaver CE</li>
+                            <li><strong>Документация:</strong> draw.io / Mermaid</li>
+                            <li><strong>SQL:</strong> PostgreSQL + DBeaver</li>
+                        </ul>
+                        <div class="badge badge-green">Всё бесплатно</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== РАЗДЕЛ 5: ФОКУС НА DbSchema И Visual Paradigm ===== -->
+            <section class="section-divider">
+                <h2>Часть 5</h2>
+                <div class="divider-line"></div>
+                <h1>DbSchema и Visual Paradigm</h1>
+                <p>Подробный разбор двух универсальных инструментов</p>
+            </section>
+
+            <!-- DbSchema: подробный разбор -->
+            <section>
+                <h2>DbSchema: подробный разбор</h2>
+                <div class="card-container">
+                    <div class="card" style="max-width: 350px;">
+                        <h4>Визуальное проектирование</h4>
+                        <ul>
+                            <li>Drag & drop создание таблиц</li>
+                            <li>Несколько диаграмм для одной схемы (фокус на подсистемах)</li>
+                            <li>Virtual Foreign Keys для БД без FK</li>
+                            <li>Подсветка связей при выделении</li>
+                        </ul>
+                    </div>
+                    <div class="card accent2" style="max-width: 350px;">
+                        <h4>Schema Sync</h4>
+                        <ul>
+                            <li>Сравнение модели и live-БД</li>
+                            <li>Визуальный diff изменений</li>
+                            <li>Автогенерация ALTER-скриптов</li>
+                            <li>Поддержка нескольких окружений (dev/staging/prod)</li>
+                        </ul>
+                    </div>
+                    <div class="card accent6" style="max-width: 350px;">
+                        <h4>Random Data Generator</h4>
+                        <ul>
+                            <li>Генерация данных по паттернам</li>
+                            <li>Reverse regex для строк</li>
+                            <li>Соблюдение FK-связей</li>
+                            <li>Экспорт в SQL INSERT</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="highlight-box mt-10">
+                    <strong>70+ СУБД:</strong> PostgreSQL, MySQL, Oracle, SQL Server, MongoDB, Cassandra,
+                    Redshift, Snowflake, ClickHouse, SQLite, MariaDB, Firebird, DB2 и др.
+                </div>
+            </section>
+
+            <!-- DbSchema: редакции -->
+            <section>
+                <h2>DbSchema: редакции и цены</h2>
+                <div class="comparison">
+                    <div class="col" style="border-top: 3px solid var(--accent6);">
+                        <h3 style="color: var(--accent6);">Community Edition (Free)</h3>
+                        <ul>
+                            <li>Подключение к БД</li>
+                            <li>Reverse engineering</li>
+                            <li>ER-диаграммы</li>
+                            <li>SQL-редактор</li>
+                            <li>Базовый экспорт</li>
+                        </ul>
+                        <div class="badge badge-green mt-10">Бесплатно навсегда</div>
+                    </div>
+                    <div class="col" style="border-top: 3px solid var(--accent2);">
+                        <h3 style="color: var(--accent2);">Pro Edition</h3>
+                        <ul>
+                            <li>Всё из Community +</li>
+                            <li>Schema Sync (model diff)</li>
+                            <li>Random Data Generator</li>
+                            <li>HTML-документация</li>
+                            <li>Визуальный Query Builder</li>
+                            <li>Формы для редактирования данных</li>
+                        </ul>
+                        <div class="badge badge-orange mt-10">от $98 (бессрочная) или $9.80/мес</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Visual Paradigm: подробный разбор -->
+            <section>
+                <h2>Visual Paradigm: подробный разбор</h2>
+                <div class="card-container">
+                    <div class="card" style="max-width: 350px;">
+                        <h4>Три уровня ERD</h4>
+                        <ul>
+                            <li>Концептуальный &rarr; Логический &rarr; Физический</li>
+                            <li>Автоматическая трассировка между уровнями</li>
+                            <li>Нотации: Crow's Foot, Chen, UML</li>
+                            <li>Table Record Editor</li>
+                        </ul>
+                    </div>
+                    <div class="card accent2" style="max-width: 350px;">
+                        <h4>Полный стек моделирования</h4>
+                        <ul>
+                            <li>UML 2.5 (все 14 типов диаграмм)</li>
+                            <li>BPMN 2.0</li>
+                            <li>ArchiMate 3.1</li>
+                            <li>DFD, Mind Map, User Story Map</li>
+                        </ul>
+                    </div>
+                    <div class="card accent6" style="max-width: 350px;">
+                        <h4>Интеграция моделей</h4>
+                        <ul>
+                            <li>ERD &harr; UML Class Diagram</li>
+                            <li>ERD &rarr; ORM mapping (Hibernate)</li>
+                            <li>BPMN &harr; требования</li>
+                            <li>Единый репозиторий проекта</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Visual Paradigm: редакции -->
+            <section>
+                <h2>Visual Paradigm: редакции и цены</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Редакция</th>
+                            <th>ERD</th>
+                            <th>UML</th>
+                            <th>BPMN</th>
+                            <th>Reverse Eng.</th>
+                            <th>Стоимость</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Community</strong></td>
+                            <td><span class="partial">Базовый</span></td>
+                            <td><span class="partial">Базовый</span></td>
+                            <td><span class="no">&mdash;</span></td>
+                            <td><span class="no">&mdash;</span></td>
+                            <td><span class="yes">Бесплатно</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Modeler</strong></td>
+                            <td><span class="yes">Полный</span></td>
+                            <td><span class="yes">Полный</span></td>
+                            <td><span class="yes">Да</span></td>
+                            <td><span class="partial">DDL-файлы</span></td>
+                            <td>$99 (бессроч.) / $6/мес</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Standard</strong></td>
+                            <td><span class="yes">Полный</span></td>
+                            <td><span class="yes">Полный</span></td>
+                            <td><span class="yes">Да</span></td>
+                            <td><span class="yes">Live DB + DDL</span></td>
+                            <td>$349 / $19/мес</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Professional</strong></td>
+                            <td><span class="yes">Полный</span></td>
+                            <td><span class="yes">Code Eng.</span></td>
+                            <td><span class="yes">Симуляция</span></td>
+                            <td><span class="yes">Live DB + DDL + Code</span></td>
+                            <td>$699 / $35/мес</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Enterprise</strong></td>
+                            <td><span class="yes">Полный</span></td>
+                            <td><span class="yes">Полный</span></td>
+                            <td><span class="yes">Полный</span></td>
+                            <td><span class="yes">Всё</span></td>
+                            <td>$1 399 / $69/мес</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- DbSchema vs Visual Paradigm -->
+            <section>
+                <h2>DbSchema vs Visual Paradigm: лицом к лицу</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Критерий</th>
+                            <th>DbSchema</th>
+                            <th>Visual Paradigm</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Фокус</strong></td>
+                            <td>Моделирование и управление БД</td>
+                            <td>Универсальное моделирование (UML + ERD + BPMN)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Уровни ERD</strong></td>
+                            <td>Только физический</td>
+                            <td><span class="yes">Конц. + Лог. + Физ. с трассировкой</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Кол-во СУБД</strong></td>
+                            <td><span class="yes">70+ (вкл. NoSQL)</span></td>
+                            <td>10+ (только реляционные)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Schema Sync</strong></td>
+                            <td><span class="yes">Полный (model diff + ALTER)</span></td>
+                            <td><span class="partial">Частичный</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Генерация данных</strong></td>
+                            <td><span class="yes">Random + Regex</span></td>
+                            <td><span class="no">&mdash;</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>UML / BPMN</strong></td>
+                            <td><span class="no">&mdash;</span></td>
+                            <td><span class="yes">Полный стек</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>ORM-маппинг</strong></td>
+                            <td><span class="no">&mdash;</span></td>
+                            <td><span class="yes">Hibernate</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Цена входа</strong></td>
+                            <td><span class="yes">Free CE / $98 Pro</span></td>
+                            <td><span class="yes">Free / $99 Modeler</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Лучше для</strong></td>
+                            <td><span class="yes">DBA, backend-разработчики</span></td>
+                            <td><span class="yes">Архитекторы, аналитики</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- ===== РАЗДЕЛ 6: ВЫВОДЫ И РЕКОМЕНДАЦИИ ===== -->
+            <section class="section-divider">
+                <h2>Часть 6</h2>
+                <div class="divider-line"></div>
+                <h1>Выводы и рекомендации</h1>
+                <p>Какой инструмент выбрать?</p>
+            </section>
+
+            <!-- Рекомендации по сценариям -->
+            <section>
+                <h2>Какой инструмент выбрать?</h2>
+                <div class="verdict-card best">
+                    <strong>Быстрый прототип модели:</strong>
+                    dbdiagram.io &mdash; за 5 минут в браузере, DBML-код можно хранить в Git
+                </div>
+                <div class="verdict-card best">
+                    <strong>Документирование существующей БД:</strong>
+                    DBeaver CE &mdash; подключился, получил ER-диаграмму, бесплатно
+                </div>
+                <div class="verdict-card best">
+                    <strong>Полный цикл проектирования БД:</strong>
+                    DbSchema Pro &mdash; forward/reverse/sync, 70+ СУБД, генерация данных, $98
+                </div>
+                <div class="verdict-card best">
+                    <strong>Архитектура системы целиком (ERD + UML + BPMN):</strong>
+                    Visual Paradigm &mdash; все нотации, три уровня ERD, трассировка, от $99
+                </div>
+                <div class="verdict-card">
+                    <strong>Enterprise с Data Governance:</strong>
+                    ERwin Data Modeler &mdash; стандарт корпораций, дорого, но мощно
+                </div>
+                <div class="verdict-card">
+                    <strong>Только PostgreSQL:</strong>
+                    pgModeler &mdash; специализированный, round-trip, $20
+                </div>
+            </section>
+
+            <!-- Квиз 1 -->
+            <section>
+                <h2>Квиз: инструменты моделирования</h2>
+                <div class="quiz-container">
+                    <h3>Вопрос 1</h3>
+                    <p class="small">Какой инструмент поддерживает наибольшее количество СУБД, включая NoSQL?</p>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">A) ERwin Data Modeler</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">B) Visual Paradigm</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true)">C) DbSchema</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">D) pgModeler</div>
+                    <div class="quiz-feedback"></div>
+                </div>
+            </section>
+
+            <!-- Квиз 2 -->
+            <section>
+                <h2>Квиз: инструменты моделирования</h2>
+                <div class="quiz-container">
+                    <h3>Вопрос 2</h3>
+                    <p class="small">Какой инструмент поддерживает все три уровня моделирования (концептуальный, логический, физический) с автоматической трассировкой?</p>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">A) DbSchema</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">B) dbdiagram.io</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true)">C) Visual Paradigm</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">D) DBeaver CE</div>
+                    <div class="quiz-feedback"></div>
+                </div>
+            </section>
+
+            <!-- Квиз 3 -->
+            <section>
+                <h2>Квиз: инструменты моделирования</h2>
+                <div class="quiz-container">
+                    <h3>Вопрос 3</h3>
+                    <p class="small">Что такое Round-trip Engineering?</p>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">A) Генерация SQL-скриптов из модели</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">B) Построение модели из существующей БД</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true)">C) Двусторонняя синхронизация модели и БД</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">D) Генерация тестовых данных</div>
+                    <div class="quiz-feedback"></div>
+                </div>
+            </section>
+
+            <!-- Квиз 4 -->
+            <section>
+                <h2>Квиз: российские продукты</h2>
+                <div class="quiz-container">
+                    <h3>Вопрос 4</h3>
+                    <p class="small">Какой российский продукт из реестра отечественного ПО ближе всего к классу инструментов моделирования (аналог ARIS)?</p>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">A) Postgres Pro</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true)">B) SILA Union</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">C) DATAREON Platform</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">D) DataLens</div>
+                    <div class="quiz-feedback"></div>
+                </div>
+            </section>
+
+            <!-- Обсуждение -->
+            <section class="discussion">
+                <div class="discussion-icon">&#128172;</div>
+                <h2>Обсуждение</h2>
+                <div class="discussion-question">
+                    <strong>Вопрос 1:</strong> Вы архитектор данных на предприятии «Руда+».
+                    Какой инструмент (или комбинацию инструментов) вы бы выбрали для моделирования MES-системы?
+                    Учтите: PostgreSQL в Yandex Cloud, команда из 5 человек, бюджет ограничен.
+                </div>
+                <div class="discussion-question">
+                    <strong>Вопрос 2:</strong> Может ли комбинация бесплатных инструментов
+                    (dbdiagram.io + DBeaver CE + PlantUML) полностью заменить ERwin Data Modeler?
+                    В каких случаях &mdash; да, а в каких &mdash; нет?
+                </div>
+                <div class="discussion-question">
+                    <strong>Вопрос 3:</strong> Как вы оцениваете зрелость российского рынка инструментов
+                    моделирования данных? Какие ниши не закрыты?
+                </div>
+            </section>
+
+            <!-- Групповая работа -->
+            <section class="group-work">
+                <h2>Групповая работа: выбор инструмента</h2>
+                <p class="small">Разделитесь на 3 группы. Каждая группа &mdash; команда на конкретном предприятии. Выберите и обоснуйте набор инструментов (10 мин).</p>
+                <div class="card-container">
+                    <div class="group-task">
+                        <span class="group-num">1</span>
+                        <strong>Стартап (5 человек)</strong><br>
+                        Разрабатываете SaaS-продукт. PostgreSQL + MongoDB. Бюджет на инструменты &mdash; $0.
+                        Нужно: модель БД, документация, совместная работа.
+                    </div>
+                    <div class="group-task">
+                        <span class="group-num">2</span>
+                        <strong>Госкорпорация (50 человек)</strong><br>
+                        Объект КИИ. Обязательно реестр отечественного ПО. Oracle &rarr; Postgres Pro миграция.
+                        Нужно: reverse engineering Oracle, forward engineering PostgreSQL, Data Dictionary.
+                    </div>
+                    <div class="group-task">
+                        <span class="group-num">3</span>
+                        <strong>Промышленное предприятие «Руда+»</strong><br>
+                        MES-система. PostgreSQL в Yandex Cloud. Команда 8 человек (3 аналитика + 5 разработчиков).
+                        Нужно: концептуальная модель для бизнеса, физическая для разработки, BI-дашборды.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Резюме -->
+            <section>
+                <h2>Резюме</h2>
+                <div class="card-container">
+                    <div class="card">
+                        <h4>14 критериев сравнения</h4>
+                        <ul>
+                            <li>Уровни моделирования</li>
+                            <li>Forward / Reverse / Round-trip</li>
+                            <li>Нотации, СУБД, совместная работа</li>
+                            <li>Стоимость и порог входа</li>
+                        </ul>
+                    </div>
+                    <div class="card accent2">
+                        <h4>8 инструментов</h4>
+                        <ul>
+                            <li>Лёгкие: dbdiagram.io, draw.io</li>
+                            <li>Специализированные: pgModeler, DbSchema</li>
+                            <li>IDE: DBeaver, DataGrip</li>
+                            <li>Enterprise: ERwin, Visual Paradigm</li>
+                        </ul>
+                    </div>
+                    <div class="card accent6">
+                        <h4>Российский контекст</h4>
+                        <ul>
+                            <li>Нет прямого аналога ERwin в реестре</li>
+                            <li>SILA Union &mdash; ближайший (архитектура)</li>
+                            <li>Open Source &mdash; безопасная альтернатива</li>
+                            <li>DbSchema / VP &mdash; для коммерческого сектора</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="text-center mt-20">
+                    <div class="badge badge-blue" style="font-size:0.8em; padding: 8px 20px;">К основной презентации модуля 2 &rarr;</div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/plugin/highlight/highlight.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            showSlideNumber: 'all',
+            transition: 'slide',
+            transitionSpeed: 'default',
+            width: 1200,
+            height: 700,
+            margin: 0.04,
+            plugins: [RevealHighlight]
+        });
+
+        function checkAnswer(element, isCorrect) {
+            const container = element.closest('.quiz-container');
+            const options = container.querySelectorAll('.quiz-option');
+            const feedback = container.querySelector('.quiz-feedback');
+
+            options.forEach(opt => {
+                opt.classList.remove('correct', 'incorrect');
+                opt.style.pointerEvents = 'none';
+            });
+
+            if (isCorrect) {
+                element.classList.add('correct');
+                feedback.textContent = '\u041f\u0440\u0430\u0432\u0438\u043b\u044c\u043d\u043e!';
+                feedback.style.background = '#e8feef';
+                feedback.style.color = '#155724';
+            } else {
+                element.classList.add('incorrect');
+                options.forEach(opt => {
+                    if (opt.getAttribute('onclick').includes('true')) {
+                        opt.classList.add('correct');
+                    }
+                });
+                feedback.textContent = '\u041d\u0435\u043f\u0440\u0430\u0432\u0438\u043b\u044c\u043d\u043e. \u041f\u0440\u0430\u0432\u0438\u043b\u044c\u043d\u044b\u0439 \u043e\u0442\u0432\u0435\u0442 \u0432\u044b\u0434\u0435\u043b\u0435\u043d \u0437\u0435\u043b\u0451\u043d\u044b\u043c.';
+                feedback.style.background = '#fee8e8';
+                feedback.style.color = '#721c24';
+            }
+            feedback.style.display = 'block';
+
+            setTimeout(() => {
+                options.forEach(opt => {
+                    opt.style.pointerEvents = 'auto';
+                });
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

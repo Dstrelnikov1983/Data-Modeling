@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Модуль 3. Data Vault 2.0 — детальная презентация</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/white.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/plugin/highlight/monokai.css">
+    <style>
+        :root {
+            --accent1: #4472C4;
+            --accent2: #ED7D31;
+            --accent6: #70AD47;
+            --bg-light: #f8f9fa;
+            --text-dark: #2c3e50;
+            --text-muted: #6c757d;
+            --hub-color: #4472C4;
+            --link-color: #ED7D31;
+            --sat-color: #70AD47;
+        }
+        .reveal { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 28px; color: var(--text-dark); }
+        .reveal h1 { color: var(--accent1); font-size: 1.8em; font-weight: 700; margin-bottom: 0.3em; }
+        .reveal h2 { color: var(--accent1); font-size: 1.4em; font-weight: 600; margin-bottom: 0.3em; }
+        .reveal h3 { color: var(--accent2); font-size: 1.1em; font-weight: 600; }
+        .reveal .slide-number { font-size: 14px; color: var(--accent1); }
+        .title-slide { text-align: center; }
+        .title-slide h1 { font-size: 2em; border-bottom: 4px solid var(--accent2); display: inline-block; padding-bottom: 10px; }
+        .title-slide .subtitle { color: var(--text-muted); font-size: 0.9em; margin-top: 20px; }
+        .title-slide .module-info { background: linear-gradient(135deg, var(--accent1), #5a8fd4); color: white; padding: 15px 30px; border-radius: 8px; display: inline-block; margin-top: 20px; font-size: 0.8em; }
+        .section-divider { background: linear-gradient(135deg, var(--accent1), #2c5aa0) !important; color: white !important; }
+        .section-divider h1, .section-divider h2 { color: white !important; }
+        .section-divider .divider-line { width: 100px; height: 4px; background: var(--accent2); margin: 20px auto; }
+        .card-container { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; margin-top: 15px; }
+        .card { background: white; border-radius: 8px; padding: 15px 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); flex: 1; min-width: 200px; max-width: 300px; text-align: left; font-size: 0.7em; border-top: 3px solid var(--accent1); }
+        .card.accent2 { border-top-color: var(--accent2); }
+        .card.accent6 { border-top-color: var(--accent6); }
+        .card h4 { color: var(--accent1); margin: 0 0 8px 0; font-size: 1.1em; }
+        .card.accent2 h4 { color: var(--accent2); }
+        .card.accent6 h4 { color: var(--accent6); }
+        .reveal ul { list-style: none; padding-left: 0; }
+        .reveal ul li { padding: 4px 0 4px 25px; position: relative; font-size: 0.85em; }
+        .reveal ul li::before { content: '\25B8'; color: var(--accent2); position: absolute; left: 5px; font-weight: bold; }
+        .reveal ol { padding-left: 30px; }
+        .reveal ol li { padding: 4px 0; font-size: 0.85em; }
+        .highlight-box { background: linear-gradient(135deg, #e8f0fe, #d4e4fc); border-left: 4px solid var(--accent1); padding: 15px 20px; border-radius: 0 8px 8px 0; margin: 15px 0; font-size: 0.8em; text-align: left; }
+        .highlight-box.warning { background: linear-gradient(135deg, #fef3e8, #fde4c8); border-left-color: var(--accent2); }
+        .highlight-box.success { background: linear-gradient(135deg, #e8feef, #c8fdd8); border-left-color: var(--accent6); }
+        .quiz-container { background: #f8f9fa; border-radius: 12px; padding: 20px; margin: 15px 0; border: 2px solid var(--accent1); }
+        .quiz-container h3 { color: var(--accent1); margin-top: 0; }
+        .quiz-option { background: white; border: 2px solid #dee2e6; border-radius: 8px; padding: 10px 15px; margin: 8px 0; cursor: pointer; transition: all 0.3s ease; font-size: 0.75em; text-align: left; }
+        .quiz-option:hover { border-color: var(--accent1); background: #e8f0fe; }
+        .quiz-option.correct { border-color: var(--accent6); background: #e8feef; }
+        .quiz-option.incorrect { border-color: #dc3545; background: #fee8e8; }
+        .quiz-feedback { margin-top: 10px; padding: 10px; border-radius: 6px; font-size: 0.75em; display: none; }
+        .discussion { background: linear-gradient(135deg, #fff8e1, #fff3cd) !important; }
+        .discussion-icon { font-size: 2em; margin-bottom: 10px; }
+        .discussion h2 { color: var(--accent2) !important; }
+        .discussion-question { background: white; border-radius: 12px; padding: 20px; margin: 10px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-size: 0.85em; border-left: 4px solid var(--accent2); text-align: left; }
+        .practice-slide { background: linear-gradient(135deg, #e8feef, #d4fce4) !important; }
+        .practice-slide h2 { color: var(--accent6) !important; }
+        .reveal table { border-collapse: collapse; margin: 15px auto; font-size: 0.65em; width: 90%; }
+        .reveal table th { background: var(--accent1); color: white; padding: 10px 15px; text-align: left; font-weight: 600; }
+        .reveal table td { padding: 8px 15px; border-bottom: 1px solid #dee2e6; text-align: left; }
+        .reveal table tr:nth-child(even) { background: #f8f9fa; }
+        .reveal table tr:hover { background: #e8f0fe; }
+        .flow-container { display: flex; align-items: center; justify-content: center; gap: 5px; flex-wrap: wrap; margin: 15px 0; }
+        .flow-step { background: linear-gradient(135deg, var(--accent1), #5a8fd4); color: white; padding: 12px 16px; border-radius: 8px; font-size: 0.6em; font-weight: 600; min-width: 100px; text-align: center; }
+        .flow-arrow { color: var(--accent2); font-size: 1.2em; font-weight: bold; }
+        .group-work { background: linear-gradient(135deg, #f0e8fe, #e4d4fc) !important; }
+        .group-work h2 { color: #7c3aed !important; }
+        .group-task { background: white; border-radius: 10px; padding: 15px; margin: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); font-size: 0.7em; text-align: left; }
+        .group-task .group-num { display: inline-block; background: #7c3aed; color: white; border-radius: 50%; width: 28px; height: 28px; line-height: 28px; text-align: center; font-weight: bold; margin-right: 8px; }
+        .case-study { background: linear-gradient(135deg, #fce8e8, #fcd4d4) !important; }
+        .case-study h2 { color: #dc3545 !important; }
+        .case-box { background: white; border-radius: 10px; padding: 20px; margin: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-size: 0.75em; text-align: left; }
+        .reveal pre { box-shadow: 0 2px 8px rgba(0,0,0,0.15); border-radius: 8px; font-size: 0.5em; }
+        .reveal pre code { padding: 15px 20px; max-height: 500px; }
+        .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.6em; font-weight: 600; color: white; margin: 2px; }
+        .badge-blue { background: var(--accent1); }
+        .badge-orange { background: var(--accent2); }
+        .badge-green { background: var(--accent6); }
+        .badge-purple { background: #7c3aed; }
+        .badge-red { background: #dc3545; }
+        .comparison { display: flex; gap: 15px; margin-top: 15px; }
+        .comparison .col { flex: 1; background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); font-size: 0.7em; text-align: left; }
+        .icon-circle { width: 60px; height: 60px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 1.5em; margin: 5px; }
+        .icon-circle.blue { background: #e8f0fe; color: var(--accent1); }
+        .icon-circle.orange { background: #fef3e8; color: var(--accent2); }
+        .icon-circle.green { background: #e8feef; color: var(--accent6); }
+        .reveal .slides section { padding: 20px 40px; }
+        .small { font-size: 0.7em; }
+        .smaller { font-size: 0.6em; }
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .mt-10 { margin-top: 10px; }
+        .mt-20 { margin-top: 20px; }
+        .mb-10 { margin-bottom: 10px; }
+        /* ER entities */
+        .er-entity { background: white; border: 2px solid var(--accent1); border-radius: 8px; padding: 10px 15px; display: inline-block; font-size: 0.65em; text-align: left; box-shadow: 0 2px 6px rgba(0,0,0,0.1); min-width: 160px; vertical-align: top; }
+        .er-entity .entity-title { background: var(--accent1); color: white; padding: 5px 10px; margin: -10px -15px 10px -15px; border-radius: 6px 6px 0 0; font-weight: 600; text-align: center; }
+        .er-entity.hub { border-color: var(--hub-color); }
+        .er-entity.hub .entity-title { background: var(--hub-color); }
+        .er-entity.link-ent { border-color: var(--link-color); }
+        .er-entity.link-ent .entity-title { background: var(--link-color); }
+        .er-entity.sat { border-color: var(--sat-color); }
+        .er-entity.sat .entity-title { background: var(--sat-color); }
+        .er-entity.accent2 { border-color: var(--accent2); }
+        .er-entity.accent2 .entity-title { background: var(--accent2); }
+        .er-entity.accent6 { border-color: var(--accent6); }
+        .er-entity.accent6 .entity-title { background: var(--accent6); }
+        .er-entity.purple { border-color: #7c3aed; }
+        .er-entity.purple .entity-title { background: #7c3aed; }
+        .er-entity.red { border-color: #dc3545; }
+        .er-entity.red .entity-title { background: #dc3545; }
+        .er-field { padding: 2px 0; font-size: 0.95em; }
+        .er-field .pk { color: var(--accent2); font-weight: bold; }
+        .er-field .fk { color: #7c3aed; font-weight: bold; }
+        .er-field .hk { color: var(--accent1); font-weight: bold; }
+        .er-field .meta { color: var(--text-muted); font-weight: bold; }
+        .er-field .metric { color: var(--accent6); font-weight: bold; }
+        .tables-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 10px; align-items: flex-start; }
+        .tables-row .er-entity { flex: 0 1 auto; }
+        /* DV layout: hub-link-sat centered */
+        .dv-layout { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin: 10px auto; max-width: 980px; align-items: flex-start; }
+        /* Star layout for DV diagrams */
+        .star-layout { display: grid; grid-template-columns: 1fr 30px 1fr 30px 1fr; grid-template-rows: auto 22px auto 22px auto; gap: 4px; justify-items: center; align-items: start; margin: 10px auto; max-width: 960px; }
+        .star-center { grid-column: 3; grid-row: 3; }
+        .star-top { grid-column: 3; grid-row: 1; }
+        .star-left { grid-column: 1; grid-row: 3; }
+        .star-right { grid-column: 5; grid-row: 3; }
+        .star-bl { grid-column: 1; grid-row: 5; }
+        .star-br { grid-column: 5; grid-row: 5; }
+        .star-bottom { grid-column: 3; grid-row: 5; }
+        /* Star connectors */
+        .star-conn { display: flex; align-items: center; justify-content: center; font-size: 0.5em; font-weight: 700; color: var(--accent1); gap: 2px; }
+        .star-conn.vert { flex-direction: column; }
+        .star-conn .conn-h { width: 100%; height: 2px; background: var(--accent1); min-width: 12px; }
+        .star-conn .conn-v { width: 2px; height: 100%; background: var(--accent1); min-height: 8px; }
+        .star-conn-top { grid-column: 3; grid-row: 2; }
+        .star-conn-left { grid-column: 2; grid-row: 3; }
+        .star-conn-right { grid-column: 4; grid-row: 3; }
+        .star-conn-bottom { grid-column: 3; grid-row: 4; }
+        .star-conn-left-bl { grid-column: 1; grid-row: 4; }
+        .star-conn-right-br { grid-column: 5; grid-row: 4; }
+        /* ER link arrows */
+        .er-link { display: flex; align-items: center; justify-content: center; flex: 0 0 auto; padding: 4px 0; white-space: nowrap; align-self: center; }
+        .er-link-inner { display: flex; align-items: center; gap: 0; font-size: 0.6em; font-weight: 700; color: var(--accent1); }
+        .er-link-inner .card-label { padding: 0 3px; }
+        .er-link-inner .link-line { width: 24px; height: 2px; background: var(--accent1); }
+        .er-link-inner .link-arrow-r::after { content: '\25B6'; font-size: 0.8em; }
+        .er-link-inner .link-arrow-l::before { content: '\25C0'; font-size: 0.8em; }
+        /* Vertical ER link */
+        .er-link-vert { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2px 0; white-space: nowrap; }
+        .er-link-vert .link-line-v { width: 2px; height: 16px; background: var(--accent1); }
+        /* Color legend */
+        .legend { display: flex; gap: 20px; justify-content: center; margin: 10px 0; font-size: 0.65em; }
+        .legend-item { display: flex; align-items: center; gap: 6px; }
+        .legend-swatch { width: 18px; height: 18px; border-radius: 4px; }
+        /* Timeline */
+        .timeline { display: flex; align-items: center; justify-content: center; gap: 0; margin: 15px 0; }
+        .timeline-item { text-align: center; padding: 10px 14px; font-size: 0.6em; }
+        .timeline-item .year { font-weight: 700; color: var(--accent1); font-size: 1.3em; }
+        .timeline-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--accent2); margin: 6px auto; }
+        .timeline-line { width: 40px; height: 3px; background: linear-gradient(90deg, var(--accent1), var(--accent2)); }
+    </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ====== TITLE ====== -->
+<section class="title-slide">
+    <h1>Data Vault 2.0</h1>
+    <p class="subtitle">Гибкая методология моделирования<br>корпоративных хранилищ данных</p>
+    <div class="module-info">
+        Модуль 3 &bull; Тема 3.4 &bull; Предприятие &laquo;Руда+&raquo;
+    </div>
+</section>
+
+<!-- ====== СОДЕРЖАНИЕ ====== -->
+<section>
+    <h2>Содержание</h2>
+    <table style="width:95%;">
+        <thead><tr><th>#</th><th>Раздел</th><th>Ключевые темы</th></tr></thead>
+        <tbody>
+            <tr><td>1</td><td>История и философия Data Vault</td><td>Дэн Линстедт, DV 1.0 &rarr; DV 2.0</td></tr>
+            <tr><td>2</td><td>Hub &mdash; бизнес-ключи</td><td>Структура, правила, хеш-ключи</td></tr>
+            <tr><td>3</td><td>Link &mdash; связи</td><td>Типы Link, Same-As, Hierarchical</td></tr>
+            <tr><td>4</td><td>Satellite &mdash; контекст</td><td>Атрибуты, история, hash_diff</td></tr>
+            <tr><td>5</td><td>Продвинутые паттерны</td><td>PIT, Bridge, Effectivity Satellite</td></tr>
+            <tr><td>6</td><td>ETL/ELT для Data Vault</td><td>Загрузка, идемпотентность, параллелизм</td></tr>
+            <tr><td>7</td><td>Data Vault vs Kimball vs 3NF</td><td>Сравнение подходов</td></tr>
+            <tr><td>8</td><td>Полный пример &laquo;Руда+&raquo;</td><td>Hub, Link, Satellite, SQL</td></tr>
+            <tr><td>9</td><td>Квизы и обсуждение</td><td>Проверка знаний, групповая работа</td></tr>
+        </tbody>
+    </table>
+</section>
+
+<!-- ============================== -->
+<!-- РАЗДЕЛ 1: ИСТОРИЯ И ФИЛОСОФИЯ -->
+<!-- ============================== -->
+<section class="section-divider">
+    <h1>1. История и философия Data Vault</h1>
+    <div class="divider-line"></div>
+    <p style="font-size:0.9em;">Дэн Линстедт &bull; От идеи к стандарту</p>
+</section>
+
+<section>
+    <h2>Хронология Data Vault</h2>
+    <div class="timeline">
+        <div class="timeline-item">
+            <div class="year">1990-е</div>
+            <div class="timeline-dot"></div>
+            <div>Дэн Линстедт<br>начинает разработку<br>концепции</div>
+        </div>
+        <div class="timeline-line"></div>
+        <div class="timeline-item">
+            <div class="year">2000</div>
+            <div class="timeline-dot"></div>
+            <div>Первая публикация<br>Data Vault 1.0<br>в журнале TDAN</div>
+        </div>
+        <div class="timeline-line"></div>
+        <div class="timeline-item">
+            <div class="year">2013</div>
+            <div class="timeline-dot"></div>
+            <div>Книга &laquo;Building<br>a Scalable DWH<br>with Data Vault 2.0&raquo;</div>
+        </div>
+        <div class="timeline-line"></div>
+        <div class="timeline-item">
+            <div class="year">2015+</div>
+            <div class="timeline-dot"></div>
+            <div>Широкое внедрение<br>в облачных DWH<br>(Snowflake, BigQuery)</div>
+        </div>
+    </div>
+    <div class="highlight-box mt-10">
+        <strong>Data Vault 2.0</strong> &mdash; методология моделирования, включающая набор таблиц (Hub, Link, Satellite), правила загрузки данных и принципы аудита. Автор &mdash; <strong>Дэн Линстедт</strong> (Dan Linstedt).
+    </div>
+</section>
+
+<section>
+    <h2>Зачем нужен Data Vault?</h2>
+    <div class="comparison">
+        <div class="col" style="border-top:3px solid var(--accent2);">
+            <strong style="color:var(--accent2);">Проблемы Kimball</strong><br><br>
+            <ul>
+                <li>Жёсткая структура &mdash; изменения схемы болезненны</li>
+                <li>Интеграция новых источников требует перестройки ETL</li>
+                <li>Трудно масштабировать параллельную загрузку</li>
+                <li>Нет полного аудита &mdash; откуда пришли данные?</li>
+            </ul>
+        </div>
+        <div class="col" style="border-top:3px solid var(--accent6);">
+            <strong style="color:var(--accent6);">Решение Data Vault</strong><br><br>
+            <ul>
+                <li>Гибкость &mdash; новые источники добавляются без перестройки</li>
+                <li>Параллельная загрузка Hub/Link/Sat независимо</li>
+                <li>Полный аудит: load_dts + record_source</li>
+                <li>Insert-only &mdash; данные не перезаписываются</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2>Ключевые принципы Data Vault 2.0</h2>
+    <div class="card-container">
+        <div class="card">
+            <h4>Insert-Only</h4>
+            <p>Данные никогда не удаляются и не обновляются. Каждое изменение &mdash; новая запись с отметкой времени (load_dts).</p>
+        </div>
+        <div class="card accent2">
+            <h4>Бизнес-ключи</h4>
+            <p>Модель строится вокруг <strong>бизнес-ключей</strong> &mdash; уникальных идентификаторов объектов реального мира (mine_id, equipment_id).</p>
+        </div>
+        <div class="card accent6">
+            <h4>Параллелизм</h4>
+            <p>Hub, Link и Satellite загружаются <strong>независимо</strong> и могут обрабатываться параллельно разными командами.</p>
+        </div>
+    </div>
+    <div class="card-container mt-10">
+        <div class="card" style="border-top-color:#7c3aed;">
+            <h4 style="color:#7c3aed;">Аудит</h4>
+            <p>Каждая запись содержит <strong>load_dts</strong> (когда загружена) и <strong>record_source</strong> (откуда пришла). Полная прослеживаемость.</p>
+        </div>
+        <div class="card" style="border-top-color:#dc3545;">
+            <h4 style="color:#dc3545;">Hash Keys (DV 2.0)</h4>
+            <p>Суррогатные ключи заменены на <strong>хеш бизнес-ключей</strong> (MD5/SHA-1). Это устраняет зависимость от SEQUENCE и ускоряет параллельную загрузку.</p>
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2>Три кита Data Vault</h2>
+    <div class="text-center">
+        <div class="legend mb-10">
+            <div class="legend-item"><div class="legend-swatch" style="background:var(--hub-color);"></div> Hub &mdash; бизнес-ключи</div>
+            <div class="legend-item"><div class="legend-swatch" style="background:var(--link-color);"></div> Link &mdash; связи</div>
+            <div class="legend-item"><div class="legend-swatch" style="background:var(--sat-color);"></div> Satellite &mdash; атрибуты</div>
+        </div>
+    </div>
+    <div class="dv-layout">
+        <div class="er-entity hub" style="min-width:150px;">
+            <div class="entity-title">Hub</div>
+            <div class="er-field"><span class="hk">HK</span> hash_key</div>
+            <div class="er-field"><span class="pk">BK</span> business_key</div>
+            <div class="er-field"><span class="meta">M</span> load_dts</div>
+            <div class="er-field"><span class="meta">M</span> record_source</div>
+        </div>
+        <div class="er-link"><div class="er-link-inner"><span class="card-label">1</span><span class="link-line"></span><span class="link-arrow-l"></span><span class="card-label">N</span></div></div>
+        <div class="er-entity sat" style="min-width:170px;">
+            <div class="entity-title">Satellite</div>
+            <div class="er-field"><span class="fk">FK</span> hub_hash_key</div>
+            <div class="er-field"><span class="meta">M</span> load_dts</div>
+            <div class="er-field"><span class="meta">M</span> load_end_dts</div>
+            <div class="er-field">attribute_1</div>
+            <div class="er-field">attribute_N</div>
+            <div class="er-field"><span class="meta">M</span> hash_diff</div>
+            <div class="er-field"><span class="meta">M</span> record_source</div>
+        </div>
+        <div style="flex-basis:100%; height:0;"></div>
+        <div class="er-entity link-ent" style="min-width:170px;">
+            <div class="entity-title">Link</div>
+            <div class="er-field"><span class="hk">HK</span> link_hash_key</div>
+            <div class="er-field"><span class="fk">FK</span> hub_A_hash_key</div>
+            <div class="er-field"><span class="fk">FK</span> hub_B_hash_key</div>
+            <div class="er-field"><span class="meta">M</span> load_dts</div>
+            <div class="er-field"><span class="meta">M</span> record_source</div>
+        </div>
+        <div class="er-link"><div class="er-link-inner"><span class="card-label">1</span><span class="link-line"></span><span class="link-arrow-l"></span><span class="card-label">N</span></div></div>
+        <div class="er-entity sat" style="min-width:170px;">
+            <div class="entity-title">Satellite (on Link)</div>
+            <div class="er-field"><span class="fk">FK</span> link_hash_key</div>
+            <div class="er-field"><span class="meta">M</span> load_dts</div>
+            <div class="er-field">metric_1</div>
+            <div class="er-field">metric_N</div>
+            <div class="er-field"><span class="meta">M</span> hash_diff</div>
+            <div class="er-field"><span class="meta">M</span> record_source</div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================== -->
+<!-- РАЗДЕЛ 2: HUB                  -->
+<!-- ============================== -->
+<section class="section-divider">
+    <h1>2. Hub &mdash; бизнес-ключи</h1>
+    <div class="divider-line"></div>
+    <p style="font-size:0.9em;">Ядро модели &mdash; уникальные бизнес-объекты</p>
+</section>
+
+<section>
+    <h2>Hub: определение и правила</h2>
+    <div class="highlight-box">
+        <strong>Hub</strong> &mdash; таблица, которая хранит <strong>уникальные бизнес-ключи</strong> сущностей реального мира. Hub содержит минимум данных: только ключ, метаданные загрузки и хеш-ключ.
+    </div>
+    <table class="mt-10">
+        <thead><tr><th>Правило</th><th>Описание</th></tr></thead>
+        <tbody>
+            <tr><td><span class="badge badge-blue">R1</span></td><td>Содержит только бизнес-ключ, хеш-ключ, load_dts, record_source</td></tr>
+            <tr><td><span class="badge badge-blue">R2</span></td><td>Бизнес-ключ <strong>никогда не меняется</strong> (natural key / UNIQUE)</td></tr>
+            <tr><td><span class="badge badge-blue">R3</span></td><td>Hash-ключ = MD5/SHA-1 от бизнес-ключа (DV 2.0)</td></tr>
+            <tr><td><span class="badge badge-blue">R4</span></td><td>load_dts &mdash; момент <strong>первого</strong> появления ключа в хранилище</td></tr>
+            <tr><td><span class="badge badge-blue">R5</span></td><td>record_source &mdash; из какой системы-источника пришёл ключ</td></tr>
+            <tr><td><span class="badge badge-blue">R6</span></td><td>Hub <strong>никогда не содержит описательных атрибутов</strong> &mdash; они в Satellite</td></tr>
+        </tbody>
+    </table>
+</section>
+
+<section>
+    <h2>Hub: пример &laquo;Руда+&raquo;</h2>
+    <div class="dv-layout">
+        <div class="er-entity hub" style="min-width:200px;">
+            <div class="entity-title">hub_mine</div>
+            <div class="er-field"><span class="hk">HK</span> hub_mine_hk <span class="smaller">(MD5)</span></div>
+            <div class="er-field"><span class="pk">BK</span> mine_id</div>
+            <div class="er-field"><span class="meta">M</span> load_dts</div>
+            <div class="er-field"><span class="meta">M</span> record_source</div>
+        </div>
+        <div class="er-entity hub" style="min-width:200px;">
+            <div class="entity-title">hub_equipment</div>
+            <div class="er-field"><span class="hk">HK</span> hub_equipment_hk</div>
+            <div class="er-field"><span class="pk">BK</span> equipment_id</div>
+            <div class="er-field"><span class="meta">M</span> load_dts</div>
+            <div class="er-field"><span class="meta">M</span> record_source</div>
+        </div>
+        <div class="er-entity hub" style="min-width:200px;">
+            <div class="entity-title">hub_operator</div>
+            <div class="er-field"><span class="hk">HK</span> hub_operator_hk</div>
+            <div class="er-field"><span class="pk">BK</span> operator_id</div>
+            <div class="er-field"><span class="meta">M</span> load_dts</div>
+            <div class="er-field"><span class="meta">M</span> record_source</div>
+        </div>
+    </div>
+    <pre class="mt-10"><code class="language-sql">CREATE TABLE vault.hub_mine (
+    hub_mine_hk     CHAR(32) PRIMARY KEY,       -- MD5(mine_id)
+    mine_id         VARCHAR(10) NOT NULL UNIQUE, -- бизнес-ключ
+    load_dts        TIMESTAMP NOT NULL DEFAULT NOW(),
+    record_source   VARCHAR(50) NOT NULL DEFAULT 'ruda_plus.mines'
+);
+
+-- Загрузка Hub: INSERT-only, идемпотентная
+INSERT INTO vault.hub_mine (hub_mine_hk, mine_id)
+SELECT MD5(mine_id), mine_id
+FROM ruda_plus.mines
+ON CONFLICT (mine_id) DO NOTHING;</code></pre>
+</section>
+
+<section>
+    <h2>Hash Key: зачем?</h2>
+    <div class="comparison">
+        <div class="col" style="border-top:3px solid var(--accent2);">
+            <strong style="color:var(--accent2);">Data Vault 1.0 (SEQUENCE)</strong>
+            <pre style="font-size:0.85em;"><code class="language-sql">-- PK = SERIAL / SEQUENCE
+hub_mine_sk SERIAL PRIMARY KEY
+-- Проблемы:
+-- 1. SEQUENCE — точка блокировки
+-- 2. Зависимость от порядка INSERT
+-- 3. JOIN дочерних таблиц
+--    требует предварительного
+--    Lookup</code></pre>
+        </div>
+        <div class="col" style="border-top:3px solid var(--accent6);">
+            <strong style="color:var(--accent6);">Data Vault 2.0 (HASH)</strong>
+            <pre style="font-size:0.85em;"><code class="language-sql">-- PK = MD5 от бизнес-ключа
+hub_mine_hk CHAR(32) PRIMARY KEY
+-- = MD5('M001')
+-- Преимущества:
+-- 1. Вычисляется на лету
+-- 2. Нет зависимости от SEQUENCE
+-- 3. Параллельная загрузка
+-- 4. JOIN без Lookup</code></pre>
+        </div>
+    </div>
+    <div class="highlight-box warning mt-10">
+        <strong>MD5 vs SHA-1 vs SHA-256:</strong> MD5 (32 символа) &mdash; самый популярный в DV 2.0 (быстрый, коллизии крайне маловероятны). SHA-256 (64 символа) &mdash; для повышенной безопасности. Главное &mdash; выбрать один алгоритм и использовать <strong>везде</strong>.
+    </div>
+</section>
+
+<section class="discussion">
+    <div class="discussion-icon">&#128172;</div>
+    <h2>Вопрос для обсуждения</h2>
+    <div class="discussion-question">
+        <strong>1.</strong> На предприятии &laquo;Руда+&raquo; каждая единица оборудования имеет equipment_id (например, &laquo;EQ001&raquo;). Этот ID генерируется MES-системой. Но тот же самосвал имеет государственный регистрационный номер и заводской серийный номер. Какой ключ выбрать для Hub? Может ли Hub иметь составной бизнес-ключ?
+    </div>
+    <div class="discussion-question">
+        <strong>2.</strong> Что произойдёт, если два разных источника (MES и ERP) присвоят одному оборудованию разные ID? Как Data Vault решает эту проблему?
+    </div>
+</section>
+
+<!-- ============================== -->
+<!-- РАЗДЕЛ 3: LINK                 -->
+<!-- ============================== -->
+<section class="section-divider">
+    <h1>3. Link &mdash; связи между сущностями</h1>
+    <div class="divider-line"></div>
+    <p style="font-size:0.9em;">Отношения, транзакции, иерархии</p>
+</section>
+
+<section>
+    <h2>Link: определение и правила</h2>
+    <div class="highlight-box">
+        <strong>Link</strong> &mdash; таблица, которая фиксирует <strong>связь (отношение)</strong> между двумя или более Hub. Link может описывать: отношение N:M, транзакцию, иерархию или эквивалентность.
+    </div>
+    <table class="mt-10">
+        <thead><tr><th>Правило</th><th>Описание</th></tr></thead>
+        <tbody>
+            <tr><td><span class="badge badge-orange">R1</span></td><td>Содержит hash-ключи связанных Hub (как FK) + собственный hash-ключ</td></tr>
+            <tr><td><span class="badge badge-orange">R2</span></td><td>Hash-ключ Link = MD5(CONCAT(hub_A_hk, hub_B_hk, ...))</td></tr>
+            <tr><td><span class="badge badge-orange">R3</span></td><td>Link <strong>не содержит описательных атрибутов</strong> &mdash; они в Satellite на Link</td></tr>
+            <tr><td><span class="badge badge-orange">R4</span></td><td>Может содержать <strong>Degenerate Key</strong> (ID транзакции, номер документа)</td></tr>
+            <tr><td><span class="badge badge-orange">R5</span></td><td>Link фиксирует <strong>факт существования связи</strong>, а не её детали</td></tr>
+            <tr><td><span class="badge badge-orange">R6</span></td><td>Комбинация FK Hub&rsquo;ов уникальна (UNIQUE constraint или входит в hash)</td></tr>
+        </tbody>
+    </table>
+</section>
+
+<section>
+    <h2>Типы Link</h2>
+    <div class="card-container">
+        <div class="card accent2">
+            <h4>Standard Link</h4>
+            <p>Связь между двумя или более Hub. Пример: Оборудование &harr; Шахта.</p>
+            <p class="smaller">link_equipment_mine (hub_equipment_hk, hub_mine_hk)</p>
+        </div>
+        <div class="card" style="border-top-color:#7c3aed;">
+            <h4 style="color:#7c3aed;">Transaction Link</h4>
+            <p>Связь, описывающая бизнес-событие (транзакцию). Содержит Degenerate Key.</p>
+            <p class="smaller">link_production (hub_mine_hk, hub_equipment_hk, hub_operator_hk, production_id)</p>
+        </div>
+    </div>
+    <div class="card-container mt-10">
+        <div class="card" style="border-top-color:#dc3545;">
+            <h4 style="color:#dc3545;">Same-As Link</h4>
+            <p>Связывает <strong>два Hub одного типа</strong>. Показывает, что два бизнес-ключа &mdash; один и тот же объект (дубли из разных систем).</p>
+            <p class="smaller">link_same_as_equipment (hub_equipment_hk_master, hub_equipment_hk_duplicate)</p>
+        </div>
+        <div class="card accent6">
+            <h4>Hierarchical Link</h4>
+            <p>Рекурсивная связь &mdash; Hub ссылается сам на себя. Моделирует иерархию &laquo;родитель-потомок&raquo;.</p>
+            <p class="smaller">link_mine_hierarchy (hub_mine_hk_parent, hub_mine_hk_child)</p>
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2>Link: примеры &laquo;Руда+&raquo;</h2>
+    <div class="dv-layout">
+        <div class="er-entity link-ent" style="min-width:220px;">
+            <div class="entity-title">link_equipment_mine</div>
+            <div class="er-field"><span class="hk">HK</span> link_equip_mine_hk</div>
+            <div class="er-field"><span class="fk">FK</span> hub_equipment_hk</div>
+            <div class="er-field"><span class="fk">FK</span> hub_mine_hk</div>
+            <div class="er-field"><span class="meta">M</span> load_dts</div>
+            <div class="er-field"><span class="meta">M</span> record_source</div>
+        </div>
+        <div class="er-entity link-ent" style="min-width:240px;">
+            <div class="entity-title">link_production</div>
+            <div class="er-field"><span class="hk">HK</span> link_production_hk</div>
+            <div class="er-field"><span class="fk">FK</span> hub_mine_hk</div>
+            <div class="er-field"><span class="fk">FK</span> hub_equipment_hk</div>
+            <div class="er-field"><span class="fk">FK</span> hub_operator_hk</div>
+            <div class="er-field"><span class="pk">DK</span> production_id</div>
+            <div class="er-field"><span class="meta">M</span> load_dts</div>
+            <div class="er-field"><span class="meta">M</span> record_source</div>
+        </div>
+    </div>
+    <pre class="mt-10"><code class="language-sql">CREATE TABLE vault.link_production (
+    link_production_hk CHAR(32) PRIMARY KEY,
+    hub_mine_hk        CHAR(32) NOT NULL REFERENCES vault.hub_mine(hub_mine_hk),
+    hub_equipment_hk   CHAR(32) NOT NULL REFERENCES vault.hub_equipment(hub_equipment_hk),
+    hub_operator_hk    CHAR(32) REFERENCES vault.hub_operator(hub_operator_hk),
+    production_id      VARCHAR(10) NOT NULL,  -- degenerate key
+    load_dts           TIMESTAMP NOT NULL DEFAULT NOW(),
+    record_source      VARCHAR(50) NOT NULL
+);
+
+-- Hash Link = MD5(mine_id || equipment_id || operator_id || production_id)
+INSERT INTO vault.link_production (link_production_hk, hub_mine_hk,
+       hub_equipment_hk, hub_operator_hk, production_id)
+SELECT MD5(CONCAT_WS('|', mine_id, equipment_id,
+                          COALESCE(operator_id,''), production_id)),
+       MD5(mine_id), MD5(equipment_id),
+       CASE WHEN operator_id IS NOT NULL THEN MD5(operator_id) END,
+       production_id
+FROM ruda_plus.ore_production
+ON CONFLICT DO NOTHING;</code></pre>
+</section>
+
+<!-- ============================== -->
+<!-- РАЗДЕЛ 4: SATELLITE            -->
+<!-- ============================== -->
+<section class="section-divider">
+    <h1>4. Satellite &mdash; контекст и история</h1>
+    <div class="divider-line"></div>
+    <p style="font-size:0.9em;">Описательные атрибуты, метрики, полная история изменений</p>
+</section>
+
+<section>
+    <h2>Satellite: определение и правила</h2>
+    <div class="highlight-box">
+        <strong>Satellite</strong> &mdash; таблица, хранящая <strong>описательные атрибуты</strong> Hub или Link с полной историей изменений. Каждое изменение &mdash; новая строка. Satellite &mdash; единственное место, где хранятся &laquo;данные о данных&raquo;.
+    </div>
+    <table class="mt-10">
+        <thead><tr><th>Правило</th><th>Описание</th></tr></thead>
+        <tbody>
+            <tr><td><span class="badge badge-green">R1</span></td><td>PK = (parent_hash_key, load_dts) &mdash; составной ключ</td></tr>
+            <tr><td><span class="badge badge-green">R2</span></td><td>Ссылается на Hub или Link через FK (hash-ключ родителя)</td></tr>
+            <tr><td><span class="badge badge-green">R3</span></td><td>hash_diff = MD5 от всех атрибутов &mdash; для быстрого определения изменений</td></tr>
+            <tr><td><span class="badge badge-green">R4</span></td><td>load_end_dts &mdash; дата закрытия записи (аналог SCD Type 2)</td></tr>
+            <tr><td><span class="badge badge-green">R5</span></td><td>Один Hub может иметь <strong>несколько</strong> Satellite (разделение по частоте изменений или источнику)</td></tr>
+            <tr><td><span class="badge badge-green">R6</span></td><td>Satellite <strong>не ссылается на другие Satellite</strong> &mdash; только на Hub или Link</td></tr>
+        </tbody>
+    </table>
+</section>
+
+<section>
+    <h2>Зачем несколько Satellite на один Hub?</h2>
+    <div class="highlight-box warning">
+        <strong>Правило разделения:</strong> Если атрибуты меняются с <strong>разной частотой</strong> или приходят из <strong>разных источников</strong> &mdash; выделяйте их в отдельные Satellite.
+    </div>
+    <div class="dv-layout mt-10">
+        <div class="er-entity sat" style="min-width:190px;">
+            <div class="entity-title">sat_equipment_details</div>
+            <div class="er-field"><span class="fk">FK</span> hub_equipment_hk</div>
+            <div class="er-field"><span class="meta">M</span> load_dts</div>
+            <div class="er-field">equipment_name</div>
+            <div class="er-field">manufacturer</div>
+            <div class="er-field">model</div>
+            <div class="er-field">year_manufactured</div>
+            <div class="er-field">max_payload_tons</div>
+            <div class="er-field"><span class="meta">M</span> hash_diff</div>
+        </div>
+        <div class="er-link"><div class="er-link-inner"><span class="card-label">N</span><span class="link-arrow-r"></span><span class="link-line"></span><span class="card-label">1</span></div></div>
+        <div class="er-entity hub" style="min-width:180px;">
+            <div class="entity-title">hub_equipment</div>
+            <div class="er-field"><span class="hk">HK</span> hub_equipment_hk</div>
+            <div class="er-field"><span class="pk">BK</span> equipment_id</div>
+            <div class="er-field"><span class="meta">M</span> load_dts</div>
+            <div class="er-field"><span class="meta">M</span> record_source</div>
+        </div>
+        <div class="er-link"><div class="er-link-inner"><span class="card-label">1</span><span class="link-line"></span><span class="link-arrow-l"></span><span class="card-label">N</span></div></div>
+        <div class="er-entity sat" style="min-width:190px;">
+            <div class="entity-title">sat_equipment_status</div>
+            <div class="er-field"><span class="fk">FK</span> hub_equipment_hk</div>
+            <div class="er-field"><span class="meta">M</span> load_dts</div>
+            <div class="er-field">status</div>
+            <div class="er-field">engine_hours</div>
+            <div class="er-field">last_maintenance</div>
+            <div class="er-field">next_maintenance</div>
+            <div class="er-field"><span class="meta">M</span> hash_diff</div>
+        </div>
+    </div>
+    <div class="highlight-box success mt-10">
+        <strong>sat_equipment_details</strong> &mdash; статические характеристики (меняются редко).<br>
+        <strong>sat_equipment_status</strong> &mdash; оперативные данные (меняются ежедневно). Разделение снижает объём хранимой истории.
+    </div>
+</section>
+
+<section>
+    <h2>Satellite: SQL-пример</h2>
+    <pre><code class="language-sql">CREATE TABLE vault.sat_equipment_details (
+    hub_equipment_hk CHAR(32) NOT NULL
+        REFERENCES vault.hub_equipment(hub_equipment_hk),
+    load_dts         TIMESTAMP NOT NULL,
+    load_end_dts     TIMESTAMP NOT NULL DEFAULT '9999-12-31',
+    equipment_name   VARCHAR(50),
+    manufacturer     VARCHAR(50),
+    model            VARCHAR(50),
+    year_manufactured INTEGER,
+    max_payload_tons NUMERIC(6,1),
+    hash_diff        CHAR(32),       -- MD5(name||mfr||model||year||payload)
+    record_source    VARCHAR(50) NOT NULL,
+    PRIMARY KEY (hub_equipment_hk, load_dts)
+);
+
+-- Загрузка: вставляем ТОЛЬКО если hash_diff изменился
+INSERT INTO vault.sat_equipment_details
+    (hub_equipment_hk, load_dts, equipment_name, manufacturer,
+     model, year_manufactured, max_payload_tons, hash_diff, record_source)
+SELECT MD5(e.equipment_id), NOW(),
+       e.equipment_name, e.manufacturer, e.model,
+       e.year_manufactured, e.max_payload_tons,
+       MD5(CONCAT_WS('|', e.equipment_name, e.manufacturer,
+                          e.model, e.year_manufactured)),
+       'ruda_plus.equipment'
+FROM ruda_plus.equipment e
+WHERE NOT EXISTS (
+    SELECT 1 FROM vault.sat_equipment_details s
+    WHERE s.hub_equipment_hk = MD5(e.equipment_id)
+      AND s.load_end_dts = '9999-12-31'
+      AND s.hash_diff = MD5(CONCAT_WS('|', e.equipment_name,
+                            e.manufacturer, e.model, e.year_manufactured))
+);</code></pre>
+</section>
+
+<section>
+    <h2>hash_diff: как определить изменения</h2>
+    <div class="flow-container">
+        <div class="flow-step" style="min-width:140px;">Извлечь данные<br>из источника</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-step" style="min-width:140px; background:linear-gradient(135deg,var(--accent2),#d4692a);">Вычислить<br>hash_diff (MD5)</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-step" style="min-width:180px; background:linear-gradient(135deg,var(--accent6),#5a9a3a);">Сравнить с текущим<br>hash_diff в Satellite</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-step" style="min-width:140px; background:linear-gradient(135deg,#7c3aed,#5a2db8);">Если различается<br>&rarr; INSERT</div>
+    </div>
+    <div class="comparison mt-10">
+        <div class="col" style="border-top:3px solid var(--accent2);">
+            <strong style="color:var(--accent2);">Без hash_diff</strong><br><br>
+            <p class="smaller">Нужно сравнивать <strong>каждый атрибут</strong> поочерёдно:<br>
+            <code>WHERE s.name &lt;&gt; src.name OR s.model &lt;&gt; src.model OR ...</code><br>
+            При 20 столбцах &mdash; 20 сравнений. Медленно, громоздко.</p>
+        </div>
+        <div class="col" style="border-top:3px solid var(--accent6);">
+            <strong style="color:var(--accent6);">С hash_diff</strong><br><br>
+            <p class="smaller">Одно сравнение:<br>
+            <code>WHERE s.hash_diff &lt;&gt; MD5(CONCAT_WS('|', src.name, src.model, ...))</code><br>
+            Одна операция &mdash; быстро, чисто, масштабируемо.</p>
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2>Satellite на Link: метрики транзакций</h2>
+    <div class="dv-layout">
+        <div class="er-entity link-ent" style="min-width:200px;">
+            <div class="entity-title">link_production</div>
+            <div class="er-field"><span class="hk">HK</span> link_production_hk</div>
+            <div class="er-field"><span class="fk">FK</span> hub_mine_hk</div>
+            <div class="er-field"><span class="fk">FK</span> hub_equipment_hk</div>
+            <div class="er-field"><span class="fk">FK</span> hub_operator_hk</div>
+            <div class="er-field"><span class="pk">DK</span> production_id</div>
+        </div>
+        <div class="er-link"><div class="er-link-inner"><span class="card-label">1</span><span class="link-line"></span><span class="link-arrow-l"></span><span class="card-label">N</span></div></div>
+        <div class="er-entity sat" style="min-width:210px;">
+            <div class="entity-title">sat_production_metrics</div>
+            <div class="er-field"><span class="fk">FK</span> link_production_hk</div>
+            <div class="er-field"><span class="meta">M</span> load_dts</div>
+            <div class="er-field">production_date</div>
+            <div class="er-field">shift</div>
+            <div class="er-field">block_id, ore_type</div>
+            <div class="er-field"><span class="metric">M</span> tonnage_extracted</div>
+            <div class="er-field"><span class="metric">M</span> fe_content_pct</div>
+            <div class="er-field"><span class="metric">M</span> moisture_pct</div>
+            <div class="er-field"><span class="meta">M</span> hash_diff</div>
+        </div>
+    </div>
+    <div class="highlight-box mt-10">
+        <strong>Satellite на Link</strong> хранит атрибуты <em>связи</em>, а не объекта. Для link_production это метрики добычи: тоннаж, содержание Fe%, влажность. Если метрики придут из другого источника &mdash; добавляем ещё один Satellite на тот же Link.
+    </div>
+</section>
+
+<!-- ============================== -->
+<!-- РАЗДЕЛ 5: ПРОДВИНУТЫЕ ПАТТЕРНЫ -->
+<!-- ============================== -->
+<section class="section-divider">
+    <h1>5. Продвинутые паттерны</h1>
+    <div class="divider-line"></div>
+    <p style="font-size:0.9em;">PIT, Bridge, Effectivity Satellite, Reference Tables</p>
+</section>
+
+<section>
+    <h2>Point-in-Time (PIT) таблица</h2>
+    <div class="highlight-box warning">
+        <strong>Проблема:</strong> У Hub есть 3 Satellite с разными load_dts. Чтобы получить &laquo;срез на дату&raquo;, нужно 3 подзапроса с MAX(load_dts). Это медленно!
+    </div>
+    <div class="highlight-box success mt-10">
+        <strong>Решение:</strong> <strong>PIT-таблица</strong> &mdash; предварительно вычисленный &laquo;снимок&raquo;, который для каждого Hub-ключа и каждой даты хранит ссылки на актуальные Satellite.
+    </div>
+    <div class="dv-layout mt-10">
+        <div class="er-entity purple" style="min-width:260px;">
+            <div class="entity-title">pit_equipment</div>
+            <div class="er-field"><span class="fk">FK</span> hub_equipment_hk</div>
+            <div class="er-field"><span class="pk">PK</span> snapshot_dts</div>
+            <div class="er-field"><span class="fk">FK</span> sat_details_load_dts</div>
+            <div class="er-field"><span class="fk">FK</span> sat_status_load_dts</div>
+        </div>
+    </div>
+    <pre class="mt-10"><code class="language-sql">-- Запрос БЕЗ PIT: 2 подзапроса с MAX
+SELECT h.equipment_id, d.equipment_name, s.status, s.engine_hours
+FROM hub_equipment h
+JOIN sat_equipment_details d ON h.hub_equipment_hk = d.hub_equipment_hk
+  AND d.load_dts = (SELECT MAX(load_dts) FROM sat_equipment_details
+                    WHERE hub_equipment_hk = h.hub_equipment_hk
+                      AND load_dts <= '2025-03-15')
+JOIN sat_equipment_status s ON h.hub_equipment_hk = s.hub_equipment_hk
+  AND s.load_dts = (SELECT MAX(load_dts) FROM sat_equipment_status
+                    WHERE hub_equipment_hk = h.hub_equipment_hk
+                      AND load_dts <= '2025-03-15');
+
+-- Запрос С PIT: простые JOIN, без подзапросов
+SELECT h.equipment_id, d.equipment_name, s.status, s.engine_hours
+FROM pit_equipment p
+JOIN hub_equipment h ON p.hub_equipment_hk = h.hub_equipment_hk
+JOIN sat_equipment_details d ON p.hub_equipment_hk = d.hub_equipment_hk
+  AND p.sat_details_load_dts = d.load_dts
+JOIN sat_equipment_status s ON p.hub_equipment_hk = s.hub_equipment_hk
+  AND p.sat_status_load_dts = s.load_dts
+WHERE p.snapshot_dts = '2025-03-15';</code></pre>
+</section>
+
+<section>
+    <h2>Bridge таблица</h2>
+    <div class="highlight-box">
+        <strong>Bridge</strong> &mdash; предварительно вычисленная таблица, соединяющая несколько Hub и Link для ускорения аналитических запросов. Аналог денормализованного представления, но в контексте Data Vault.
+    </div>
+    <div class="dv-layout mt-10">
+        <div class="er-entity red" style="min-width:280px;">
+            <div class="entity-title">bridge_production</div>
+            <div class="er-field"><span class="fk">FK</span> hub_mine_hk</div>
+            <div class="er-field"><span class="fk">FK</span> hub_equipment_hk</div>
+            <div class="er-field"><span class="fk">FK</span> hub_operator_hk</div>
+            <div class="er-field"><span class="fk">FK</span> link_production_hk</div>
+            <div class="er-field">mine_name</div>
+            <div class="er-field">equipment_name, type</div>
+            <div class="er-field">operator_name</div>
+            <div class="er-field">tonnage, fe_pct</div>
+            <div class="er-field"><span class="meta">M</span> snapshot_dts</div>
+        </div>
+    </div>
+    <div class="highlight-box warning mt-10">
+        <strong>Bridge vs PIT:</strong> PIT хранит только ссылки на Satellite (ключи). Bridge хранит <strong>денормализованные данные</strong> (значения атрибутов). Bridge &mdash; это &laquo;виртуальная звезда&raquo; поверх Data Vault.
+    </div>
+</section>
+
+<section>
+    <h2>Effectivity Satellite</h2>
+    <div class="highlight-box">
+        <strong>Effectivity Satellite</strong> &mdash; специальный Satellite на Link, который отслеживает <strong>временной период действия связи</strong>. Показывает, когда связь стала активной и когда закончилась.
+    </div>
+    <div class="dv-layout mt-10">
+        <div class="er-entity link-ent" style="min-width:200px;">
+            <div class="entity-title">link_operator_mine</div>
+            <div class="er-field"><span class="hk">HK</span> link_oper_mine_hk</div>
+            <div class="er-field"><span class="fk">FK</span> hub_operator_hk</div>
+            <div class="er-field"><span class="fk">FK</span> hub_mine_hk</div>
+        </div>
+        <div class="er-link"><div class="er-link-inner"><span class="card-label">1</span><span class="link-line"></span><span class="link-arrow-l"></span><span class="card-label">N</span></div></div>
+        <div class="er-entity sat" style="min-width:230px;">
+            <div class="entity-title">sat_eff_operator_mine</div>
+            <div class="er-field"><span class="fk">FK</span> link_oper_mine_hk</div>
+            <div class="er-field"><span class="meta">M</span> load_dts</div>
+            <div class="er-field">start_date</div>
+            <div class="er-field">end_date</div>
+            <div class="er-field">is_active</div>
+        </div>
+    </div>
+    <div class="highlight-box success mt-10">
+        <strong>Пример &laquo;Руда+&raquo;:</strong> Оператор Иванов А.А. работал на шахте &laquo;Северная&raquo; с 2020-01-15 по 2024-06-30, затем переведён на &laquo;Южную&raquo; с 2024-07-01. Effectivity Satellite фиксирует оба периода: start_date / end_date / is_active.
+    </div>
+</section>
+
+<section>
+    <h2>Reference Table и код-таблицы</h2>
+    <div class="comparison">
+        <div class="col" style="border-top:3px solid var(--accent1);">
+            <strong>Reference Table</strong><br><br>
+            <p class="smaller">Для &laquo;справочных&raquo; данных, которые не являются бизнес-объектами: коды стран, валют, единиц измерения, типов оборудования.</p>
+            <p class="smaller"><strong>Не нужен Hub!</strong> Достаточно обычной таблицы с версионированием:</p>
+            <pre style="font-size:0.85em;"><code class="language-sql">ref_equipment_type (
+  type_code VARCHAR(10) PK,
+  type_name VARCHAR(50),
+  category  VARCHAR(30),
+  load_dts  TIMESTAMP
+)</code></pre>
+        </div>
+        <div class="col" style="border-top:3px solid var(--accent2);">
+            <strong>Когда Hub, а когда Ref?</strong><br><br>
+            <table style="font-size:0.9em; width:100%;">
+                <tr><td>Бизнес-ключ уникален?</td><td>Hub</td></tr>
+                <tr><td>Объект имеет связи?</td><td>Hub + Link</td></tr>
+                <tr><td>Объект имеет историю атрибутов?</td><td>Hub + Sat</td></tr>
+                <tr><td>Просто код-справочник?</td><td>Ref Table</td></tr>
+                <tr><td>Код не меняется?</td><td>Ref (простой)</td></tr>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- ============================== -->
+<!-- РАЗДЕЛ 6: ETL/ELT              -->
+<!-- ============================== -->
+<section class="section-divider">
+    <h1>6. ETL/ELT для Data Vault</h1>
+    <div class="divider-line"></div>
+    <p style="font-size:0.9em;">Паттерны загрузки, идемпотентность, параллелизм</p>
+</section>
+
+<section>
+    <h2>Порядок загрузки Data Vault</h2>
+    <div class="flow-container">
+        <div class="flow-step" style="min-width:130px;">1. Staging<br>(raw data)</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-step" style="min-width:130px; background:linear-gradient(135deg,var(--hub-color),#3560a8);">2. Hubs<br>(бизнес-ключи)</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-step" style="min-width:130px; background:linear-gradient(135deg,var(--link-color),#d4692a);">3. Links<br>(связи)</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-step" style="min-width:130px; background:linear-gradient(135deg,var(--sat-color),#5a9a3a);">4. Satellites<br>(атрибуты)</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-step" style="min-width:130px; background:linear-gradient(135deg,#7c3aed,#5a2db8);">5. PIT / Bridge<br>(опционально)</div>
+    </div>
+    <div class="highlight-box mt-10">
+        <strong>Ключевой принцип:</strong> Hubs загружаются <strong>первыми</strong>, потому что Links и Satellites ссылаются на них через FK. Но все Hubs могут загружаться <strong>параллельно</strong> между собой. Аналогично &mdash; все Links параллельно, все Satellites параллельно.
+    </div>
+    <table class="mt-10">
+        <thead><tr><th>Этап</th><th>Параллелизм</th><th>Зависимость</th></tr></thead>
+        <tbody>
+            <tr><td><span class="badge badge-blue">Hubs</span></td><td>Все Hubs параллельно</td><td>Только Staging</td></tr>
+            <tr><td><span class="badge badge-orange">Links</span></td><td>Все Links параллельно</td><td>Hubs должны быть загружены</td></tr>
+            <tr><td><span class="badge badge-green">Satellites</span></td><td>Все Satellites параллельно</td><td>Hub/Link родителя загружен</td></tr>
+        </tbody>
+    </table>
+</section>
+
+<section>
+    <h2>Идемпотентность загрузки</h2>
+    <div class="highlight-box warning">
+        <strong>Идемпотентность</strong> &mdash; повторная загрузка тех же данных не создаёт дубликатов и не меняет результат. Это критично для Data Vault!
+    </div>
+    <div class="card-container mt-10">
+        <div class="card">
+            <h4>Hub: ON CONFLICT DO NOTHING</h4>
+            <p>Если бизнес-ключ уже есть &mdash; пропускаем. Бизнес-ключ + UNIQUE constraint гарантируют идемпотентность.</p>
+        </div>
+        <div class="card accent2">
+            <h4>Link: ON CONFLICT DO NOTHING</h4>
+            <p>Если комбинация FK Hub&rsquo;ов уже существует &mdash; пропускаем. Hash-ключ Link уникален.</p>
+        </div>
+        <div class="card accent6">
+            <h4>Satellite: hash_diff check</h4>
+            <p>Перед INSERT проверяем: если hash_diff текущей записи совпадает с новым &mdash; пропускаем. Вставляем только при изменении.</p>
+        </div>
+    </div>
+    <pre class="mt-10"><code class="language-sql">-- Паттерн идемпотентной загрузки Satellite
+INSERT INTO vault.sat_mine_details (hub_mine_hk, load_dts, ...)
+SELECT MD5(mine_id), NOW(), ...
+FROM ruda_plus.mines src
+WHERE NOT EXISTS (
+    SELECT 1 FROM vault.sat_mine_details s
+    WHERE s.hub_mine_hk = MD5(src.mine_id)
+      AND s.load_end_dts = '9999-12-31'       -- текущая версия
+      AND s.hash_diff = MD5(CONCAT_WS('|', ...)) -- не изменилась
+);</code></pre>
+</section>
+
+<section>
+    <h2>Staging Area: буфер между источником и Vault</h2>
+    <div class="card-container">
+        <div class="card">
+            <h4>Raw Staging</h4>
+            <p>Точная копия данных из источника. Без трансформаций. Добавляем только load_dts и record_source.</p>
+            <p class="smaller"><strong>Пример:</strong> stg_ruda_plus_equipment &mdash; все столбцы из equipment + метаданные.</p>
+        </div>
+        <div class="card accent2">
+            <h4>Hashed Staging</h4>
+            <p>На этапе staging предварительно вычисляем hash-ключи и hash_diff. Это ускоряет загрузку в Vault.</p>
+            <p class="smaller"><strong>Добавляемые столбцы:</strong> hub_hk, link_hk, hash_diff.</p>
+        </div>
+        <div class="card accent6">
+            <h4>Delta Detection</h4>
+            <p>В staging определяем дельту: какие записи новые, какие изменились. Используем hash_diff для сравнения.</p>
+            <p class="smaller"><strong>Подход:</strong> FULL OUTER JOIN staging vs текущий Satellite.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ============================== -->
+<!-- РАЗДЕЛ 7: СРАВНЕНИЕ ПОДХОДОВ   -->
+<!-- ============================== -->
+<section class="section-divider">
+    <h1>7. Data Vault vs Kimball vs 3NF</h1>
+    <div class="divider-line"></div>
+    <p style="font-size:0.9em;">Когда какой подход выбрать?</p>
+</section>
+
+<section>
+    <h2>Сравнение трёх подходов</h2>
+    <table style="width:98%; font-size:0.58em;">
+        <thead><tr><th>Критерий</th><th>3НФ (Inmon)</th><th>Dimensional (Kimball)</th><th>Data Vault 2.0</th></tr></thead>
+        <tbody>
+            <tr><td>Назначение</td><td>Корпоративная модель</td><td>Аналитика, BI</td><td>Интеграция + история</td></tr>
+            <tr><td>Структура</td><td>Нормализованные таблицы</td><td>Звезда / Снежинка</td><td>Hub / Link / Satellite</td></tr>
+            <tr><td>Гибкость к изменениям</td><td><span class="badge badge-red">Низкая</span></td><td><span class="badge badge-orange">Средняя</span></td><td><span class="badge badge-green">Высокая</span></td></tr>
+            <tr><td>Простота запросов</td><td><span class="badge badge-red">Сложно</span></td><td><span class="badge badge-green">Просто</span></td><td><span class="badge badge-red">Сложно</span> (PIT/Bridge)</td></tr>
+            <tr><td>История изменений</td><td>SCD Type 2</td><td>SCD Type 2</td><td><span class="badge badge-green">Встроена</span></td></tr>
+            <tr><td>Аудит (lineage)</td><td><span class="badge badge-orange">Частичный</span></td><td><span class="badge badge-orange">Частичный</span></td><td><span class="badge badge-green">Полный</span></td></tr>
+            <tr><td>Параллельная загрузка</td><td><span class="badge badge-red">Трудно</span></td><td><span class="badge badge-orange">Умеренно</span></td><td><span class="badge badge-green">Нативно</span></td></tr>
+            <tr><td>Масштабируемость ETL</td><td><span class="badge badge-orange">Средняя</span></td><td><span class="badge badge-orange">Средняя</span></td><td><span class="badge badge-green">Высокая</span></td></tr>
+            <tr><td>Поддержка BI-инструментов</td><td><span class="badge badge-orange">Средняя</span></td><td><span class="badge badge-green">Нативная</span></td><td><span class="badge badge-red">Через Bridge</span></td></tr>
+            <tr><td>Количество таблиц</td><td>Среднее</td><td>Малое</td><td><span class="badge badge-red">Большое</span></td></tr>
+        </tbody>
+    </table>
+</section>
+
+<section>
+    <h2>Архитектура: Data Vault + Kimball</h2>
+    <div class="highlight-box success">
+        <strong>Best Practice:</strong> Data Vault используется как <strong>слой интеграции</strong> (Raw Vault), а <strong>Kimball-модель</strong> строится поверх него как <strong>слой представления</strong> (Business Vault &rarr; Information Marts).
+    </div>
+    <div class="flow-container mt-10">
+        <div class="flow-step" style="min-width:100px;">Источники<br>(MES, ERP,<br>IoT)</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-step" style="min-width:100px; background:linear-gradient(135deg,#6c757d,#495057);">Staging<br>Area</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-step" style="min-width:120px; background:linear-gradient(135deg,var(--accent1),#3560a8);">Raw Vault<br>(Hub/Link/Sat)</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-step" style="min-width:120px; background:linear-gradient(135deg,var(--accent2),#d4692a);">Business Vault<br>(PIT, Bridge,<br>Same-As)</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-step" style="min-width:120px; background:linear-gradient(135deg,var(--accent6),#5a9a3a);">Info Marts<br>(Star Schema<br>для BI)</div>
+    </div>
+    <div class="comparison mt-10">
+        <div class="col" style="border-top:3px solid var(--accent1);">
+            <strong style="color:var(--accent1);">Raw Vault</strong><br>
+            <p class="smaller">Hub, Link, Satellite &mdash; точное отражение источников. Без бизнес-логики. Insert-only.</p>
+        </div>
+        <div class="col" style="border-top:3px solid var(--accent2);">
+            <strong style="color:var(--accent2);">Business Vault</strong><br>
+            <p class="smaller">PIT, Bridge, вычисляемые Satellite. Бизнес-правила и обогащение.</p>
+        </div>
+        <div class="col" style="border-top:3px solid var(--accent6);">
+            <strong style="color:var(--accent6);">Info Marts</strong><br>
+            <p class="smaller">Звёздные схемы для BI-инструментов (Tableau, Power BI, Superset).</p>
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2>Когда выбирать Data Vault?</h2>
+    <div class="card-container">
+        <div class="card accent6">
+            <h4>Data Vault подходит</h4>
+            <ul>
+                <li>Много источников данных (5+)</li>
+                <li>Источники часто меняют структуру</li>
+                <li>Нужна полная история и аудит</li>
+                <li>Большая команда &mdash; параллельная разработка</li>
+                <li>Agile-подход к DWH</li>
+                <li>Регуляторные требования (финансы, медицина)</li>
+            </ul>
+        </div>
+        <div class="card accent2">
+            <h4>Data Vault избыточен</h4>
+            <ul>
+                <li>Один источник данных</li>
+                <li>Маленькая команда (1-2 человека)</li>
+                <li>Простая аналитика, быстрый результат</li>
+                <li>Не нужна полная история</li>
+                <li>Прототип или MVP</li>
+            </ul>
+        </div>
+    </div>
+    <div class="highlight-box mt-10">
+        <strong>&laquo;Руда+&raquo;:</strong> На старте (3 шахты, 12 единиц техники) Data Vault может быть избыточным. Но при масштабировании до 10 шахт, интеграции с ERP, добавлении IoT-телеметрии &mdash; Data Vault окупается.
+    </div>
+</section>
+
+<!-- ============================== -->
+<!-- РАЗДЕЛ 8: ПОЛНЫЙ ПРИМЕР        -->
+<!-- ============================== -->
+<section class="section-divider">
+    <h1>8. Полный пример &laquo;Руда+&raquo;</h1>
+    <div class="divider-line"></div>
+    <p style="font-size:0.9em;">Data Vault 2.0 для MES-системы горнодобычи</p>
+</section>
+
+<section>
+    <h2>Общая схема Data Vault &laquo;Руда+&raquo;</h2>
+    <div class="star-layout" style="max-width:1000px;">
+        <div class="er-entity sat star-top" style="min-width:150px;">
+            <div class="entity-title">sat_mine_details</div>
+            <div class="er-field"><span class="fk">FK</span> hub_mine_hk</div>
+            <div class="er-field">mine_name</div>
+            <div class="er-field">location, region</div>
+            <div class="er-field">max_depth_m, status</div>
+            <div class="er-field"><span class="meta">M</span> hash_diff</div>
+        </div>
+        <div class="er-entity hub star-left" style="min-width:160px;">
+            <div class="entity-title">hub_mine</div>
+            <div class="er-field"><span class="hk">HK</span> hub_mine_hk</div>
+            <div class="er-field"><span class="pk">BK</span> mine_id</div>
+            <div class="er-field"><span class="meta">M</span> load_dts</div>
+            <div class="er-field"><span class="meta">M</span> record_source</div>
+        </div>
+        <div class="er-entity link-ent star-center" style="min-width:180px;">
+            <div class="entity-title">link_production</div>
+            <div class="er-field"><span class="hk">HK</span> link_production_hk</div>
+            <div class="er-field"><span class="fk">FK</span> hub_mine_hk</div>
+            <div class="er-field"><span class="fk">FK</span> hub_equipment_hk</div>
+            <div class="er-field"><span class="fk">FK</span> hub_operator_hk</div>
+            <div class="er-field"><span class="pk">DK</span> production_id</div>
+        </div>
+        <div class="er-entity hub star-right" style="min-width:160px;">
+            <div class="entity-title">hub_equipment</div>
+            <div class="er-field"><span class="hk">HK</span> hub_equipment_hk</div>
+            <div class="er-field"><span class="pk">BK</span> equipment_id</div>
+            <div class="er-field"><span class="meta">M</span> load_dts</div>
+            <div class="er-field"><span class="meta">M</span> record_source</div>
+        </div>
+        <div class="er-entity hub star-bottom" style="min-width:160px;">
+            <div class="entity-title">hub_operator</div>
+            <div class="er-field"><span class="hk">HK</span> hub_operator_hk</div>
+            <div class="er-field"><span class="pk">BK</span> operator_id</div>
+            <div class="er-field"><span class="meta">M</span> load_dts</div>
+            <div class="er-field"><span class="meta">M</span> record_source</div>
+        </div>
+        <div class="star-conn star-conn-top vert"><span>N</span><span class="conn-v"></span><span>1</span></div>
+        <div class="star-conn star-conn-left"><span>1</span><span class="conn-h"></span><span>N</span></div>
+        <div class="star-conn star-conn-right"><span>N</span><span class="conn-h"></span><span>1</span></div>
+        <div class="star-conn star-conn-bottom vert"><span>N</span><span class="conn-v"></span><span>1</span></div>
+    </div>
+    <div class="legend mt-10">
+        <div class="legend-item"><div class="legend-swatch" style="background:var(--hub-color);"></div> Hub</div>
+        <div class="legend-item"><div class="legend-swatch" style="background:var(--link-color);"></div> Link</div>
+        <div class="legend-item"><div class="legend-swatch" style="background:var(--sat-color);"></div> Satellite</div>
+    </div>
+</section>
+
+<section>
+    <h2>Satellite&rsquo;ы &laquo;Руда+&raquo;: полная карта</h2>
+    <div class="dv-layout">
+        <div class="er-entity sat" style="min-width:160px;">
+            <div class="entity-title">sat_mine_details</div>
+            <div class="er-field">mine_name</div>
+            <div class="er-field">location, region</div>
+            <div class="er-field">max_depth_m</div>
+            <div class="er-field">status, opened_date</div>
+        </div>
+        <div class="er-entity sat" style="min-width:170px;">
+            <div class="entity-title">sat_equipment_details</div>
+            <div class="er-field">equipment_name</div>
+            <div class="er-field">manufacturer, model</div>
+            <div class="er-field">year_manufactured</div>
+            <div class="er-field">max_payload_tons</div>
+        </div>
+        <div class="er-entity sat" style="min-width:170px;">
+            <div class="entity-title">sat_equipment_status</div>
+            <div class="er-field">status</div>
+            <div class="er-field">engine_hours</div>
+            <div class="er-field">last_maintenance</div>
+            <div class="er-field">next_maintenance</div>
+        </div>
+        <div class="er-entity sat" style="min-width:160px;">
+            <div class="entity-title">sat_operator_details</div>
+            <div class="er-field">last_name, first_name</div>
+            <div class="er-field">position</div>
+            <div class="er-field">qualification</div>
+            <div class="er-field">hire_date, is_active</div>
+        </div>
+        <div class="er-entity sat" style="min-width:180px;">
+            <div class="entity-title">sat_production_metrics</div>
+            <div class="er-field">production_date, shift</div>
+            <div class="er-field">block_id, ore_type</div>
+            <div class="er-field">tonnage_extracted</div>
+            <div class="er-field">fe_content_pct</div>
+            <div class="er-field">moisture_pct</div>
+        </div>
+    </div>
+    <table class="mt-10" style="width:95%;">
+        <thead><tr><th>Satellite</th><th>Родитель</th><th>Частота обновления</th><th>Источник</th></tr></thead>
+        <tbody>
+            <tr><td>sat_mine_details</td><td>hub_mine</td><td>Редко (при изменении статуса)</td><td>ruda_plus.mines</td></tr>
+            <tr><td>sat_equipment_details</td><td>hub_equipment</td><td>Редко (при замене, модернизации)</td><td>ruda_plus.equipment</td></tr>
+            <tr><td>sat_equipment_status</td><td>hub_equipment</td><td>Ежедневно (наработка, ТО)</td><td>ruda_plus.equipment</td></tr>
+            <tr><td>sat_operator_details</td><td>hub_operator</td><td>При изменении (разряд, должность)</td><td>ruda_plus.operators</td></tr>
+            <tr><td>sat_production_metrics</td><td>link_production</td><td>Каждая смена</td><td>ruda_plus.ore_production</td></tr>
+        </tbody>
+    </table>
+</section>
+
+<section>
+    <h2>Аналитический запрос через Data Vault</h2>
+    <pre><code class="language-sql">-- Добыча по шахтам с актуальными атрибутами
+-- (демонстрация сложности запросов без PIT/Bridge)
+SELECT
+    sm.mine_name                           AS шахта,
+    se.equipment_name                      AS оборудование,
+    so.last_name || ' ' || so.first_name   AS оператор,
+    sp.production_date                     AS дата,
+    sp.tonnage_extracted                   AS тоннаж,
+    sp.fe_content_pct                      AS содержание_Fe
+FROM vault.link_production lp
+-- Hub → бизнес-ключи
+JOIN vault.hub_mine      hm ON lp.hub_mine_hk      = hm.hub_mine_hk
+JOIN vault.hub_equipment he ON lp.hub_equipment_hk  = he.hub_equipment_hk
+JOIN vault.hub_operator  ho ON lp.hub_operator_hk   = ho.hub_operator_hk
+-- Satellite → актуальные атрибуты
+JOIN vault.sat_mine_details sm ON hm.hub_mine_hk = sm.hub_mine_hk
+    AND sm.load_end_dts = '9999-12-31'
+JOIN vault.sat_equipment_details se ON he.hub_equipment_hk = se.hub_equipment_hk
+    AND se.load_end_dts = '9999-12-31'
+JOIN vault.sat_operator_details so ON ho.hub_operator_hk = so.hub_operator_hk
+    AND so.load_end_dts = '9999-12-31'
+-- Satellite на Link → метрики
+JOIN vault.sat_production_metrics sp ON lp.link_production_hk = sp.link_production_hk
+    AND sp.load_end_dts = '9999-12-31'
+ORDER BY sp.production_date DESC, sp.tonnage_extracted DESC;</code></pre>
+    <div class="highlight-box warning mt-10">
+        <strong>Обратите внимание:</strong> 7 JOIN! Это &laquo;цена&raquo; гибкости Data Vault. Для BI-пользователей создаём <strong>Bridge</strong> или <strong>Info Mart</strong> (звёздную схему).
+    </div>
+</section>
+
+<section>
+    <h2>Расширение: новый источник данных</h2>
+    <div class="highlight-box success">
+        <strong>Сценарий:</strong> ERP-система начала передавать стоимость ремонтов оборудования. Как добавить это в Data Vault?
+    </div>
+    <div class="flow-container mt-10">
+        <div class="flow-step" style="min-width:170px;">Hub уже есть<br>(hub_equipment)<br><strong>Ничего не меняем!</strong></div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-step" style="min-width:190px; background:linear-gradient(135deg,var(--sat-color),#5a9a3a);">Добавляем Satellite<br>sat_equipment_costs<br>(из ERP, record_source=&lsquo;erp&rsquo;)</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-step" style="min-width:150px; background:linear-gradient(135deg,#7c3aed,#5a2db8);">Обновляем<br>PIT / Bridge<br>(опционально)</div>
+    </div>
+    <pre class="mt-10"><code class="language-sql">-- Новый Satellite из ERP — никаких изменений в существующих таблицах!
+CREATE TABLE vault.sat_equipment_costs (
+    hub_equipment_hk CHAR(32) NOT NULL
+        REFERENCES vault.hub_equipment(hub_equipment_hk),
+    load_dts         TIMESTAMP NOT NULL,
+    load_end_dts     TIMESTAMP DEFAULT '9999-12-31',
+    repair_cost      NUMERIC(12,2),
+    spare_parts_cost NUMERIC(12,2),
+    labor_cost       NUMERIC(12,2),
+    hash_diff        CHAR(32),
+    record_source    VARCHAR(50) DEFAULT 'erp.maintenance',
+    PRIMARY KEY (hub_equipment_hk, load_dts)
+);</code></pre>
+    <div class="highlight-box mt-10">
+        <strong>Главное преимущество Data Vault:</strong> Добавление нового источника = добавление нового Satellite. <strong>Существующие таблицы не меняются</strong>. Нет миграций, нет даунтайма, нет риска сломать работающие ETL.
+    </div>
+</section>
+
+<!-- ============================== -->
+<!-- РАЗДЕЛ 9: КВИЗЫ И ОБСУЖДЕНИЕ   -->
+<!-- ============================== -->
+<section class="section-divider">
+    <h1>9. Проверь себя</h1>
+    <div class="divider-line"></div>
+    <p style="font-size:0.9em;">Квизы, обсуждение, групповая работа</p>
+</section>
+
+<!-- Quiz 1 -->
+<section>
+    <h2>Квиз 1: Что хранит Hub?</h2>
+    <div class="quiz-container">
+        <h3>Какие данные содержит таблица Hub в Data Vault?</h3>
+        <div class="quiz-option" onclick="checkAnswer(this, false)">A) Бизнес-ключ + все описательные атрибуты объекта</div>
+        <div class="quiz-option" onclick="checkAnswer(this, true)">B) Бизнес-ключ + hash-ключ + load_dts + record_source</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false)">C) Бизнес-ключ + связи с другими Hub</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false)">D) Бизнес-ключ + метрики и факты</div>
+        <div class="quiz-feedback"></div>
+    </div>
+</section>
+
+<!-- Quiz 2 -->
+<section>
+    <h2>Квиз 2: Где хранятся метрики добычи?</h2>
+    <div class="quiz-container">
+        <h3>В Data Vault &laquo;Руда+&raquo; тоннаж и содержание Fe% &mdash; это:</h3>
+        <div class="quiz-option" onclick="checkAnswer(this, false)">A) Атрибуты Hub (hub_mine)</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false)">B) Поля Link (link_production)</div>
+        <div class="quiz-option" onclick="checkAnswer(this, true)">C) Satellite на Link (sat_production_metrics)</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false)">D) Reference Table</div>
+        <div class="quiz-feedback"></div>
+    </div>
+</section>
+
+<!-- Quiz 3 -->
+<section>
+    <h2>Квиз 3: Hash Key</h2>
+    <div class="quiz-container">
+        <h3>Зачем в Data Vault 2.0 используют hash-ключи вместо SEQUENCE?</h3>
+        <div class="quiz-option" onclick="checkAnswer(this, false)">A) Для экономии дискового пространства</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false)">B) Для защиты персональных данных</div>
+        <div class="quiz-option" onclick="checkAnswer(this, true)">C) Для параллельной загрузки без блокировок и lookup</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false)">D) Для ускорения аналитических запросов</div>
+        <div class="quiz-feedback"></div>
+    </div>
+</section>
+
+<!-- Quiz 4 -->
+<section>
+    <h2>Квиз 4: Порядок загрузки</h2>
+    <div class="quiz-container">
+        <h3>В каком порядке загружаются таблицы Data Vault?</h3>
+        <div class="quiz-option" onclick="checkAnswer(this, false)">A) Satellite &rarr; Link &rarr; Hub</div>
+        <div class="quiz-option" onclick="checkAnswer(this, true)">B) Hub &rarr; Link &rarr; Satellite</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false)">C) Link &rarr; Hub &rarr; Satellite</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false)">D) Порядок не имеет значения</div>
+        <div class="quiz-feedback"></div>
+    </div>
+</section>
+
+<!-- Quiz 5 -->
+<section>
+    <h2>Квиз 5: Разделение Satellite</h2>
+    <div class="quiz-container">
+        <h3>Почему для оборудования в &laquo;Руда+&raquo; создано два Satellite (details и status)?</h3>
+        <div class="quiz-option" onclick="checkAnswer(this, false)">A) Лимит на количество столбцов в одной таблице</div>
+        <div class="quiz-option" onclick="checkAnswer(this, true)">B) Атрибуты меняются с разной частотой &mdash; details редко, status ежедневно</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false)">C) Требование нормализации Data Vault</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false)">D) Для ускорения INSERT-операций</div>
+        <div class="quiz-feedback"></div>
+    </div>
+</section>
+
+<!-- Quiz 6 -->
+<section>
+    <h2>Квиз 6: PIT-таблица</h2>
+    <div class="quiz-container">
+        <h3>Что хранит PIT-таблица (Point-in-Time)?</h3>
+        <div class="quiz-option" onclick="checkAnswer(this, false)">A) Денормализованные данные из всех Satellite</div>
+        <div class="quiz-option" onclick="checkAnswer(this, true)">B) Ссылки (load_dts) на актуальные записи каждого Satellite для каждой даты</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false)">C) Историю изменений бизнес-ключей</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false)">D) Агрегированные метрики по периодам</div>
+        <div class="quiz-feedback"></div>
+    </div>
+</section>
+
+<!-- Обсуждение -->
+<section class="discussion">
+    <div class="discussion-icon">&#128172;</div>
+    <h2>Вопросы для обсуждения</h2>
+    <div class="discussion-question">
+        <strong>1.</strong> На предприятии &laquo;Руда+&raquo; внедряют IoT-платформу, которая каждую секунду передаёт показания 500 датчиков. Подходит ли Data Vault для хранения IoT-телеметрии? Почему?
+    </div>
+    <div class="discussion-question">
+        <strong>2.</strong> Два источника (MES и ERP) передают данные об одном и том же оборудовании с разными ID. MES использует &laquo;EQ001&raquo;, ERP &mdash; &laquo;EQUIP-0001&raquo;. Как решить эту проблему в Data Vault? Какой паттерн использовать?
+    </div>
+    <div class="discussion-question">
+        <strong>3.</strong> Заказчик хочет видеть аналитические дашборды в Power BI. Вы построили Data Vault. Что ещё нужно сделать, чтобы BI-инструмент мог эффективно работать с данными?
+    </div>
+</section>
+
+<!-- Групповая работа -->
+<section class="group-work">
+    <h2>Групповая работа: спроектируйте Data Vault</h2>
+    <div class="card-container">
+        <div class="group-task">
+            <p><span class="group-num">1</span> <strong>Группа &laquo;IoT-телеметрия&raquo;</strong></p>
+            <p>Добавьте в Data Vault &laquo;Руда+&raquo; сущность &laquo;Датчик&raquo; (sensor_id, тип, единица измерения). Спроектируйте Hub, Satellite и Link к оборудованию.</p>
+        </div>
+        <div class="group-task">
+            <p><span class="group-num">2</span> <strong>Группа &laquo;Мультиисточник&raquo;</strong></p>
+            <p>MES и ERP передают данные о простоях оборудования. Спроектируйте Satellite на один Hub с разными record_source. Как обрабатывать конфликты?</p>
+        </div>
+        <div class="group-task">
+            <p><span class="group-num">3</span> <strong>Группа &laquo;Безопасность&raquo;</strong></p>
+            <p>Добавьте hub_safety_incident (инциденты ТБ). Определите Link к Mine, Equipment, Operator. Какие Satellite нужны?</p>
+        </div>
+        <div class="group-task">
+            <p><span class="group-num">4</span> <strong>Группа &laquo;Info Mart&raquo;</strong></p>
+            <p>Спроектируйте звёздную схему (Info Mart) поверх Data Vault для отчёта &laquo;OEE по оборудованию за месяц&raquo;. Какие Satellite и Link понадобятся?</p>
+        </div>
+    </div>
+    <div class="smaller text-center mt-10" style="color:#7c3aed;">Время: 20 минут. Результат: ER-диаграмма + DDL ключевых таблиц (3 мин на защиту)</div>
+</section>
+
+<!-- КЕЙС -->
+<section class="case-study">
+    <h2>Кейс: миграция &laquo;Руда+&raquo; на Data Vault</h2>
+    <div class="case-box">
+        <strong>Ситуация:</strong> Предприятие &laquo;Руда+&raquo; использует OLTP (PostgreSQL, 3НФ) для оперативной работы. Руководство хочет построить корпоративное хранилище данных (DWH) для:
+        <ul>
+            <li>Интеграции данных из MES, ERP и IoT-платформы</li>
+            <li>Хранения полной истории изменений (аудит, регуляторные требования)</li>
+            <li>Предоставления данных для BI-дашбордов и ML-моделей</li>
+        </ul>
+    </div>
+    <div class="card-container mt-10">
+        <div class="card">
+            <h4>Вопрос 1</h4>
+            <p>Какую архитектуру DWH вы предложите: только Data Vault, только Kimball, или комбинацию? Обоснуйте.</p>
+        </div>
+        <div class="card accent2">
+            <h4>Вопрос 2</h4>
+            <p>Как вы организуете Staging Area для трёх источников? Общий staging или отдельный на каждый источник?</p>
+        </div>
+        <div class="card accent6">
+            <h4>Вопрос 3</h4>
+            <p>Для ML-моделей нужны данные телеметрии за 2 года с секундным разрешением. Где их хранить: в Data Vault, отдельном Data Lake, или TimescaleDB?</p>
+        </div>
+    </div>
+</section>
+
+<!-- ИТОГИ -->
+<section>
+    <h2>Ключевые выводы</h2>
+    <div class="card-container">
+        <div class="card">
+            <h4>Три кита DV</h4>
+            <p><strong>Hub</strong> &mdash; бизнес-ключи. <strong>Link</strong> &mdash; связи. <strong>Satellite</strong> &mdash; атрибуты и метрики с полной историей.</p>
+        </div>
+        <div class="card accent2">
+            <h4>DV 2.0: Hash + Insert-Only</h4>
+            <p>Hash-ключи для параллелизма. Insert-only для аудита. hash_diff для быстрого сравнения.</p>
+        </div>
+        <div class="card accent6">
+            <h4>DV + Kimball = Best Practice</h4>
+            <p>Data Vault &mdash; слой интеграции. Kimball &mdash; слой представления. Каждый делает своё дело лучше всего.</p>
+        </div>
+    </div>
+    <div class="highlight-box mt-20">
+        <strong>Что дальше:</strong> На практическом занятии реализуем Data Vault для &laquo;Руда+&raquo; в PostgreSQL (скрипт <em>03_data_vault.sql</em>), загрузим данные из OLTP и сравним сложность запросов с Kimball-моделью.
+    </div>
+</section>
+
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/plugin/highlight/highlight.js"></script>
+<script>
+    Reveal.initialize({
+        hash: true,
+        slideNumber: 'c/t',
+        showSlideNumber: 'all',
+        transition: 'slide',
+        transitionSpeed: 'default',
+        width: 1200,
+        height: 700,
+        margin: 0.04,
+        plugins: [RevealHighlight]
+    });
+
+    function checkAnswer(element, isCorrect) {
+        const container = element.closest('.quiz-container');
+        const options = container.querySelectorAll('.quiz-option');
+        const feedback = container.querySelector('.quiz-feedback');
+        options.forEach(opt => {
+            opt.classList.remove('correct', 'incorrect');
+            opt.style.pointerEvents = 'none';
+        });
+        if (isCorrect) {
+            element.classList.add('correct');
+            feedback.textContent = 'Правильно!';
+            feedback.style.background = '#e8feef';
+            feedback.style.color = '#155724';
+        } else {
+            element.classList.add('incorrect');
+            options.forEach(opt => {
+                if (opt.getAttribute('onclick').includes('true')) {
+                    opt.classList.add('correct');
+                }
+            });
+            feedback.textContent = 'Неправильно. Правильный ответ выделен зелёным.';
+            feedback.style.background = '#fee8e8';
+            feedback.style.color = '#721c24';
+        }
+        feedback.style.display = 'block';
+        setTimeout(() => {
+            options.forEach(opt => { opt.style.pointerEvents = 'auto'; });
+        }, 3000);
+    }
+</script>
+</body>
+</html>
