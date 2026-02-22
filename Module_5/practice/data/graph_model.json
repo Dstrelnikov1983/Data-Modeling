@@ -1,0 +1,284 @@
+{
+  "model_name": "Графовая модель MES-системы «Руда+»",
+  "description": "Описание графовой модели данных для предприятия по добыче железной руды. Модель представляет связи между шахтами, горизонтами, оборудованием, операторами, датчиками и событиями обслуживания.",
+  "version": "1.0",
+  "created": "2025-03-01",
+  "database": "Neo4j 5.x",
+  "query_language": "Cypher",
+
+  "nodes": [
+    {
+      "label": "Mine",
+      "description": "Шахта предприятия «Руда+»",
+      "count": 4,
+      "properties": [
+        {"name": "mine_id", "type": "STRING", "required": true, "unique": true, "description": "Уникальный идентификатор шахты (MINE-001..MINE-004)"},
+        {"name": "name", "type": "STRING", "required": true, "description": "Название шахты (Северная, Южная, Восточная, Глубокая)"},
+        {"name": "region", "type": "STRING", "required": true, "description": "Регион расположения"},
+        {"name": "depth_m", "type": "INTEGER", "required": true, "description": "Глубина шахты в метрах"},
+        {"name": "status", "type": "STRING", "required": true, "description": "Статус: Активная, Разведка, Консервация"},
+        {"name": "commissioned_year", "type": "INTEGER", "required": false, "description": "Год ввода в эксплуатацию"},
+        {"name": "annual_capacity_tons", "type": "INTEGER", "required": false, "description": "Проектная годовая мощность (тонны)"},
+        {"name": "employees", "type": "INTEGER", "required": false, "description": "Количество сотрудников"}
+      ],
+      "examples": [
+        {"mine_id": "MINE-001", "name": "Северная", "region": "Кольский полуостров", "depth_m": 850, "status": "Активная"},
+        {"mine_id": "MINE-002", "name": "Южная", "region": "Курская магнитная аномалия", "depth_m": 620, "status": "Активная"}
+      ]
+    },
+    {
+      "label": "Horizon",
+      "description": "Горизонт (уровень) внутри шахты — зона ведения горных работ",
+      "count": 10,
+      "properties": [
+        {"name": "horizon_id", "type": "STRING", "required": true, "unique": true, "description": "Уникальный идентификатор горизонта (HRZ-001..HRZ-010)"},
+        {"name": "name", "type": "STRING", "required": true, "description": "Название горизонта (например, Горизонт -350м)"},
+        {"name": "depth_m", "type": "INTEGER", "required": true, "description": "Глубина горизонта в метрах"},
+        {"name": "mine_id", "type": "STRING", "required": true, "description": "Идентификатор шахты"},
+        {"name": "status", "type": "STRING", "required": true, "description": "Статус: Активный, Подготовка, Разведка, Отработан"},
+        {"name": "ore_type", "type": "STRING", "required": false, "description": "Тип руды на горизонте"}
+      ],
+      "examples": [
+        {"horizon_id": "HRZ-001", "name": "Горизонт -350м", "depth_m": 350, "mine_id": "MINE-001", "status": "Активный", "ore_type": "Магнетит"}
+      ]
+    },
+    {
+      "label": "Equipment",
+      "description": "Единица горнодобывающего оборудования",
+      "count": 12,
+      "properties": [
+        {"name": "equipment_id", "type": "STRING", "required": true, "unique": true, "description": "Уникальный идентификатор (EQ-001..EQ-012)"},
+        {"name": "name", "type": "STRING", "required": true, "description": "Название оборудования (ПДМ-01, Самосвал-01 и т.д.)"},
+        {"name": "type", "type": "STRING", "required": true, "description": "Тип: ПДМ, Шахтный самосвал, Вагонетка, Скиповый подъёмник"},
+        {"name": "manufacturer", "type": "STRING", "required": true, "description": "Производитель (Sandvik, Caterpillar, УЗТМ, НКМЗ)"},
+        {"name": "model", "type": "STRING", "required": true, "description": "Модель оборудования"},
+        {"name": "status", "type": "STRING", "required": true, "description": "Статус: В работе, На ТО, В резерве"},
+        {"name": "year", "type": "INTEGER", "required": true, "description": "Год выпуска"},
+        {"name": "engine_hours", "type": "INTEGER", "required": false, "description": "Наработка двигателя (моточасы)"},
+        {"name": "max_payload_tons", "type": "FLOAT", "required": false, "description": "Максимальная грузоподъёмность (тонны)"}
+      ],
+      "examples": [
+        {"equipment_id": "EQ-001", "name": "ПДМ-01", "type": "ПДМ", "manufacturer": "Sandvik", "model": "LH517i", "status": "В работе"},
+        {"equipment_id": "EQ-010", "name": "Скип-01", "type": "Скиповый подъёмник", "manufacturer": "НКМЗ", "model": "СК-20", "status": "В работе"}
+      ]
+    },
+    {
+      "label": "Operator",
+      "description": "Оператор / механик предприятия «Руда+»",
+      "count": 10,
+      "properties": [
+        {"name": "operator_id", "type": "STRING", "required": true, "unique": true, "description": "Уникальный идентификатор (OP-001..OP-010)"},
+        {"name": "name", "type": "STRING", "required": true, "description": "ФИО оператора (сокращённо)"},
+        {"name": "first_name", "type": "STRING", "required": true, "description": "Имя"},
+        {"name": "last_name", "type": "STRING", "required": true, "description": "Фамилия"},
+        {"name": "position", "type": "STRING", "required": true, "description": "Должность (Машинист ПДМ, Водитель самосвала, Оператор подъёмника, Механик)"},
+        {"name": "qualification", "type": "STRING", "required": true, "description": "Квалификация (3/4/5 разряд)"},
+        {"name": "experience_years", "type": "INTEGER", "required": false, "description": "Стаж работы в годах"},
+        {"name": "birth_year", "type": "INTEGER", "required": false, "description": "Год рождения"}
+      ],
+      "examples": [
+        {"operator_id": "OP-001", "name": "Иванов А.А.", "position": "Машинист ПДМ", "qualification": "5 разряд", "experience_years": 12},
+        {"operator_id": "OP-009", "name": "Лебедев И.И.", "position": "Механик", "qualification": "5 разряд", "experience_years": 18}
+      ]
+    },
+    {
+      "label": "Sensor",
+      "description": "Датчик, установленный на оборудовании",
+      "count": 20,
+      "properties": [
+        {"name": "sensor_id", "type": "STRING", "required": true, "unique": true, "description": "Уникальный идентификатор (SENS-001..SENS-020)"},
+        {"name": "type", "type": "STRING", "required": true, "description": "Тип датчика (Температура двигателя, Давление гидравлики, Вибрация, Скорость, Уровень топлива и др.)"},
+        {"name": "unit", "type": "STRING", "required": true, "description": "Единица измерения (celsius, bar, mm/s, km/h, percent, tons, m/s)"},
+        {"name": "alarm_threshold", "type": "FLOAT", "required": false, "description": "Порог срабатывания алерта"},
+        {"name": "install_date", "type": "DATE", "required": false, "description": "Дата установки датчика"},
+        {"name": "equipment_id", "type": "STRING", "required": true, "description": "Идентификатор оборудования, на котором установлен"}
+      ],
+      "examples": [
+        {"sensor_id": "SENS-001", "type": "Температура двигателя", "unit": "celsius", "alarm_threshold": 100, "equipment_id": "EQ-001"},
+        {"sensor_id": "SENS-015", "type": "Вибрация каната", "unit": "mm/s", "alarm_threshold": 3.0, "equipment_id": "EQ-010"}
+      ]
+    },
+    {
+      "label": "MaintenanceEvent",
+      "description": "Событие обслуживания или ремонта оборудования",
+      "count": 15,
+      "properties": [
+        {"name": "event_id", "type": "STRING", "required": true, "unique": true, "description": "Уникальный идентификатор (MNT-001..MNT-015)"},
+        {"name": "date", "type": "DATE", "required": true, "description": "Дата события"},
+        {"name": "type", "type": "STRING", "required": true, "description": "Тип: Плановое ТО, Аварийный, Диагностика, Модернизация"},
+        {"name": "description", "type": "STRING", "required": true, "description": "Описание выполненных работ"},
+        {"name": "duration_hours", "type": "INTEGER", "required": true, "description": "Длительность работ (часы)"},
+        {"name": "cost", "type": "INTEGER", "required": true, "description": "Стоимость работ (рубли)"},
+        {"name": "equipment_id", "type": "STRING", "required": true, "description": "Идентификатор обслуживаемого оборудования"},
+        {"name": "performed_by", "type": "STRING", "required": true, "description": "Идентификатор оператора/механика"}
+      ],
+      "examples": [
+        {"event_id": "MNT-001", "date": "2025-01-15", "type": "Плановое ТО", "description": "Замена масла и фильтров", "duration_hours": 8, "cost": 45000},
+        {"event_id": "MNT-006", "date": "2025-03-15", "type": "Аварийный", "description": "Перегрев двигателя, замена термостата", "duration_hours": 24, "cost": 185000}
+      ]
+    }
+  ],
+
+  "relationships": [
+    {
+      "type": "LOCATED_IN",
+      "from": "Equipment",
+      "to": "Mine",
+      "description": "Оборудование расположено в шахте",
+      "count": 12,
+      "properties": [
+        {"name": "since", "type": "DATE", "description": "Дата размещения"},
+        {"name": "horizon", "type": "STRING", "description": "Горизонт расположения"}
+      ]
+    },
+    {
+      "type": "ON_HORIZON",
+      "from": "Equipment",
+      "to": "Horizon",
+      "description": "Оборудование работает на конкретном горизонте",
+      "count": 8,
+      "properties": []
+    },
+    {
+      "type": "PART_OF",
+      "from": "Horizon",
+      "to": "Mine",
+      "description": "Горизонт принадлежит шахте",
+      "count": 10,
+      "properties": []
+    },
+    {
+      "type": "WORKS_AT",
+      "from": "Operator",
+      "to": "Mine",
+      "description": "Оператор работает на шахте",
+      "count": 10,
+      "properties": [
+        {"name": "since", "type": "DATE", "description": "Дата начала работы"},
+        {"name": "shift", "type": "STRING", "description": "Смена (Дневная/Ночная)"}
+      ]
+    },
+    {
+      "type": "OPERATES",
+      "from": "Operator",
+      "to": "Equipment",
+      "description": "Оператор управляет оборудованием (один оператор может управлять несколькими машинами)",
+      "count": 9,
+      "properties": [
+        {"name": "since", "type": "DATE", "description": "Дата начала работы на оборудовании"},
+        {"name": "certified", "type": "BOOLEAN", "description": "Наличие сертификата"},
+        {"name": "hours_logged", "type": "INTEGER", "description": "Наработанные часы на данном оборудовании"}
+      ]
+    },
+    {
+      "type": "HAS_SENSOR",
+      "from": "Equipment",
+      "to": "Sensor",
+      "description": "У оборудования установлен датчик",
+      "count": 20,
+      "properties": [
+        {"name": "installed", "type": "DATE", "description": "Дата установки"}
+      ]
+    },
+    {
+      "type": "CONNECTED_TO",
+      "from": "Equipment",
+      "to": "Equipment",
+      "description": "Маршрутная связь транспортировки руды (оборудование передаёт руду другому оборудованию)",
+      "count": 9,
+      "properties": [
+        {"name": "route", "type": "STRING", "description": "Название маршрута"},
+        {"name": "distance_m", "type": "INTEGER", "description": "Расстояние в метрах"},
+        {"name": "transport_type", "type": "STRING", "description": "Тип транспортировки (перегрузка, рельсовый, прямая доставка)"}
+      ]
+    },
+    {
+      "type": "REQUIRED_MAINTENANCE",
+      "from": "Equipment",
+      "to": "MaintenanceEvent",
+      "description": "Оборудование требовало обслуживания",
+      "count": 15,
+      "properties": [
+        {"name": "urgency", "type": "STRING", "description": "Срочность: Высокая, Средняя, Низкая"}
+      ]
+    },
+    {
+      "type": "MAINTAINED_BY",
+      "from": "MaintenanceEvent",
+      "to": "Operator",
+      "description": "Обслуживание проведено оператором/механиком",
+      "count": 15,
+      "properties": []
+    }
+  ],
+
+  "routes": {
+    "description": "Маршруты транспортировки руды — цепочки связей CONNECTED_TO",
+    "routes_list": [
+      {
+        "name": "Маршрут 1",
+        "mine": "Северная",
+        "chain": ["EQ-001 (ПДМ-01)", "EQ-007 (Вагонетка-01)", "EQ-010 (Скип-01)"],
+        "total_distance_m": 1700,
+        "hops": 2
+      },
+      {
+        "name": "Маршрут 2",
+        "mine": "Северная",
+        "chain": ["EQ-002 (ПДМ-02)", "EQ-004 (Самосвал-01)", "EQ-008 (Вагонетка-02)", "EQ-010 (Скип-01)"],
+        "total_distance_m": 2100,
+        "hops": 3
+      },
+      {
+        "name": "Маршрут 3",
+        "mine": "Южная",
+        "chain": ["EQ-003 (ПДМ-03)", "EQ-005 (Самосвал-02)", "EQ-009 (Вагонетка-03)", "EQ-011 (Скип-02)"],
+        "total_distance_m": 1900,
+        "hops": 3
+      },
+      {
+        "name": "Резервный маршрут",
+        "mine": "Северная",
+        "chain": ["EQ-001 (ПДМ-01)", "EQ-004 (Самосвал-01)", "EQ-010 (Скип-01)"],
+        "total_distance_m": 2350,
+        "hops": 2
+      }
+    ]
+  },
+
+  "analytics_use_cases": [
+    {
+      "name": "Анализ маршрутов",
+      "description": "Поиск кратчайшего/оптимального маршрута от забоя до поверхности",
+      "cypher_pattern": "(start:Equipment)-[:CONNECTED_TO*]->(finish:Equipment {type: 'Скиповый подъёмник'})"
+    },
+    {
+      "name": "Анализ отказов",
+      "description": "Поиск оборудования с наибольшим числом аварийных событий",
+      "cypher_pattern": "(e:Equipment)-[:REQUIRED_MAINTENANCE]->(me:MaintenanceEvent {type: 'Аварийный'})"
+    },
+    {
+      "name": "Рекомендация оператора",
+      "description": "Подбор оператора для оборудования на основе опыта с аналогичным типом",
+      "cypher_pattern": "(o:Operator)-[:OPERATES]->(similar:Equipment {type: target_type})"
+    },
+    {
+      "name": "Анализ зависимостей",
+      "description": "Определение критических точек — оборудования, при отказе которого нарушаются маршруты",
+      "cypher_pattern": "(start:Equipment)-[:CONNECTED_TO*]->(critical:Equipment)"
+    },
+    {
+      "name": "Аномальные паттерны",
+      "description": "Обнаружение необычных комбинаций оператор-поломка",
+      "cypher_pattern": "(o:Operator)-[:OPERATES]->(e:Equipment)-[:REQUIRED_MAINTENANCE]->(me:MaintenanceEvent {type: 'Аварийный'})"
+    }
+  ],
+
+  "statistics": {
+    "total_nodes": 71,
+    "total_relationships": 98,
+    "node_types": 6,
+    "relationship_types": 9,
+    "avg_degree": 2.76
+  }
+}

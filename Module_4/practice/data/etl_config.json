@@ -1,0 +1,355 @@
+{
+  "etl_pipeline": {
+    "name": "ruda_plus_etl",
+    "version": "1.0.0",
+    "description": "ETL-конфигурация для MES-системы предприятия Руда+",
+    "environment": "development"
+  },
+
+  "source": {
+    "schema": "ruda_plus",
+    "database": "ruda_plus_db",
+    "connection": {
+      "host": "<managed-postgresql-host>.mdb.yandexcloud.net",
+      "port": 6432,
+      "dbname": "ruda_plus_db",
+      "user": "student",
+      "sslmode": "verify-full"
+    },
+    "tables": [
+      {
+        "name": "mines",
+        "primary_key": "mine_id",
+        "change_tracking_column": "updated_at",
+        "load_priority": 1,
+        "estimated_rows": 4
+      },
+      {
+        "name": "equipment_types",
+        "primary_key": "type_id",
+        "change_tracking_column": "updated_at",
+        "load_priority": 1,
+        "estimated_rows": 4
+      },
+      {
+        "name": "equipment",
+        "primary_key": "equipment_id",
+        "change_tracking_column": "updated_at",
+        "load_priority": 2,
+        "estimated_rows": 12,
+        "dependencies": ["mines", "equipment_types"]
+      },
+      {
+        "name": "operators",
+        "primary_key": "operator_id",
+        "change_tracking_column": "updated_at",
+        "load_priority": 2,
+        "estimated_rows": 10,
+        "dependencies": ["mines"]
+      },
+      {
+        "name": "ore_production",
+        "primary_key": "production_id",
+        "change_tracking_column": "created_at",
+        "load_priority": 3,
+        "estimated_rows": 15,
+        "dependencies": ["mines", "equipment", "operators"]
+      },
+      {
+        "name": "downtime_events",
+        "primary_key": "event_id",
+        "change_tracking_column": "created_at",
+        "load_priority": 3,
+        "estimated_rows": 10,
+        "dependencies": ["equipment", "operators"]
+      },
+      {
+        "name": "sensor_readings",
+        "primary_key": "reading_id",
+        "change_tracking_column": "created_at",
+        "load_priority": 4,
+        "estimated_rows": 86400000,
+        "note": "Высокообъёмная таблица — рекомендуется партиционирование по дате"
+      }
+    ]
+  },
+
+  "staging": {
+    "schema": "staging",
+    "table_prefix": "stg_",
+    "metadata_columns": {
+      "load_id": "_load_id",
+      "load_timestamp": "_load_timestamp",
+      "source_system": "_source_system",
+      "row_hash": "_row_hash"
+    },
+    "control_tables": {
+      "load_log": "etl_load_log",
+      "watermark": "etl_watermark"
+    },
+    "cleanup_strategy": "truncate_before_full_load",
+    "retention_days": 7
+  },
+
+  "target": {
+    "schema": "star",
+    "dimensions": [
+      {
+        "name": "dim_time",
+        "type": "conformed",
+        "scd_type": "none",
+        "source": "generated",
+        "note": "Генерируется из generate_series, не из OLTP"
+      },
+      {
+        "name": "dim_mine",
+        "type": "conformed",
+        "scd_type": 2,
+        "business_key": "mine_id",
+        "surrogate_key": "mine_key",
+        "tracking_columns": ["mine_name", "region", "max_depth_m", "status"],
+        "source_tables": ["mines"]
+      },
+      {
+        "name": "dim_equipment",
+        "type": "conformed",
+        "scd_type": 2,
+        "business_key": "equipment_id",
+        "surrogate_key": "equipment_key",
+        "tracking_columns": ["equipment_name", "type_name", "mine_name", "status"],
+        "source_tables": ["equipment", "equipment_types", "mines"],
+        "denormalized": true
+      },
+      {
+        "name": "dim_operator",
+        "type": "conformed",
+        "scd_type": 2,
+        "business_key": "operator_id",
+        "surrogate_key": "operator_key",
+        "tracking_columns": ["full_name", "position", "qualification", "mine_name"],
+        "source_tables": ["operators", "mines"],
+        "denormalized": true
+      },
+      {
+        "name": "dim_downtime_category",
+        "type": "junk",
+        "scd_type": 1,
+        "surrogate_key": "category_key",
+        "attributes": ["event_type", "event_category", "severity"],
+        "source_tables": ["downtime_events"]
+      }
+    ],
+    "facts": [
+      {
+        "name": "fact_production",
+        "grain": "Одна смена + одно оборудование + один оператор",
+        "business_key": "production_id",
+        "dimension_keys": ["time_key", "mine_key", "equipment_key", "operator_key"],
+        "degenerate_dimensions": ["production_id", "shift", "block_id", "ore_type"],
+        "measures": ["tonnage_extracted", "fe_content_pct", "moisture_pct"],
+        "filter": "status = 'Завершена'",
+        "source_tables": ["ore_production"]
+      },
+      {
+        "name": "fact_downtime",
+        "grain": "Одно событие простоя",
+        "business_key": "event_id",
+        "dimension_keys": ["time_key", "equipment_key", "category_key"],
+        "degenerate_dimensions": ["event_id"],
+        "measures": ["duration_minutes"],
+        "source_tables": ["downtime_events"]
+      }
+    ]
+  },
+
+  "incremental": {
+    "strategy": "timestamp",
+    "description": "Инкрементальная загрузка на основе временных меток (watermark)",
+    "watermark_column": "updated_at",
+    "fallback_column": "created_at",
+    "batch_size": 10000,
+    "max_lookback_hours": 48,
+    "overlap_minutes": 5,
+    "note": "Перекрытие в 5 минут защищает от потери записей при транзакционных задержках",
+    "scd_handling": {
+      "type": 2,
+      "effective_from_column": "effective_from",
+      "effective_to_column": "effective_to",
+      "is_current_column": "is_current",
+      "infinity_date": "9999-12-31",
+      "hash_function": "MD5",
+      "hash_separator": "|"
+    }
+  },
+
+  "quality_rules": [
+    {
+      "rule_id": "QR-001",
+      "name": "not_null_primary_key",
+      "description": "Первичный ключ не может быть NULL",
+      "severity": "critical",
+      "action": "reject_row",
+      "applies_to": "all_tables",
+      "check": "primary_key IS NOT NULL"
+    },
+    {
+      "rule_id": "QR-002",
+      "name": "unique_primary_key",
+      "description": "Первичный ключ должен быть уникальным",
+      "severity": "critical",
+      "action": "reject_duplicates",
+      "applies_to": "all_tables",
+      "check": "COUNT(*) GROUP BY primary_key HAVING COUNT(*) = 1"
+    },
+    {
+      "rule_id": "QR-003",
+      "name": "referential_integrity",
+      "description": "Внешние ключи должны ссылаться на существующие записи",
+      "severity": "warning",
+      "action": "log_and_continue",
+      "applies_to": ["equipment", "ore_production", "downtime_events"],
+      "check": "FK LEFT JOIN parent IS NOT NULL"
+    },
+    {
+      "rule_id": "QR-004",
+      "name": "tonnage_positive",
+      "description": "Тоннаж добычи должен быть положительным для завершённых операций",
+      "severity": "warning",
+      "action": "log_and_continue",
+      "applies_to": ["ore_production"],
+      "check": "tonnage_extracted > 0 WHERE status = 'Завершена'"
+    },
+    {
+      "rule_id": "QR-005",
+      "name": "fe_content_range",
+      "description": "Содержание Fe должно быть в диапазоне 0-100%",
+      "severity": "warning",
+      "action": "log_and_continue",
+      "applies_to": ["ore_production"],
+      "check": "fe_content_pct BETWEEN 0 AND 100"
+    },
+    {
+      "rule_id": "QR-006",
+      "name": "downtime_consistency",
+      "description": "Время окончания простоя не может быть раньше времени начала",
+      "severity": "critical",
+      "action": "reject_row",
+      "applies_to": ["downtime_events"],
+      "check": "end_time >= start_time"
+    },
+    {
+      "rule_id": "QR-007",
+      "name": "sensor_value_range",
+      "description": "Показания датчиков должны быть в физически возможном диапазоне",
+      "severity": "warning",
+      "action": "flag_as_suspect",
+      "applies_to": ["sensor_readings"],
+      "checks_by_type": {
+        "temperature": {"min": -50, "max": 200, "unit": "celsius"},
+        "vibration": {"min": 0, "max": 50, "unit": "mm_s"},
+        "pressure": {"min": 0, "max": 20, "unit": "bar"},
+        "speed": {"min": 0, "max": 30, "unit": "km_h"},
+        "fuel_level": {"min": 0, "max": 100, "unit": "percent"}
+      }
+    }
+  ],
+
+  "streaming": {
+    "schema": "streaming",
+    "description": "Конфигурация потоковой обработки телеметрии",
+    "landing_tables": [
+      "raw_sensor_events",
+      "raw_equipment_events",
+      "raw_navigation_events"
+    ],
+    "window_config": {
+      "tumbling_windows": [
+        {"name": "tumbling_5min", "size_minutes": 5},
+        {"name": "tumbling_1h", "size_minutes": 60}
+      ],
+      "sliding_windows": [
+        {"name": "sliding_10min", "size_minutes": 10, "slide_minutes": 1}
+      ]
+    },
+    "alert_rules": {
+      "temperature": {
+        "warning_threshold": 85.0,
+        "critical_threshold": 95.0,
+        "unit": "celsius"
+      },
+      "vibration": {
+        "warning_threshold": 4.5,
+        "critical_threshold": 7.0,
+        "unit": "mm_s"
+      },
+      "pressure": {
+        "warning_low": 2.0,
+        "warning_high": 8.0,
+        "critical_low": 1.0,
+        "critical_high": 10.0,
+        "unit": "bar"
+      },
+      "speed": {
+        "warning_threshold": 12.0,
+        "critical_threshold": 15.0,
+        "unit": "km_h"
+      },
+      "fuel_level": {
+        "warning_threshold": 15.0,
+        "critical_threshold": 5.0,
+        "unit": "percent",
+        "direction": "below"
+      }
+    },
+    "escalation": {
+      "warning_to_critical_count": 3,
+      "warning_to_critical_window_minutes": 15,
+      "critical_ack_timeout_minutes": 10,
+      "critical_to_emergency": true
+    }
+  },
+
+  "schedule": {
+    "full_load": {
+      "cron": "0 2 * * 0",
+      "description": "Полная загрузка каждое воскресенье в 02:00"
+    },
+    "incremental_load": {
+      "cron": "*/15 * * * *",
+      "description": "Инкрементальная загрузка каждые 15 минут"
+    },
+    "stream_aggregation": {
+      "cron": "*/5 * * * *",
+      "description": "Агрегация потоковых данных каждые 5 минут"
+    },
+    "data_quality_check": {
+      "cron": "0 6 * * *",
+      "description": "Ежедневная проверка качества данных в 06:00"
+    }
+  },
+
+  "monitoring": {
+    "metrics": [
+      {
+        "name": "etl_load_duration_seconds",
+        "description": "Длительность ETL-загрузки в секундах",
+        "alert_threshold_seconds": 300
+      },
+      {
+        "name": "etl_rows_rejected_count",
+        "description": "Количество отклонённых строк",
+        "alert_threshold": 10
+      },
+      {
+        "name": "etl_data_freshness_minutes",
+        "description": "Свежесть данных: минуты с последней загрузки",
+        "alert_threshold_minutes": 30
+      },
+      {
+        "name": "streaming_lag_seconds",
+        "description": "Задержка потоковой обработки",
+        "alert_threshold_seconds": 60
+      }
+    ]
+  }
+}
